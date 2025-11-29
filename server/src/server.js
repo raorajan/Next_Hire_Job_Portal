@@ -11,6 +11,7 @@ const companyRouter = require("./routes/company.route");
 const applicationRouter = require("./routes/application.route");
 const prepResourceRouter = require("./routes/prepResource.route");
 const highlightRouter = require("./routes/highlight.route");
+const emailRouter = require("./routes/email.route");
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const externalJobsRouter = require("./routes/externalJobs.route");
@@ -90,6 +91,7 @@ app.use("/api/v1/application", applicationRouter);
 app.use("/api/v1/prep-resources", prepResourceRouter);
 app.use("/api/v1/highlights", highlightRouter);
 app.use("/api/v1/external-jobs", externalJobsRouter);
+app.use("/api/v1", emailRouter);
 
 // Health check endpoint
 app.get("/", (req, res) => {
