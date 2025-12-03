@@ -12,8 +12,8 @@ const applicationRouter = require("./routes/application.route");
 const prepResourceRouter = require("./routes/prepResource.route");
 const highlightRouter = require("./routes/highlight.route");
 const emailRouter = require("./routes/email.route");
-const swaggerJsdoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 const externalJobsRouter = require("./routes/externalJobs.route");
 const app = express();
 
@@ -35,25 +35,32 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" })); // Limit URL-enc
 app.use(cookieParser());
 const options = {
   definition: {
-    openapi: '3.0.0',
+    openapi: "3.0.0",
     info: {
-      title: 'Job Portal By NextHire',
-      version: '1.0.0',
+      title: "Job Portal By NextHire",
+      version: "1.0.0",
     },
     servers: [
       {
-        url: process.env.BACKEND_URL || process.env.SERVER_URL || 'http://localhost:8000'
+        url:
+          process.env.BACKEND_URL ||
+          process.env.SERVER_URL ||
+          "http://localhost:8000",
       },
-      ...(process.env.PRODUCTION_BACKEND_URL ? [{
-        url: process.env.PRODUCTION_BACKEND_URL
-      }] : [])
+      ...(process.env.PRODUCTION_BACKEND_URL
+        ? [
+            {
+              url: process.env.PRODUCTION_BACKEND_URL,
+            },
+          ]
+        : []),
     ],
     components: {
       securitySchemes: {
         bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT',
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
         },
       },
     },
@@ -63,15 +70,35 @@ const options = {
       },
     ],
   },
-  apis: ['./src/swagger/*.js'],
+  apis: ["./src/swagger/*.js"],
 };
 
 const openapiSpecification = swaggerJsdoc(options);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 // Optimize: Configure CORS with specific options
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || process.env.CLIENT_URL || "*",
+    origin: function (origin, callback) {
+      // List of allowed origins
+      const allowedOrigins = [
+        process.env.FRONTEND_URL,
+        process.env.CLIENT_URL,
+        "https://raorajan.github.io",
+        "http://localhost:5173",
+      ].filter(Boolean); // Remove undefined/null values
+
+      // Allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true);
+
+      if (
+        allowedOrigins.indexOf(origin) !== -1 ||
+        allowedOrigins.includes("*")
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
