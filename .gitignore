@@ -10,6 +10,12 @@
 # Docker
 docker-compose.override.yml
 
+# SSL Certificates (sensitive)
+ssl/*.pem
+ssl/*.key
+ssl/*.crt
+!ssl/.gitkeep
+
 # Node modules
 node_modules/
 npm-debug.log*

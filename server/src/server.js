@@ -83,7 +83,7 @@ app.use(
       const allowedOrigins = [
         process.env.FRONTEND_URL,
         process.env.CLIENT_URL,
-        "https://raorajan.github.io",
+        process.env.GITHUB_PAGES_URL,
         "http://localhost:5173",
       ].filter(Boolean); // Remove undefined/null values
 
