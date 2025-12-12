@@ -1,42 +1,43 @@
-# Stage 1: Build (optimized for memory)
 FROM node:22-alpine AS builder
 WORKDIR /app
-
-# Copy package files
 COPY package*.json ./
-
-# Install dependencies (including devDependencies for build)
-RUN npm ci --no-audit --no-fund && \
-    npm cache clean --force
-
-# Copy source code
+RUN npm ci --no-audit --no-fund && npm cache clean --force
 COPY . .
-
-# CLEANUP: Remove unnecessary files before build
-RUN find . -name "*.md" -type f -delete && \
-    find . -name "*.test.js" -type f -delete && \
-    find . -name "*.spec.js" -type f -delete && \
-    find . -name ".eslintrc*" -type f -delete && \
-    find . -name ".prettierrc*" -type f -delete && \
-    rm -rf .git/ .github/ node_modules/.cache
-
-# Build with memory optimization
-ENV NODE_OPTIONS="--max-old-space-size=512"
+ARG VITE_API_URL
+ARG VITE_FRONTEND_URL
+ARG VITE_CLIENT_URL
+ARG VITE_FIREBASE_API_KEY
+ARG VITE_FIREBASE_AUTH_DOMAIN
+ARG VITE_FIREBASE_PROJECT_ID
+ARG VITE_FIREBASE_STORAGE_BUCKET
+ARG VITE_FIREBASE_MESSAGING_SENDER_ID
+ARG VITE_FIREBASE_APP_ID
+ARG VITE_FIREBASE_MEASUREMENT_ID
+ARG VITE_APPLICATION_ID
+ARG VITE_APPLICATION_KEY
+ARG VITE_ADZUNA_API_URL
+ARG VITE_SOCIAL_FACEBOOK_URL
+ARG VITE_SOCIAL_TWITTER_URL
+ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_FRONTEND_URL=$VITE_FRONTEND_URL
+ENV VITE_CLIENT_URL=$VITE_CLIENT_URL
+ENV VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY
+ENV VITE_FIREBASE_AUTH_DOMAIN=$VITE_FIREBASE_AUTH_DOMAIN
+ENV VITE_FIREBASE_PROJECT_ID=$VITE_FIREBASE_PROJECT_ID
+ENV VITE_FIREBASE_STORAGE_BUCKET=$VITE_FIREBASE_STORAGE_BUCKET
+ENV VITE_FIREBASE_MESSAGING_SENDER_ID=$VITE_FIREBASE_MESSAGING_SENDER_ID
+ENV VITE_FIREBASE_APP_ID=$VITE_FIREBASE_APP_ID
+ENV VITE_FIREBASE_MEASUREMENT_ID=$VITE_FIREBASE_MEASUREMENT_ID
+ENV VITE_APPLICATION_ID=$VITE_APPLICATION_ID
+ENV VITE_APPLICATION_KEY=$VITE_APPLICATION_KEY
+ENV VITE_ADZUNA_API_URL=$VITE_ADZUNA_API_URL
+ENV VITE_SOCIAL_FACEBOOK_URL=$VITE_SOCIAL_FACEBOOK_URL
+ENV VITE_SOCIAL_TWITTER_URL=$VITE_SOCIAL_TWITTER_URL
 RUN npm run build
 
-# Stage 2: Production (minimal nginx)
-FROM nginx:alpine
-
-# Copy built assets
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Copy custom nginx config
-COPY nginx-custom.conf /etc/nginx/conf.d/default.conf
-
-# Remove unnecessary files and optimize
-RUN rm -rf /usr/share/nginx/html/*.map && \
-    rm -f /etc/nginx/conf.d/default.conf.bak
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+FROM node:22-alpine
+WORKDIR /app
+RUN npm install -g serve
+COPY --from=builder /app/dist ./dist
+EXPOSE 3000
+CMD ["serve", "-s", "dist", "-l", "3000"]
