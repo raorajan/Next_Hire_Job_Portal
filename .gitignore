@@ -6,6 +6,10 @@
 .env.test
 .env.*
 *.env
+# Explicitly ignore .env in subdirectories
+client/.env
+server/.env
+**/.env
 
 # Docker
 docker-compose.override.yml

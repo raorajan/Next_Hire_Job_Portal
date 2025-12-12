@@ -1,9 +1,24 @@
 FROM node:22-alpine
+
 WORKDIR /app
+
 COPY package*.json ./
-RUN npm ci --only=production --no-audit --no-fund && npm cache clean --force
+
+# Install dependencies
+RUN npm ci --only=production --no-audit --no-fund
+
+# Copy source code
 COPY . .
-ENV NODE_ENV=production
-ENV NODE_OPTIONS="--max-old-space-size=256"
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
+
+USER nextjs
+
+# Expose port
 EXPOSE 3000
+
+# Start command
 CMD ["node", "src/app.js"]
+# OR if using npm start: CMD ["npm", "start"]
