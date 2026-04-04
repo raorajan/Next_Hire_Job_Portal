@@ -40,7 +40,7 @@ const sendContactEmail = asyncErrorHandler(async (req, res, next) => {
   }
 
   // Check if email service is configured
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+  if (!process.env.RESEND_EMAIL_API_KEY) {
     const error = new ErrorHandler("Email service is not configured", 500);
     return error.sendError(res);
   }
@@ -557,7 +557,7 @@ contact form on my portfolio.
   try {
     // Send notification email to portfolio owner
     const emailResult = await sendMail({
-      from: process.env.EMAIL_USER,
+      from: "NextHire Contact <contact@raorajan.pro>",
       to: recipientEmails.join(','), // Send to both email addresses
       replyTo: email, // Set reply-to to the user's email so you can reply directly
       subject: emailSubject,
@@ -575,7 +575,7 @@ contact form on my portfolio.
 
     // Send welcome email to the person who submitted the form
     const welcomeResult = await sendMail({
-      from: process.env.EMAIL_USER,
+      from: "NextHire Contact <contact@raorajan.pro>",
       to: email, // Send to the person who submitted the form
       subject: welcomeSubject,
       text: welcomeText,
@@ -589,13 +589,7 @@ contact form on my portfolio.
       rejected: welcomeResult?.rejected,
     });
     
-    // Additional warning if email might be filtered
-    if (recipientEmails.includes(process.env.EMAIL_USER)) {
-      console.log("⚠️  NOTE: Email sent to same address as sender. Check:");
-      console.log("   1. Gmail 'All Mail' folder (not just Inbox)");
-      console.log("   2. Spam/Junk folder");
-      console.log("   3. Gmail may delay self-sent automated emails");
-    }
+    // Note: Resend successfully sends to the account owner and multiple recipients!
 
     res.status(200).json({
       success: true,

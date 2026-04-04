@@ -365,7 +365,7 @@ Team NextHire`;
 
 const sendJobAlertsForUser = async (user) => {
   if (!shouldSendJobAlert(user)) return false;
-  if (!process.env.EMAIL_USER) return false;
+  if (!process.env.RESEND_EMAIL_API_KEY) return false;
 
   const jobs = await collectAlertJobsForUser(user);
   if (!jobs.length) return false;
@@ -373,7 +373,7 @@ const sendJobAlertsForUser = async (user) => {
   const emailContent = buildJobAlertEmail(user, jobs);
 
   await sendMail({
-    from: process.env.EMAIL_USER,
+    from: "NextHire Alerts <alerts@raorajan.pro>",
     to: user.email,
     subject: emailContent.subject,
     text: emailContent.text,
@@ -386,9 +386,9 @@ const sendJobAlertsForUser = async (user) => {
 };
 
 const sendJobAlertDigests = async () => {
-  if (!process.env.EMAIL_USER) {
+  if (!process.env.RESEND_EMAIL_API_KEY) {
     if (process.env.NODE_ENV === "development") {
-      console.warn("EMAIL_USER is not configured. Skipping job alert digests.");
+      console.warn("RESEND_EMAIL_API_KEY is not configured. Skipping job alert digests.");
     }
     return;
   }
@@ -511,7 +511,7 @@ const registerUser = asyncErrorHandler(async (req, res, next) => {
   const verificationUrl = `${frontendUrl}/verify-email?token=${verificationToken}`;
 
   const emailBody = {
-    from: process.env.EMAIL_USER,
+    from: "NextHire <verify@raorajan.pro>",
     to: email,
     subject: "Welcome to NextHire - Verify Your Email",
     text: `Hello ${fullname},\n\nWelcome to NextHire! Please verify your email by clicking on the following link: ${verificationUrl}\n\nIf you didn't request this, please ignore this email.`,
@@ -1162,12 +1162,12 @@ const loginUser = asyncErrorHandler(async (req, res, next) => {
     await user.save();
     
     // Send verification email if email configuration is available
-    if (process.env.EMAIL_USER && process.env.EMAIL_PASS && email && user.fullname) {
+    if (process.env.RESEND_EMAIL_API_KEY && email && user.fullname) {
       const frontendUrl = process.env.FRONTEND_URL || process.env.CLIENT_URL ;
       const verificationUrl = `${frontendUrl}/verify-email?token=${verificationToken}`;
 
       const emailBody = {
-        from: process.env.EMAIL_USER,
+        from: "NextHire <verify@raorajan.pro>",
         to: email,
         subject: "Email Verification Required - NextHire",
         text: `Hello ${user.fullname},\n\nPlease verify your email by clicking on the following link: ${verificationUrl}\n\nIf you didn't request this, please ignore this email.`,
@@ -1281,7 +1281,7 @@ const forgetPassword = asyncErrorHandler(async (req, res, next) => {
   const resetUrl = `${frontendUrl}/reset-password?token=${resetToken}`;
 
   const emailBody = {
-    from: process.env.EMAIL_USER,
+    from: "NextHire Support <support@raorajan.pro>",
     to: email,
     subject: "Password Reset Request",
     text: `You requested to reset your password. Click the link to reset: ${resetUrl}`,

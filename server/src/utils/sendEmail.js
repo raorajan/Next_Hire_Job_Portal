@@ -12,7 +12,7 @@ async function sendMail(emailBody) {
     // Use the custom domain raorajan.pro for professional sending
     // Make sure you have added the DNS records provided for raorajan.pro in Resend
     const resendOptions = {
-      from: `Next Hire <verify@raorajan.pro>`, 
+      from: emailBody.from || `Next Hire <verify@raorajan.pro>`, 
       to: emailBody.to,
       subject: emailBody.subject,
       text: emailBody.text || "",

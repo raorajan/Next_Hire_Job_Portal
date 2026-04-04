@@ -57,7 +57,7 @@ async function processJobAndNotifyUsers(job, companyName) {
         const emailContent = await generateEmailContent(job, user, companyName);
 
         const emailBody = {
-          from: "NextHire <noreply@nexthire.com>",
+          from: "NextHire <notifications@raorajan.pro>",
           to: user.email,
           subject: `Exciting Job Opportunity: ${job.title} at ${companyName}`,
           text: emailContent,
@@ -104,7 +104,7 @@ async function notifyUsersToCompleteProfile() {
       The NextHire Team`;
 
       const emailBody = {
-        from: "NextHire <noreply@nexthire.com>",
+        from: "NextHire <notifications@raorajan.pro>",
         to: user.email,
         subject: "Enhance Your Profile for Better Job Suggestions",
         text: emailContent,
@@ -169,7 +169,7 @@ async function notifyApplicationReceived(user, job, companyName) {
     <p>Best regards,<br>The Hiring Team at ${companyName}</p>`;
 
     const emailBody = {
-      from: "NextHire <noreply@nexthire.com>",
+      from: "NextHire <notifications@raorajan.pro>",
       to: user.email,
       subject: `Application Received for ${job.title} at ${companyName}`,
       text: emailContentText,
@@ -209,7 +209,7 @@ async function notifyJobDeletion(jobTitle, companyName, applicants) {
       <p>Best regards,<br>The Hiring Team at ${companyName}</p>`;
 
       const emailBody = {
-        from: "NextHire <noreply@nexthire.com>",
+        from: "NextHire <notifications@raorajan.pro>",
         to: applicant.email,
         subject: `Update on Your Application for ${jobTitle}`,
         text: emailContentText,
@@ -274,7 +274,7 @@ async function notifyStatusUpdate(applicant, jobTitle, status, companyName) {
     <p>Best regards,<br>The Hiring Team at ${companyName}</p>`;
 
     const emailBody = {
-      from: "NextHire <noreply@nexthire.com>",
+      from: "NextHire <notifications@raorajan.pro>",
       to: applicant.email,
       subject: `Application Status Update for ${jobTitle}`,
       text: emailContentText,
