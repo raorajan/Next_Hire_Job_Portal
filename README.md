@@ -235,3 +235,12 @@ npm run dev
 - Resume builder for job seekers
 - Interview scheduling system
 - Mobile application
+
+
+
+NEXT_HIRE_JOB_PORTAL
+>client
+ >.env
+>server
+ >.env
+.env

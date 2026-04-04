@@ -85,6 +85,7 @@ app.use(
         process.env.CLIENT_URL,
         process.env.GITHUB_PAGES_URL,
         "http://localhost:5173",
+        "http://127.0.0.1:5173",
       ].filter(Boolean); // Remove undefined/null values
 
       // Allow requests with no origin (like mobile apps or curl)
@@ -96,6 +97,7 @@ app.use(
       ) {
         callback(null, true);
       } else {
+        console.error(`Blocked by CORS: Origin "${origin}" not allowed.`);
         callback(new Error("Not allowed by CORS"));
       }
     },
