@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../../layout/Navbar";
-import { Avatar, AvatarImage } from "../../ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "../../ui/avatar";
 import { Button } from "../../ui/button";
 import { Mail, Pen } from "lucide-react";
 import { Badge } from "../../ui/badge";
@@ -40,6 +40,9 @@ const Profile = () => {
                     src={user?.profile?.profilePhoto?.url}
                     alt="profile"
                   />
+                  <AvatarFallback className="text-3xl font-bold bg-gradient-to-br from-[#6A38C2]/20 to-[#F83002]/20 text-[#6A38C2]">
+                    {user?.fullname ? user.fullname.charAt(0).toUpperCase() : "U"}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-r from-[#6A38C2] to-[#F83002] rounded-full border-2 border-white"></div>
               </div>

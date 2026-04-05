@@ -18,7 +18,7 @@ import {
   updateQuickTemplate,
   deleteQuickTemplate,
 } from "@/redux/slices/user.slice";
-import { Avatar, AvatarImage } from "../../ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "../../ui/avatar";
 import Loader from "../../common/Loader";
 import { toast } from "react-toastify";
 import ReactHelmet from "../../common/ReactHelmet";
@@ -219,6 +219,9 @@ function ProfileTab() {
           <div className='relative mb-4'>
             <Avatar className='h-24 w-24 ring-4 ring-[#6A38C2]/20'>
               <AvatarImage src={user?.profile?.profilePhoto?.url} alt='profile' />
+              <AvatarFallback className="text-3xl font-bold bg-gradient-to-br from-[#6A38C2]/20 to-[#F83002]/20 text-[#6A38C2]">
+                {user?.fullname ? user.fullname.charAt(0).toUpperCase() : "U"}
+              </AvatarFallback>
             </Avatar>
             <div className='absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-r from-[#6A38C2] to-[#F83002] rounded-full border-2 border-white'></div>
           </div>

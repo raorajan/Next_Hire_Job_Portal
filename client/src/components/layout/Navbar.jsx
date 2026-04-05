@@ -10,6 +10,7 @@ import { getProfilePic, getToken } from "@/utils/constant";
 import { FaUser, FaCog, FaShieldAlt, FaSignOutAlt, FaBook, FaStar } from "react-icons/fa";
 import { logoutUser } from "@/redux/slices/user.slice";
 import { useDispatch, useSelector } from "react-redux";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -181,13 +182,12 @@ const Navbar = () => {
                   onClick={toggleDropdown}
                 >
                   <RiMenu2Fill className='text-gray-600' />
-                  <div className='w-7 h-7 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full overflow-hidden ml-3 ring-2 ring-white shadow-sm'>
-                    <img
-                      src={profilePic}
-                      alt='Profile'
-                      className='w-full h-full object-cover'
-                    />
-                  </div>
+                  <Avatar className='w-7 h-7 ring-2 ring-white shadow-sm ml-3'>
+                    <AvatarImage src={profilePic} alt='Profile' />
+                    <AvatarFallback className="bg-gradient-to-br from-[#6A38C2]/20 to-[#F83002]/20 text-[#6A38C2] text-xs font-bold">
+                      {user?.fullname ? user.fullname.charAt(0).toUpperCase() : "U"}
+                    </AvatarFallback>
+                  </Avatar>
                 </div>
 
                 {/* Dropdown Menu */}
@@ -334,13 +334,12 @@ const Navbar = () => {
                   {user && (
                     <li className='px-4 py-2'>
                       <div className='flex items-center gap-3'>
-                        <div className='w-10 h-10 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full overflow-hidden ring-2 ring-white shadow-sm'>
-                          <img
-                            src={profilePic}
-                            alt='Profile'
-                            className='w-full h-full object-cover'
-                          />
-                        </div>
+                        <Avatar className='w-10 h-10 ring-2 ring-white shadow-sm'>
+                          <AvatarImage src={profilePic} alt='Profile' />
+                          <AvatarFallback className="bg-gradient-to-br from-[#6A38C2]/20 to-[#F83002]/20 text-[#6A38C2] font-bold">
+                            {user?.fullname ? user.fullname.charAt(0).toUpperCase() : "U"}
+                          </AvatarFallback>
+                        </Avatar>
                         <div className='flex-1 min-w-0'>
                           <p className='font-semibold text-gray-900 truncate text-sm'>{user.fullname}</p>
                           <p className='text-xs text-gray-500 truncate'>{user.email}</p>
