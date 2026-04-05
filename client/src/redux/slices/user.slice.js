@@ -459,20 +459,31 @@ const userSlice = createSlice({
       })
       .addCase(updateUserProfile.fulfilled, (state, action) => {
         state.loading = false;
-        if (action.payload.data.user.fullname) {
-          state.user.fullname = action.payload.data.user.fullname;
+        const payloadUser = action.payload?.data?.user;
+        if (!state.user) {
+          state.user = payloadUser || {};
         }
-        if (action.payload.data.user.email) {
-          state.user.email = action.payload.data.user.email;
+        if (state.user && !state.user.profile) {
+          state.user.profile = {};
         }
-        if (action.payload.data.user.profile.bio) {
-          state.user.profile.bio = action.payload.data.user.profile.bio;
+        
+        if (payloadUser?.fullname) {
+          state.user.fullname = payloadUser.fullname;
         }
-        if (action.payload.data.user.profile.skills) {
-          state.user.profile.skills = action.payload.data.user.profile.skills;
+        if (payloadUser?.email) {
+          state.user.email = payloadUser.email;
         }
-        if (action.payload.data.user.profile.resume) {
-          state.user.profile.resume = action.payload.data.user.profile.resume;
+        if (payloadUser?.profile?.bio !== undefined) {
+          state.user.profile.bio = payloadUser.profile.bio;
+        }
+        if (payloadUser?.profile?.skills !== undefined) {
+          state.user.profile.skills = payloadUser.profile.skills;
+        }
+        if (payloadUser?.profile?.resume !== undefined) {
+          state.user.profile.resume = payloadUser.profile.resume;
+        }
+        if (payloadUser?.profile?.profilePhoto !== undefined) {
+          state.user.profile.profilePhoto = payloadUser.profile.profilePhoto;
         }
       })
       .addCase(updateUserProfile.rejected, (state, action) => {

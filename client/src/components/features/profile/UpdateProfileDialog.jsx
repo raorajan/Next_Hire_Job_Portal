@@ -77,14 +77,15 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
     }
 
     dispatch(updateUserProfile(formData))
+      .unwrap()
       .then((res) => {
-        if (res?.payload?.status === 200) {
+        if (res?.status === 200 || res?.success) {
           toast.success("Profile updated successfully!");
           setOpen(false);
         }
       })
       .catch((error) => {
-        toast.error("Failed to update profile. Please try again.");
+        toast.error(error?.message || error || "Failed to update profile. Please try again.");
       })
       .finally(() => {
         setLoading(false);
@@ -179,7 +180,7 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
                     id='file'
                     name='file'
                     type='file'
-                    accept='image/png'
+                    accept='image/png, image/jpeg, application/pdf'
                     onChange={fileChangeHandler}
                     className='col-span-3'
                   />
