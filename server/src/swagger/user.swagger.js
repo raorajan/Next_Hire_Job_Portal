@@ -491,18 +491,12 @@
  * @swagger
  * /api/v1/user/search:
  *   get:
- *     summary: Get search results based on query
+ *     summary: Get personalized search results based on user history
  *     tags: [User]
  *     security:
  *       - bearerAuth: []
- *     description: Performs a search across jobs based on the query string. Search history is updated automatically. Optimized with indexed queries and aggregation pipeline.
+ *     description: Returns job results based on the authenticated user's search history. If the search history is empty, it falls back to displaying the latest 50 job openings. Optimized with aggregation pipelines and indexed queries.
  *     parameters:
- *       - name: query
- *         in: query
- *         description: Search query string
- *         required: true
- *         schema:
- *           type: string
  *       - name: page
  *         in: query
  *         description: Page number for pagination
@@ -512,14 +506,14 @@
  *           default: 1
  *       - name: limit
  *         in: query
- *         description: Number of results per page
+ *         description: Number of results to return
  *         required: false
  *         schema:
  *           type: integer
- *           default: 10
+ *           default: 50
  *     responses:
  *       200:
- *         description: Successfully retrieved search results
+ *         description: Successfully retrieved jobs (based on history or latest fallback)
  *         content:
  *           application/json:
  *             schema:
@@ -528,21 +522,20 @@
  *                 success:
  *                   type: boolean
  *                   example: true
+ *                 status:
+ *                   type: number
+ *                   example: 200
+ *                 message:
+ *                   type: string
+ *                   example: Explore our latest job openings.
  *                 jobs:
  *                   type: array
  *                   items:
  *                     $ref: '#/components/schemas/Job'
- *                 currentPage:
- *                   type: number
- *                   example: 1
- *                 totalPages:
- *                   type: number
- *                   example: 5
- *                 totalJobs:
- *                   type: number
- *                   example: 50
+ *       401:
+ *         description: Unauthorized - authentication required
  *       404:
- *         description: No results found
+ *         description: User not found
  *       500:
  *         description: Internal server error
  */
@@ -587,7 +580,7 @@
  *   post:
  *     summary: Extract key information from a user's documents
  *     tags: [User]
- *     description: Extracts text content from uploaded PDF documents using OpenAI service.
+ *     description: Extracts text content from uploaded PDF documents using Google Gemini AI service.
  *     requestBody:
  *       required: true
  *       content:
@@ -614,11 +607,551 @@
  *                   type: integer
  *                   description: HTTP status code
  *                 extractedContent:
- *                   type: string
- *                   description: Text content extracted from the document
+ *                   type: object
+ *                   description: JSON content extracted from the document
  *       400:
  *         description: No document file was uploaded
  *       500:
  *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/v1/user/job-alerts:
+ *   get:
+ *     summary: Get user's job alert preferences
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Returns the authenticated user's job alert settings including enabled status, frequency, and saved filters.
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved job alert preferences
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 jobAlerts:
+ *                   type: object
+ *                   properties:
+ *                     enabled:
+ *                       type: boolean
+ *                     frequency:
+ *                       type: string
+ *                       enum: [daily, weekly]
+ *                     savedFilters:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *       404:
+ *         description: User not found
+ *   post:
+ *     summary: Update user's job alert preferences
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Updates job alert settings including enabled status, frequency (daily/weekly), and saved search filters.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               enabled:
+ *                 type: boolean
+ *                 description: Enable or disable job alerts
+ *               frequency:
+ *                 type: string
+ *                 enum: [daily, weekly]
+ *                 description: Frequency of job alert emails
+ *               filters:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                     keywords:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                     location:
+ *                       type: string
+ *                     jobType:
+ *                       type: string
+ *                     minSalary:
+ *                       type: number
+ *                     maxSalary:
+ *                       type: number
+ *                     experienceLevel:
+ *                       type: number
+ *                     companyIds:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                     limit:
+ *                       type: number
+ *     responses:
+ *       200:
+ *         description: Job alert preferences updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 message:
+ *                   type: string
+ *                   example: Job alert preferences updated successfully.
+ *                 jobAlerts:
+ *                   type: object
+ *       400:
+ *         description: Invalid frequency value
+ *       404:
+ *         description: User not found
+ */
+
+/**
+ * @swagger
+ * /api/v1/user/saved-searches:
+ *   get:
+ *     summary: Get user's saved searches
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Returns all saved job searches for the authenticated user.
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved saved searches
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 savedSearches:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/SavedSearch'
+ *       404:
+ *         description: User not found
+ *   post:
+ *     summary: Create or update a saved search
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Creates a new saved search or updates an existing one. Users can save up to 20 searches.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               searchId:
+ *                 type: string
+ *                 description: ID of existing search to update (omit for new search)
+ *               name:
+ *                 type: string
+ *                 description: Name for the saved search
+ *               keywords:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Search keywords (max 10)
+ *               location:
+ *                 type: string
+ *               jobType:
+ *                 type: string
+ *               minSalary:
+ *                 type: number
+ *               maxSalary:
+ *                 type: number
+ *               experienceLevel:
+ *                 type: number
+ *               companyIds:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               limit:
+ *                 type: number
+ *                 description: Max results (1-50)
+ *               alertEnabled:
+ *                 type: boolean
+ *                 description: Enable email alerts for this search
+ *     responses:
+ *       200:
+ *         description: Saved search created or updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 message:
+ *                   type: string
+ *                   example: Saved search created successfully.
+ *                 savedSearches:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/SavedSearch'
+ *       400:
+ *         description: Maximum saved searches limit reached (20)
+ *       404:
+ *         description: User or saved search not found
+ */
+
+/**
+ * @swagger
+ * /api/v1/user/saved-searches/{searchId}:
+ *   delete:
+ *     summary: Delete a saved search
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Removes a saved search by ID.
+ *     parameters:
+ *       - name: searchId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the saved search to delete
+ *     responses:
+ *       200:
+ *         description: Saved search removed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 message:
+ *                   type: string
+ *                   example: Saved search removed successfully.
+ *                 savedSearches:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/SavedSearch'
+ *       400:
+ *         description: Invalid saved search ID
+ *       404:
+ *         description: User or saved search not found
+ */
+
+/**
+ * @swagger
+ * /api/v1/user/profile/skill-gap:
+ *   get:
+ *     summary: Get skill gap insights for a specific job
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Analyzes the user's skills against a job's requirements and suggests learning resources for missing skills.
+ *     parameters:
+ *       - name: jobId
+ *         in: query
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Job ID to analyze skill gap for
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved skill gap insights
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 job:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                     title:
+ *                       type: string
+ *                     company:
+ *                       type: string
+ *                     location:
+ *                       type: string
+ *                 userSkills:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                 matchedSkills:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                 missingSkills:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                 recommendedResources:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/PrepResource'
+ *       400:
+ *         description: Valid jobId query parameter is required
+ *       404:
+ *         description: User or job not found
+ */
+
+/**
+ * @swagger
+ * /api/v1/user/profile/completion:
+ *   get:
+ *     summary: Get profile completion score
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Returns the user's profile completion percentage and pending tasks to complete their profile.
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved profile completion data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 score:
+ *                   type: integer
+ *                   description: Completion percentage (0-100)
+ *                   example: 60
+ *                 completedTasks:
+ *                   type: integer
+ *                   example: 3
+ *                 totalTasks:
+ *                   type: integer
+ *                   example: 5
+ *                 pendingTasks:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                 pendingTasksDetails:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       key:
+ *                         type: string
+ *                       label:
+ *                         type: string
+ *                       completed:
+ *                         type: boolean
+ *                 templatesCount:
+ *                   type: integer
+ *                   description: Number of quick apply templates
+ *       404:
+ *         description: User not found
+ */
+
+/**
+ * @swagger
+ * /api/v1/user/templates:
+ *   get:
+ *     summary: Get user's quick apply templates
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Returns all quick apply templates saved by the user.
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved templates
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 templates:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/QuickTemplate'
+ *       404:
+ *         description: User not found
+ *   post:
+ *     summary: Create a quick apply template
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Creates a new quick apply template with cover letter and optional resume reference.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Template title
+ *               coverLetter:
+ *                 type: string
+ *                 description: Cover letter content
+ *               resumeId:
+ *                 type: string
+ *                 description: Reference to a saved resume
+ *     responses:
+ *       201:
+ *         description: Template created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 status:
+ *                   type: integer
+ *                   example: 201
+ *                 message:
+ *                   type: string
+ *                   example: Quick apply template created successfully.
+ *                 templates:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/QuickTemplate'
+ *       400:
+ *         description: Template title is required
+ *       404:
+ *         description: User not found
+ */
+
+/**
+ * @swagger
+ * /api/v1/user/templates/{templateId}:
+ *   put:
+ *     summary: Update a quick apply template
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Updates an existing quick apply template.
+ *     parameters:
+ *       - name: templateId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the template to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               coverLetter:
+ *                 type: string
+ *               resumeId:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Template updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 message:
+ *                   type: string
+ *                   example: Quick apply template updated successfully.
+ *                 templates:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/QuickTemplate'
+ *       404:
+ *         description: User or template not found
+ *   delete:
+ *     summary: Delete a quick apply template
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Deletes a quick apply template by ID.
+ *     parameters:
+ *       - name: templateId
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the template to delete
+ *     responses:
+ *       200:
+ *         description: Template deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 message:
+ *                   type: string
+ *                   example: Quick apply template deleted successfully.
+ *                 templates:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/QuickTemplate'
+ *       404:
+ *         description: User or template not found
  */
 

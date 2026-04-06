@@ -1458,10 +1458,11 @@ const getSearchResult = asyncErrorHandler(async (req, res, next) => {
   const userId = req.user.id;
   const user = await User.findById(userId)
     .select("searchHistory")
-    .lean(); // Use lean() for read-only query
+    .lean();
 
   if (!user) {
-    return next(new ErrorHandler("User not found", 404));
+    const error = new ErrorHandler("User not found", 404);
+    return error.sendError(res);
   }
   
   const searchKeywords = [
@@ -1472,24 +1473,22 @@ const getSearchResult = asyncErrorHandler(async (req, res, next) => {
     ),
   ];
 
-  if (searchKeywords.length === 0) {
-    return res.status(200).json({
-      success: true,
-      status: 200,
-      message: "No search history found",
-      jobs: [],
-    });
+  let jobQuery = {};
+  let message = "Jobs retrieved successfully.";
+
+  if (searchKeywords.length > 0) {
+    // If we have history, filter by it using a combined regex for efficiency
+    const searchPattern = searchKeywords.join("|");
+    jobQuery = {
+      $or: [
+        { title: { $regex: searchPattern, $options: "i" } },
+        { requirements: { $regex: searchPattern, $options: "i" } },
+      ],
+    };
+  } else {
+    // If no history, show latest jobs as a fallback for better UX
+    message = "Explore our latest job openings.";
   }
-  
-  // Optimize: Build regex patterns once
-  const regexPatterns = searchKeywords.map((keyword) => new RegExp(keyword, "i"));
-  
-  const jobQuery = {
-    $or: [
-      { title: { $in: regexPatterns } },
-      { requirements: { $in: regexPatterns } },
-    ],
-  };
 
   // Optimize: Use aggregation with lookup for better performance
   const jobs = await Job.aggregate([
@@ -1512,22 +1511,14 @@ const getSearchResult = asyncErrorHandler(async (req, res, next) => {
       },
     },
     { $unwind: "$company" },
-    { $limit: 50 }, // Limit results
     { $sort: { createdAt: -1 } },
+    { $limit: 50 }, // Limit results for browse/search view
   ]);
-
-  if (!jobs.length) {
-    return res.status(200).json({
-      success: true,
-      status: 200,
-      message: "No jobs found matching the search history",
-      jobs: [],
-    });
-  }
 
   return res.status(200).json({
     success: true,
     status: 200,
+    message: jobs.length === 0 ? "No jobs found matching your criteria." : message,
     jobs,
   });
 });

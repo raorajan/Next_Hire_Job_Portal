@@ -55,13 +55,25 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Error'
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
  *       403:
  *         description: Forbidden - Only students can apply for jobs
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Error'
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
  *       404:
  *         description: Job not found
  */
@@ -172,8 +184,11 @@
  *             properties:
  *               status:
  *                 type: string
- *                 enum: [applied, interview, offered, rejected]
+ *                 enum: [pending, shortlisted, interviewed, offered, accepted, rejected]
  *                 description: New status for the application
+ *               note:
+ *                 type: string
+ *                 description: Optional note about the status change
  *             required:
  *               - status
  *     responses:
@@ -194,14 +209,96 @@
  *                   type: integer
  *                   example: 200
  *       400:
- *         description: Bad Request - Invalid status or application data
+ *         description: Bad Request - Invalid status or application already in this status
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Error'
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
  *       404:
  *         description: Application not found
  *       403:
  *         description: Unauthorized to update this application
+ */
+
+/**
+ * @swagger
+ * /api/v1/application/{applicationId}/timeline:
+ *   get:
+ *     summary: Get application status timeline
+ *     tags: [Application]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Returns the complete status history timeline for a job application. Only the applicant or recruiter can view this.
+ *     parameters:
+ *       - name: applicationId
+ *         in: path
+ *         required: true
+ *         description: ID of the application
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved application timeline
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 status:
+ *                   type: integer
+ *                   example: 200
+ *                 application:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                     jobTitle:
+ *                       type: string
+ *                     companyName:
+ *                       type: string
+ *                     currentStatus:
+ *                       type: string
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                     updatedAt:
+ *                       type: string
+ *                       format: date-time
+ *                 timeline:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       status:
+ *                         type: string
+ *                       note:
+ *                         type: string
+ *                       changedBy:
+ *                         type: object
+ *                         properties:
+ *                           _id:
+ *                             type: string
+ *                           fullname:
+ *                             type: string
+ *                           role:
+ *                             type: string
+ *                       changedAt:
+ *                         type: string
+ *                         format: date-time
+ *       400:
+ *         description: Application ID is required
+ *       403:
+ *         description: Not authorized to view this timeline
+ *       404:
+ *         description: Application not found
  */
 
