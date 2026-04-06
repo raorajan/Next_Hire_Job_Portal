@@ -5,9 +5,9 @@
 NextHire is a comprehensive job portal application that connects job seekers with employers. The platform allows recruiters to post job opportunities and manage applications, while job seekers can search for positions, apply to jobs, and receive personalized recommendations based on their profile.
 
 ## Live Demo
-- [Frontend](https://nexthire-portal.netlify.app/)
-- [Backend](https://nexthire.onrender.com/)
-- [API Documentation](https://nexthire.onrender.com/api-docs/)
+- [Frontend](https://nexthire.raorajan.pro/)
+- [Backend](https://nexthireapi.raorajan.pro/)
+- [API Documentation](https://nexthire.raorajan.pro/api-docs/)
 
 ## Tech Stack
 
