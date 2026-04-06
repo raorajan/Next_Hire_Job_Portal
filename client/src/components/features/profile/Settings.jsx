@@ -43,11 +43,12 @@ export default function Settings() {
   }, [page]);
 
   return (
-    <div className='min-h-screen bg-gradient-to-b from-white via-gray-50/30 to-white relative overflow-hidden'>
+    <div className='min-h-screen bg-background relative overflow-hidden'>
       {/* Background decorations */}
       <div className='absolute inset-0 -z-10 overflow-hidden'>
-        <div className='absolute top-0 left-1/4 w-96 h-96 bg-[#6A38C2]/5 rounded-full blur-3xl'></div>
-        <div className='absolute bottom-0 right-1/4 w-96 h-96 bg-[#F83002]/5 rounded-full blur-3xl'></div>
+        <div className='absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl'></div>
+        <div className='absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl'></div>
+        <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/3 rounded-full blur-3xl'></div>
       </div>
 
       <Navbar />
@@ -57,9 +58,9 @@ export default function Settings() {
         canonicalUrl='/settings'
       />
       <div className='flex flex-col min-h-screen'>
-        <div className='flex-1 mx-4 pt-24 flex gap-6 max-w-7xl relative z-10'>
-          <div className='w-[300px] bg-white/95 backdrop-blur-sm border-2 border-gray-200/60 shadow-lg rounded-2xl px-4 py-6 sticky top-24 h-fit'>
-            <h2 className='text-2xl font-extrabold mb-6 bg-gradient-to-r from-[#6A38C2] to-[#F83002] bg-clip-text text-transparent'>
+        <div className='flex-1 mx-4 pt-24 flex flex-col md:flex-row gap-6 max-w-7xl relative z-10'>
+          <div className='w-full md:w-[300px] bg-card backdrop-blur-sm border border-border shadow-custom rounded-2xl px-4 py-6 md:sticky md:top-24 h-fit'>
+            <h2 className='text-2xl font-extrabold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
               Settings
             </h2>
             <div className='flex flex-col gap-2'>
@@ -69,8 +70,8 @@ export default function Settings() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 text-left ${
                     activeTab === tab.id
-                      ? "bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] text-white shadow-lg transform scale-105"
-                      : "bg-gray-100/80 text-gray-700 hover:bg-gradient-to-r hover:from-[#6A38C2]/10 hover:to-[#F83002]/10 hover:text-[#6A38C2] hover:border hover:border-[#6A38C2]/20"
+                      ? "bg-primary text-primary-foreground shadow-neon transform scale-105"
+                      : "bg-muted/30 text-muted-foreground hover:bg-primary/10 hover:text-primary border border-transparent hover:border-primary/20"
                   }`}
                 >
                   {tab.icon}
@@ -81,7 +82,7 @@ export default function Settings() {
           </div>
 
           {/* Main Content Area */}
-          <div className='flex-1 bg-white/95 backdrop-blur-sm border-2 border-gray-200/60 shadow-lg px-6 py-8 rounded-2xl'>
+          <div className='flex-1 bg-card backdrop-blur-sm border border-border shadow-custom px-6 py-8 rounded-2xl'>
             {activeTab === "settings" && <ProfileTab />}
             {activeTab === "password" && <PasswordTab />}
             {activeTab === "notifications" && <NotificationsTab />}
@@ -190,23 +191,23 @@ function ProfileTab() {
     <form onSubmit={submitHandler} className='space-y-6'>
       {loading && <Loader />}
       {profileCompletion && (
-        <div className="mb-6 bg-indigo-50/80 border border-indigo-200 rounded-2xl p-4">
+        <div className="mb-6 bg-primary/5 border border-primary/20 rounded-2xl p-4">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-semibold text-gray-800">
-              Profile completion: <span className="text-indigo-700">{profileCompletion.score}%</span>
+            <p className="text-sm font-semibold text-foreground">
+              Profile completion: <span className="text-primary">{profileCompletion.score}%</span>
             </p>
-            <p className="text-xs text-gray-600">
+            <p className="text-xs text-muted-foreground">
               {profileCompletion.completedTasks}/{profileCompletion.totalTasks} steps completed
             </p>
           </div>
-          <div className="w-full bg-indigo-100 rounded-full h-2 overflow-hidden">
+          <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
             <div
-              className="bg-gradient-to-r from-[#6A38C2] to-[#F83002] h-2 rounded-full transition-all duration-500"
+              className="bg-gradient-to-r from-primary to-secondary h-2 rounded-full transition-all duration-500 shadow-neon"
               style={{ width: `${profileCompletion.score}%` }}
             />
           </div>
           {profileCompletion.pendingTasks && profileCompletion.pendingTasks.length > 0 && (
-            <ul className="mt-3 text-xs text-gray-700 list-disc list-inside space-y-1">
+            <ul className="mt-3 text-xs text-muted-foreground list-disc list-inside space-y-1">
               {profileCompletion.pendingTasks.map((task) => (
                 <li key={task}>{task}</li>
               ))}
@@ -217,15 +218,15 @@ function ProfileTab() {
       <div className='flex items-start gap-6'>
         <div className='flex flex-col items-center'>
           <div className='relative mb-4'>
-            <Avatar className='h-24 w-24 ring-4 ring-[#6A38C2]/20'>
+            <Avatar className='h-24 w-24 ring-4 ring-primary/20'>
               <AvatarImage src={user?.profile?.profilePhoto?.url} alt='profile' />
-              <AvatarFallback className="text-3xl font-bold bg-gradient-to-br from-[#6A38C2]/20 to-[#F83002]/20 text-[#6A38C2]">
+              <AvatarFallback className="text-3xl font-bold bg-secondary/20 text-secondary">
                 {user?.fullname ? user.fullname.charAt(0).toUpperCase() : "U"}
               </AvatarFallback>
             </Avatar>
-            <div className='absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-r from-[#6A38C2] to-[#F83002] rounded-full border-2 border-white'></div>
+            <div className='absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-r from-primary to-secondary rounded-full border-2 border-background shadow-neon'></div>
           </div>
-          <label className='cursor-pointer bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] hover:from-[#5b30a6] hover:to-[#4a2580] text-white px-6 py-2 rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 inline-block'>
+          <label className='cursor-pointer bg-primary hover:bg-primary/80 text-primary-foreground px-6 py-2 rounded-xl text-sm font-semibold shadow-neon hover:scale-105 transition-all duration-300 inline-block text-center'>
             Upload Photo
             <input
               id='avatar'
@@ -238,37 +239,37 @@ function ProfileTab() {
           </label>
         </div>
         <div className='flex-1'>
-          <label className='block font-bold mb-2 text-gray-900'>Bio</label>
+          <label className='block font-bold mb-2 text-foreground'>Bio</label>
           <textarea
             name='bio'
             value={input.bio}
             onChange={changeHandler}
             rows='4'
-            className='block w-full rounded-xl border-2 border-gray-200/60 p-3 resize-none focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 outline-none transition-all duration-300 bg-white/80 backdrop-blur-sm'
+            className='block w-full rounded-xl border border-border p-3 resize-none focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-300 bg-background text-foreground'
           ></textarea>
         </div>
       </div>
 
       <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
         <div>
-          <label className='block font-bold mb-2 text-gray-900'>Full Name</label>
+          <label className='block font-bold mb-2 text-foreground'>Full Name</label>
           <input
             name='fullname'
             value={input.fullname}
             onChange={changeHandler}
             type='text'
-            className='mt-1 block w-full rounded-xl border-2 border-gray-200/60 p-3 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 outline-none transition-all duration-300 bg-white/80 backdrop-blur-sm'
+            className='mt-1 block w-full rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-300 bg-background text-foreground'
           />
         </div>
         <div>
-          <label className='block font-bold mb-2 text-gray-900'>Email</label>
+          <label className='block font-bold mb-2 text-foreground'>Email</label>
           <input
             name='email'
             value={input.email}
             onChange={changeHandler}
             type='email'
             disabled
-            className='mt-1 block w-full rounded-xl border-2 border-gray-200/60 p-3 bg-gray-100/80 cursor-not-allowed'
+            className='mt-1 block w-full rounded-xl border border-border p-3 bg-muted/50 text-muted-foreground cursor-not-allowed'
           />
         </div>
       </div>
@@ -276,24 +277,24 @@ function ProfileTab() {
       {user?.role === "student" && (
         <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
           <div>
-            <label className='block font-bold mb-2 text-gray-900'>Skills</label>
+            <label className='block font-bold mb-2 text-foreground'>Skills</label>
             <input
               name='skills'
               value={input.skills}
               onChange={changeHandler}
               type='text'
-              className='mt-1 block w-full rounded-xl border-2 border-gray-200/60 p-3 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 outline-none transition-all duration-300 bg-white/80 backdrop-blur-sm'
+              className='mt-1 block w-full rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-300 bg-background text-foreground'
               placeholder='e.g., React, Node.js, Python'
             />
           </div>
           <div>
-            <label className='block font-bold mb-2 text-gray-900'>Upload Resume</label>
+            <label className='block font-bold mb-2 text-foreground'>Upload Resume</label>
             <input
               name='file'
               onChange={fileHandler}
               type='file'
               accept='.pdf,.doc,.docx'
-              className='mt-1 block w-full rounded-xl border-2 border-gray-200/60 p-2 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r file:from-[#6A38C2] file:to-[#5b30a6] file:text-white hover:file:from-[#5b30a6] hover:file:to-[#4a2580] file:cursor-pointer transition-all duration-300 bg-white/80 backdrop-blur-sm'
+              className='mt-1 block w-full rounded-xl border border-border p-2 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/80 file:cursor-pointer transition-all duration-300 bg-background text-foreground'
             />
           </div>
         </div>
@@ -302,7 +303,7 @@ function ProfileTab() {
       <div>
         <button
           type='submit'
-          className='mt-4 bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] hover:from-[#5b30a6] hover:to-[#4a2580] text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300'
+          className='mt-4 bg-primary hover:bg-primary/80 text-primary-foreground px-8 py-3 rounded-xl font-bold shadow-neon hover:scale-105 transition-all duration-300'
           disabled={loading}
         >
           {loading ? "Please wait..." : "Save Changes"}
@@ -355,10 +356,10 @@ function PasswordTab() {
   return (
     <div className='space-y-6'>
       <div>
-        <label className='block font-bold mb-2 text-gray-900'>Current Password</label>
+        <label className='block font-bold mb-2 text-foreground'>Current Password</label>
         <input
           type='password'
-          className='mt-1 block w-full rounded-xl border-2 border-gray-200/60 p-3 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 outline-none transition-all duration-300 bg-white/80 backdrop-blur-sm'
+          className='mt-1 block w-full rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-300 bg-background text-foreground'
           value={currentPassword}
           onChange={(e) => {
             setCurrentPassword(e.target.value);
@@ -367,33 +368,33 @@ function PasswordTab() {
         />
       </div>
       <div>
-        <label className='block font-bold mb-2 text-gray-900'>New Password</label>
+        <label className='block font-bold mb-2 text-foreground'>New Password</label>
         <input
           type='password'
-          className='mt-1 block w-full rounded-xl border-2 border-gray-200/60 p-3 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 outline-none transition-all duration-300 bg-white/80 backdrop-blur-sm'
+          className='mt-1 block w-full rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-300 bg-background text-foreground'
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
         />
       </div>
       <div>
-        <label className='block font-bold mb-2 text-gray-900'>Confirm New Password</label>
+        <label className='block font-bold mb-2 text-foreground'>Confirm New Password</label>
         <input
           type='password'
-          className='mt-1 block w-full rounded-xl border-2 border-gray-200/60 p-3 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 outline-none transition-all duration-300 bg-white/80 backdrop-blur-sm'
+          className='mt-1 block w-full rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-300 bg-background text-foreground'
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
       </div>
 
       {error && (
-        <div className='bg-red-50/80 backdrop-blur-sm border-2 border-red-200 rounded-xl p-4'>
-          <p className='text-red-700 font-semibold'>{error}</p>
+        <div className='bg-destructive/10 border border-destructive/20 rounded-xl p-4'>
+          <p className='text-destructive font-semibold'>{error}</p>
         </div>
       )}
 
       <button
         onClick={handlePasswordChange}
-        className='mt-4 bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] hover:from-[#5b30a6] hover:to-[#4a2580] text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300'
+        className='mt-4 bg-primary hover:bg-primary/80 text-primary-foreground px-8 py-3 rounded-xl font-bold shadow-neon hover:scale-105 transition-all duration-300'
       >
         Update Password
       </button>
@@ -444,11 +445,11 @@ function NotificationsTab() {
 
   return (
     <div className='space-y-6'>
-      <div className='bg-gray-50/80 rounded-xl p-4 border border-gray-200/60 space-y-4'>
+      <div className='bg-muted/30 rounded-xl p-4 border border-border space-y-4'>
         <div className='flex items-center justify-between'>
           <div>
-            <p className='font-semibold text-gray-900'>Job Alerts</p>
-            <p className='text-xs text-gray-600'>
+            <p className='font-semibold text-foreground'>Job Alerts</p>
+            <p className='text-xs text-muted-foreground'>
               Get periodic emails with new jobs that match your interests.
             </p>
           </div>
@@ -459,32 +460,32 @@ function NotificationsTab() {
               checked={enabled}
               onChange={(e) => setEnabled(e.target.checked)}
             />
-            <div className='w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#6A38C2]/40 rounded-full peer peer-checked:bg-[#6A38C2] relative transition-colors'>
-              <span className='absolute top-[2px] left-[2px] w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-200 peer-checked:translate-x-5' />
+            <div className='w-11 h-6 bg-muted peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/40 rounded-full peer peer-checked:bg-primary relative transition-colors shadow-inner'>
+              <span className='absolute top-[2px] left-[2px] w-5 h-5 bg-foreground rounded-full shadow-sm transition-transform duration-200 peer-checked:translate-x-5' />
             </div>
-        </label>
-      </div>
+          </label>
+        </div>
 
         <div className='mt-3'>
-          <p className='text-xs font-semibold text-gray-700 mb-1'>
+          <p className='text-xs font-semibold text-muted-foreground mb-1'>
             Alert frequency
           </p>
           <select
             value={frequency}
             onChange={(e) => setFrequency(e.target.value)}
             disabled={!enabled}
-            className='mt-1 block w-full rounded-xl border-2 border-gray-200/60 p-2 text-sm focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 outline-none bg-white/80 disabled:bg-gray-100 disabled:text-gray-400'
+            className='mt-1 block w-full rounded-xl border border-border p-2 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none bg-background text-foreground disabled:bg-muted/50 disabled:text-muted-foreground transition-all duration-300'
           >
             <option value='daily'>Daily</option>
             <option value='weekly'>Weekly</option>
           </select>
-      </div>
+        </div>
       </div>
 
       <button
         onClick={handleSave}
         disabled={saving}
-        className='mt-4 bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] hover:from-[#5b30a6] hover:to-[#4a2580] text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed'
+        className='mt-4 bg-primary hover:bg-primary/80 text-primary-foreground px-8 py-3 rounded-xl font-bold shadow-neon hover:scale-105 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed'
       >
         {saving ? "Saving..." : "Save Preferences"}
       </button>
@@ -495,24 +496,24 @@ function NotificationsTab() {
 function PrivacyTab() {
   return (
     <div className='space-y-6'>
-      <div className='bg-gray-50/80 rounded-xl p-4 border border-gray-200/60'>
-        <label className='flex items-center gap-3 cursor-pointer hover:bg-gray-100/50 rounded-lg p-3 transition-colors duration-200'>
-          <input type='checkbox' className='w-5 h-5 text-[#6A38C2] border-gray-300 rounded focus:ring-[#6A38C2] focus:ring-2 cursor-pointer' />
-          <span className='font-semibold text-gray-900'>Make my profile public</span>
+      <div className='bg-muted/30 rounded-xl p-4 border border-border'>
+        <label className='flex items-center gap-3 cursor-pointer hover:bg-primary/5 rounded-lg p-3 transition-all duration-200'>
+          <input type='checkbox' className='w-5 h-5 accent-primary border-border rounded focus:ring-primary focus:ring-2 cursor-pointer bg-background' />
+          <span className='font-semibold text-foreground'>Make my profile public</span>
         </label>
       </div>
-      <div className='bg-gray-50/80 rounded-xl p-4 border border-gray-200/60'>
-        <label className='flex items-center gap-3 cursor-pointer hover:bg-gray-100/50 rounded-lg p-3 transition-colors duration-200'>
-          <input type='checkbox' className='w-5 h-5 text-[#6A38C2] border-gray-300 rounded focus:ring-[#6A38C2] focus:ring-2 cursor-pointer' />
-          <span className='font-semibold text-gray-900'>Allow resume downloads</span>
+      <div className='bg-muted/30 rounded-xl p-4 border border-border'>
+        <label className='flex items-center gap-3 cursor-pointer hover:bg-primary/5 rounded-lg p-3 transition-all duration-200'>
+          <input type='checkbox' className='w-5 h-5 accent-primary border-border rounded focus:ring-primary focus:ring-2 cursor-pointer bg-background' />
+          <span className='font-semibold text-foreground'>Allow resume downloads</span>
         </label>
       </div>
-      <div className='mt-8 border-t-2 border-gray-200 pt-6 space-y-3'>
-        <button className='text-red-600 hover:text-red-700 font-semibold px-4 py-2 rounded-xl hover:bg-red-50 transition-all duration-200'>
+      <div className='mt-8 border-t border-border pt-6 space-y-4'>
+        <button className='text-destructive hover:text-white font-bold px-4 py-2 rounded-xl hover:bg-destructive transition-all duration-300 border border-destructive/20 hover:border-destructive'>
           Deactivate Account
         </button>
         <br />
-        <button className='text-red-600 hover:text-red-700 font-semibold px-4 py-2 rounded-xl hover:bg-red-50 transition-all duration-200'>
+        <button className='text-destructive hover:text-white font-bold px-4 py-2 rounded-xl hover:bg-destructive transition-all duration-300 border border-destructive/20 hover:border-destructive'>
           Delete My Account
         </button>
       </div>
@@ -581,25 +582,25 @@ function SavedSearchesTab() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-extrabold bg-gradient-to-r from-[#6A38C2] to-[#F83002] bg-clip-text text-transparent">
+        <h2 className="text-2xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
           Saved Searches
         </h2>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] hover:from-[#5b30a6] hover:to-[#4a2580] text-white px-6 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+          className="bg-primary hover:bg-primary/80 text-primary-foreground px-6 py-2 rounded-xl font-bold shadow-neon hover:scale-105 transition-all duration-300"
         >
           {showForm ? "Cancel" : "+ New Search"}
         </button>
       </div>
 
       {showForm && (
-        <div className="bg-gray-50/80 rounded-xl p-6 border-2 border-gray-200/60 space-y-4">
+        <div className="bg-muted/30 rounded-xl p-6 border border-border space-y-4 shadow-inner">
           <input
             type="text"
             placeholder="Search name (e.g., 'React Developer Jobs')"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full rounded-xl border-2 border-gray-200/60 p-3 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 outline-none"
+            className="w-full rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none bg-background text-foreground"
           />
           <div className="grid grid-cols-2 gap-4">
             <input
@@ -607,36 +608,36 @@ function SavedSearchesTab() {
               placeholder="Keywords (comma-separated)"
               value={formData.keywords}
               onChange={(e) => setFormData({ ...formData, keywords: e.target.value })}
-              className="rounded-xl border-2 border-gray-200/60 p-3 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 outline-none"
+              className="rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none bg-background text-foreground"
             />
             <input
               type="text"
               placeholder="Location"
               value={formData.location}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              className="rounded-xl border-2 border-gray-200/60 p-3 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 outline-none"
+              className="rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none bg-background text-foreground"
             />
             <input
               type="text"
               placeholder="Job Type"
               value={formData.jobType}
               onChange={(e) => setFormData({ ...formData, jobType: e.target.value })}
-              className="rounded-xl border-2 border-gray-200/60 p-3 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 outline-none"
+              className="rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none bg-background text-foreground"
             />
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <input
                 type="checkbox"
                 checked={formData.alertEnabled}
                 onChange={(e) => setFormData({ ...formData, alertEnabled: e.target.checked })}
-                className="w-5 h-5 text-[#6A38C2]"
+                className="w-5 h-5 accent-primary bg-background border-border"
               />
-              <label className="font-semibold text-gray-900">Enable alerts for this search</label>
+              <label className="font-semibold text-foreground">Enable alerts for this search</label>
             </div>
           </div>
           <button
             onClick={handleSave}
             disabled={loading}
-            className="bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] hover:from-[#5b30a6] hover:to-[#4a2580] text-white px-6 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+            className="bg-primary hover:bg-primary/80 text-primary-foreground px-6 py-2 rounded-xl font-bold shadow-neon hover:scale-105 transition-all duration-300"
           >
             {loading ? "Saving..." : "Save Search"}
           </button>
@@ -648,19 +649,19 @@ function SavedSearchesTab() {
           savedSearches.map((search) => (
             <div
               key={search._id}
-              className="bg-white/80 rounded-xl p-4 border-2 border-gray-200/60 hover:border-[#6A38C2]/30 transition-all"
+              className="bg-muted/20 backdrop-blur-sm rounded-xl p-4 border border-border hover:border-primary/30 hover:bg-muted/30 transition-all duration-300 group"
             >
               <div className="flex justify-between items-start">
                 <div className="flex-1">
-                  <h3 className="font-bold text-lg text-gray-900 mb-2">{search.name}</h3>
-                  <div className="text-sm text-gray-600 space-y-1">
+                  <h3 className="font-bold text-lg text-foreground mb-2 group-hover:text-primary transition-colors">{search.name}</h3>
+                  <div className="text-sm text-muted-foreground space-y-1">
                     {search.keywords?.length > 0 && (
                       <p><strong>Keywords:</strong> {search.keywords.join(", ")}</p>
                     )}
                     {search.location && <p><strong>Location:</strong> {search.location}</p>}
                     {search.jobType && <p><strong>Job Type:</strong> {search.jobType}</p>}
                     {search.alertEnabled && (
-                      <span className="inline-block bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold mt-2">
+                      <span className="inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold mt-2 shadow-neon-sm">
                         Alerts Enabled
                       </span>
                     )}
@@ -668,7 +669,7 @@ function SavedSearchesTab() {
                 </div>
                 <button
                   onClick={() => handleDelete(search._id)}
-                  className="text-red-600 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-colors"
+                  className="text-muted-foreground hover:text-destructive p-2 hover:bg-destructive/10 rounded-lg transition-all duration-200"
                 >
                   <FaTrash />
                 </button>
@@ -744,7 +745,7 @@ function QuickTemplatesTab() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-extrabold bg-gradient-to-r from-[#6A38C2] to-[#F83002] bg-clip-text text-transparent">
+        <h2 className="text-2xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
           Quick Apply Templates
         </h2>
         <button
@@ -755,32 +756,32 @@ function QuickTemplatesTab() {
               setFormData({ title: "", coverLetter: "" });
             }
           }}
-          className="bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] hover:from-[#5b30a6] hover:to-[#4a2580] text-white px-6 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+          className="bg-primary hover:bg-primary/80 text-primary-foreground px-6 py-2 rounded-xl font-bold shadow-neon hover:scale-105 transition-all duration-300"
         >
           {showForm ? "Cancel" : "+ New Template"}
         </button>
       </div>
 
       {showForm && (
-        <div className="bg-gray-50/80 rounded-xl p-6 border-2 border-gray-200/60 space-y-4">
+        <div className="bg-muted/30 rounded-xl p-6 border border-border space-y-4 shadow-inner">
           <input
             type="text"
             placeholder="Template title (e.g., 'Software Engineer Application')"
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            className="w-full rounded-xl border-2 border-gray-200/60 p-3 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 outline-none"
+            className="w-full rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none bg-background text-foreground"
           />
           <textarea
             placeholder="Cover letter text..."
             value={formData.coverLetter}
             onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })}
             rows={8}
-            className="w-full rounded-xl border-2 border-gray-200/60 p-3 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 outline-none resize-none"
+            className="w-full rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none resize-none bg-background text-foreground"
           />
           <button
             onClick={handleSave}
             disabled={loading}
-            className="bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] hover:from-[#5b30a6] hover:to-[#4a2580] text-white px-6 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+            className="bg-primary hover:bg-primary/80 text-primary-foreground px-6 py-2 rounded-xl font-bold shadow-neon hover:scale-105 transition-all duration-300"
           >
             {loading ? "Saving..." : editingId ? "Update Template" : "Create Template"}
           </button>
@@ -792,12 +793,12 @@ function QuickTemplatesTab() {
           quickTemplates.map((template) => (
             <div
               key={template._id}
-              className="bg-white/80 rounded-xl p-4 border-2 border-gray-200/60 hover:border-[#6A38C2]/30 transition-all"
+              className="bg-muted/20 backdrop-blur-sm rounded-xl p-4 border border-border hover:border-primary/30 transition-all duration-300"
             >
               <div className="flex justify-between items-start">
                 <div className="flex-1">
-                  <h3 className="font-bold text-lg text-gray-900 mb-2">{template.title}</h3>
-                  <p className="text-sm text-gray-600 line-clamp-3">{template.coverLetter}</p>
+                  <h3 className="font-bold text-lg text-foreground mb-2">{template.title}</h3>
+                  <p className="text-sm text-muted-foreground line-clamp-3">{template.coverLetter}</p>
                 </div>
                 <div className="flex gap-2 ml-4">
                   <button

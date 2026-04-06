@@ -3,21 +3,21 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="relative bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white border-t border-gray-700/50 overflow-hidden">
+    <footer className="relative bg-background text-foreground border-t border-border overflow-hidden">
       {/* Background decorations */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#6A38C2]/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#F83002]/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl"></div>
       </div>
 
       <div className="container mx-auto px-4 py-12 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}
           <div className="col-span-1 md:col-span-2">
-            <h2 className="text-2xl font-extrabold mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-              Next<span className="text-[#F83002]">Hire</span>
+            <h2 className="text-2xl font-extrabold mb-4 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+              Next<span className="text-primary">Hire</span>
             </h2>
-            <p className="text-gray-400 mb-4 max-w-md">
+            <p className="text-muted-foreground mb-4 max-w-md">
               Your trusted platform for connecting talented professionals with top employers. 
               Discover opportunities, grow your career, and build your future.
             </p>
@@ -26,10 +26,10 @@ const Footer = () => {
                 href={import.meta.env.VITE_SOCIAL_FACEBOOK_URL || "https://facebook.com"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-gray-700/50 hover:bg-[#6A38C2] flex items-center justify-center transition-all duration-300 transform hover:scale-110"
+                className="w-10 h-10 rounded-full bg-muted hover:bg-primary hover:shadow-neon flex items-center justify-center transition-all duration-300 transform hover:scale-110"
                 aria-label="Facebook"
               >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-foreground" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M22.676 0H1.324C.593 0 0 .592 0 1.324v21.352C0 23.408.593 24 1.324 24H12.82V14.706H9.692v-3.578h3.128V8.408c0-3.1 1.893-4.787 4.657-4.787 1.325 0 2.463.1 2.794.144v3.238l-1.918.001c-1.503 0-1.794.715-1.794 1.762v2.31h3.587l-.468 3.578h-3.119V24h6.116C23.407 24 24 23.408 24 22.676V1.324C24 .592 23.407 0 22.676 0z" />
                 </svg>
               </a>
@@ -37,10 +37,10 @@ const Footer = () => {
                 href={import.meta.env.VITE_SOCIAL_TWITTER_URL || "https://twitter.com"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-gray-700/50 hover:bg-[#6A38C2] flex items-center justify-center transition-all duration-300 transform hover:scale-110"
+                className="w-10 h-10 rounded-full bg-muted hover:bg-primary hover:shadow-neon flex items-center justify-center transition-all duration-300 transform hover:scale-110"
                 aria-label="Twitter"
               >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-foreground" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M24 4.557a9.835 9.835 0 01-2.828.775 4.934 4.934 0 002.165-2.724 9.867 9.867 0 01-3.127 1.195 4.924 4.924 0 00-8.38 4.49A13.978 13.978 0 011.67 3.149 4.93 4.93 0 003.16 9.724a4.903 4.903 0 01-2.229-.616v.062a4.93 4.93 0 003.946 4.827 4.902 4.902 0 01-2.224.084 4.93 4.93 0 004.6 3.417A9.869 9.869 0 010 21.543a13.978 13.978 0 007.548 2.212c9.057 0 14.01-7.507 14.01-14.01 0-.213-.004-.425-.015-.636A10.012 10.012 0 0024 4.557z" />
                 </svg>
               </a>
@@ -48,7 +48,7 @@ const Footer = () => {
                 href={import.meta.env.VITE_SOCIAL_LINKEDIN_URL || "https://linkedin.com"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-gray-700/50 hover:bg-[#6A38C2] flex items-center justify-center transition-all duration-300 transform hover:scale-110"
+                className="w-10 h-10 rounded-full bg-muted hover:bg-primary hover:shadow-neon flex items-center justify-center transition-all duration-300 transform hover:scale-110"
                 aria-label="LinkedIn"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -60,25 +60,25 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-bold mb-4 text-white">Quick Links</h3>
+            <h3 className="text-lg font-bold mb-4 text-foreground">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-400 hover:text-[#6A38C2] transition-colors duration-200">
+                <Link to="/" className="text-muted-foreground hover:text-primary transition-colors duration-200">
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/jobs" className="text-gray-400 hover:text-[#6A38C2] transition-colors duration-200">
+                <Link to="/jobs" className="text-muted-foreground hover:text-primary transition-colors duration-200">
                   Browse Jobs
                 </Link>
               </li>
               <li>
-                <Link to="/browse-jobs" className="text-gray-400 hover:text-[#6A38C2] transition-colors duration-200">
+                <Link to="/browse-jobs" className="text-muted-foreground hover:text-primary transition-colors duration-200">
                   Search Results
                 </Link>
               </li>
               <li>
-                <Link to="/other-jobs" className="text-gray-400 hover:text-[#6A38C2] transition-colors duration-200">
+                <Link to="/other-jobs" className="text-muted-foreground hover:text-primary transition-colors duration-200">
                   Other Jobs
                 </Link>
               </li>
@@ -87,40 +87,40 @@ const Footer = () => {
 
           {/* For Employers */}
           <div>
-            <h3 className="text-lg font-bold mb-4 text-white">For Employers</h3>
+            <h3 className="text-lg font-bold mb-4 text-foreground">For Employers</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/signup" className="text-gray-400 hover:text-[#6A38C2] transition-colors duration-200">
+                <Link to="/signup" className="text-muted-foreground hover:text-primary transition-colors duration-200">
                   Post a Job
                 </Link>
               </li>
               <li>
-                <Link to="/profile/admin/companies/create" className="text-gray-400 hover:text-[#6A38C2] transition-colors duration-200">
+                <Link to="/profile/admin/companies/create" className="text-muted-foreground hover:text-primary transition-colors duration-200">
                   Create Company
                 </Link>
               </li>
               <li>
-                <span className="text-gray-400">Find Talent</span>
+                <span className="text-muted-foreground cursor-pointer hover:text-primary transition-colors duration-200">Find Talent</span>
               </li>
               <li>
-                <span className="text-gray-400">Pricing</span>
+                <span className="text-muted-foreground cursor-pointer hover:text-primary transition-colors duration-200">Pricing</span>
               </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-700/50 pt-8 mt-8">
+        <div className="border-t border-border pt-8 mt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm mb-4 md:mb-0">
+            <p className="text-muted-foreground text-sm mb-4 md:mb-0">
               © 2024 NextHire. All rights reserved.
             </p>
             <div className="flex space-x-6 text-sm">
-              <Link to="/privacy" className="text-gray-400 hover:text-[#6A38C2] transition-colors duration-200">
+              <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors duration-200">
                 Privacy Policy
               </Link>
-              <span className="text-gray-400">|</span>
-              <span className="text-gray-400">Terms of Service</span>
+              <span className="text-muted-foreground">|</span>
+              <span className="text-muted-foreground cursor-pointer hover:text-primary transition-colors duration-200">Terms of Service</span>
             </div>
           </div>
         </div>

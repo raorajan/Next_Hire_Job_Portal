@@ -55,138 +55,135 @@ const OtherJobs = () => {
   return (
     <>
       <Navbar />
-      <div className='min-h-screen bg-gradient-to-b from-white via-gray-50/30 to-white relative overflow-hidden'>
+      <div className='min-h-screen bg-background relative overflow-hidden'>
         {/* Background decorations */}
         <div className='absolute inset-0 -z-10 overflow-hidden'>
-          <div className='absolute top-0 left-1/4 w-96 h-96 bg-[#6A38C2]/5 rounded-full blur-3xl'></div>
-          <div className='absolute bottom-0 right-1/4 w-96 h-96 bg-[#F83002]/5 rounded-full blur-3xl'></div>
-          <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#6A38C2]/3 rounded-full blur-3xl'></div>
+          <div className='absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] animate-pulse'></div>
+          <div className='absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[100px] animate-pulse'></div>
         </div>
         
-        <div className='container mx-auto px-6 py-8 relative z-10'>
+        <div className='container mx-auto px-6 py-12 relative z-10'>
           {/* Header Section */}
-          <div className='text-center mb-16 mt-8'>
-            <div className='inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#6A38C2]/10 via-[#F83002]/10 to-[#6A38C2]/10 text-[#6A38C2] font-semibold text-sm border-2 border-[#6A38C2]/30 shadow-lg backdrop-blur-sm mb-6 hover:scale-105 transition-transform duration-300'>
-              <span className='w-2.5 h-2.5 bg-gradient-to-r from-[#6A38C2] to-[#F83002] rounded-full animate-pulse'></span>
-              External Job Listings
+          <div className='text-center mb-20 mt-12'>
+            <div className='inline-flex items-center gap-3 px-6 py-3 rounded-full bg-primary/10 text-primary font-bold text-sm border border-primary/20 shadow-neon-sm backdrop-blur-sm mb-8 hover:scale-105 transition-all duration-300'>
+              <span className='w-2.5 h-2.5 bg-primary rounded-full animate-pulse'></span>
+              External Global Opportunities
             </div>
-            <h1 className='text-5xl md:text-6xl font-extrabold mb-4'>
-              <span className='bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent'>
+            <h1 className='text-5xl md:text-7xl font-extrabold mb-6 tracking-tight'>
+              <span className='text-foreground'>
                 Discover{" "}
               </span>
-              <span className='bg-gradient-to-r from-[#6A38C2] via-[#8B5CF6] to-[#F83002] bg-clip-text text-transparent'>
-                Amazing Jobs
+              <span className='bg-gradient-to-r from-primary via-blue-400 to-secondary bg-clip-text text-transparent italic'>
+                Limitless Potential
               </span>
             </h1>
-            <p className='text-lg md:text-xl text-gray-600 max-w-2xl mx-auto font-medium'>
-              Explore thousands of job opportunities from top companies worldwide
+            <p className='text-xl text-muted-foreground max-w-2xl mx-auto font-medium leading-relaxed'>
+              Access thousands of premium job opportunities aggregated from the world's leading tech ecosystems.
             </p>
           </div>
 
           {/* Loading and Error States */}
           {loading && (
-            <div className='flex justify-center items-center py-20'>
+            <div className='flex justify-center items-center py-24'>
               <div className='text-center'>
                 <Loader />
-                <p className='text-gray-600 mt-4'>Loading amazing job opportunities...</p>
+                <p className='text-muted-foreground mt-6 font-semibold animate-pulse'>Aggregating global listings...</p>
               </div>
             </div>
           )}
           
           {error && (
             <div className='text-center py-20'>
-              <div className='bg-red-50 border border-red-200 rounded-2xl p-8 max-w-md mx-auto'>
-                <div className='w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4'>
-                  <svg className='w-8 h-8 text-red-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+              <div className='bg-destructive/10 border border-destructive/20 rounded-2xl p-10 max-w-md mx-auto shadow-custom backdrop-blur-sm'>
+                <div className='w-20 h-20 bg-destructive/20 rounded-full flex items-center justify-center mx-auto mb-6'>
+                  <svg className='w-10 h-10 text-destructive' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z' />
                   </svg>
                 </div>
-                <h3 className='text-lg font-semibold text-red-800 mb-2'>Oops! Something went wrong</h3>
-                <p className='text-red-600'>{error}</p>
+                <h3 className='text-2xl font-bold text-destructive mb-2'>Aggregation Fault</h3>
+                <p className='text-destructive/80'>{error}</p>
               </div>
             </div>
           )}
 
           {/* Job Cards Grid */}
           {!loading && !error && (
-            <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6'>
+            <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8'>
               {jobs?.map((job, index) => {
                 const cleanDescription = job?.description
                   ?.replace(/<[^>]+>/g, "")
-                  ?.slice(0, 220);
+                  ?.slice(0, 200);
                 const title = job?.title || job?.position || "Untitled Role";
-                const companyName = job?.company || job?.company_name || "Company Not Specified";
+                const companyName = job?.company || job?.company_name || "Enterprise Stealth";
                 const jobTags = job?.tags || [];
                 const location = Array.isArray(job?.location)
                   ? job.location.join(", ")
-                  : job?.location || "Remote / Flexible";
+                  : job?.location || "Remote / Global";
                 const salaryDisplay = job?.salary
                   ? job.salary
                   : job?.salary_min && job?.salary_max
                     ? `₹${Math.round(job.salary_min).toLocaleString()} - ₹${Math.round(job.salary_max).toLocaleString()}`
-                    : "Not specified";
+                    : "Competitive Market Rate";
 
                 return (
                 <div
                   key={index}
-                  className='group relative bg-white/95 backdrop-blur-sm p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-gray-200/60 hover:border-[#6A38C2]/30 hover:-translate-y-2 overflow-hidden'
+                  className='group relative bg-card backdrop-blur-md p-8 rounded-2xl shadow-custom hover:shadow-neon transition-all duration-500 border border-border hover:border-primary/30 hover:-translate-y-2 overflow-hidden'
                 >
-                  {/* Gradient overlay on hover */}
-                  <div className='absolute inset-0 bg-gradient-to-br from-[#6A38C2]/5 to-[#F83002]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
+                  <div className='absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none'></div>
+                  
                   <div className='relative z-10'>
-                    {/* Job Header */}
-                    <div className='flex items-start justify-between mb-4'>
+                    <div className='flex items-start justify-between mb-6'>
                       <div className='flex-1'>
-                        <h3 className='text-xl font-extrabold text-gray-900 group-hover:text-[#6A38C2] transition-colors duration-200 line-clamp-2 mb-2'>
+                        <h3 className='text-2xl font-bold text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-2 mb-3 tracking-tight'>
                           {title}
                         </h3>
                         <div className='flex items-center gap-2'>
-                          <div className='w-2.5 h-2.5 bg-gradient-to-r from-[#6A38C2] to-[#F83002] rounded-full'></div>
-                          <p className='text-gray-600 font-semibold'>
+                          <div className='w-2.5 h-2.5 bg-primary rounded-full shadow-neon-sm'></div>
+                          <p className='text-muted-foreground font-bold'>
                             {companyName}
                           </p>
                         </div>
                       </div>
-                      <div className='w-12 h-12 bg-gradient-to-br from-[#6A38C2]/10 to-[#F83002]/10 rounded-xl flex items-center justify-center ml-4 border-2 border-[#6A38C2]/20 group-hover:border-[#6A38C2]/40 transition-colors duration-300'>
-                        <svg className='w-6 h-6 text-[#6A38C2]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2V6' />
+                      <div className='w-14 h-14 bg-muted/50 rounded-2xl flex items-center justify-center ml-4 border border-border group-hover:border-primary/40 transition-all duration-300 shadow-inner'>
+                        <svg className='w-7 h-7 text-primary' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                          <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2V6' />
                         </svg>
                       </div>
                     </div>
 
-                    {/* Job Details */}
-                    <div className='space-y-3 mb-6 bg-gray-50/80 rounded-xl p-4 border border-gray-200/60'>
-                      <div className='flex items-center gap-3'>
-                        <div className='w-10 h-10 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg flex items-center justify-center border border-blue-200'>
-                          <svg className='w-5 h-5 text-blue-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' />
+                    <div className='space-y-4 mb-8 bg-muted/30 rounded-2xl p-5 border border-border/50'>
+                      <div className='flex items-center gap-4'>
+                        <div className='w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20 shadow-neon-sm'>
+                          <svg className='w-5 h-5 text-primary' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z' />
                           </svg>
                         </div>
                         <div>
-                          <p className='text-xs text-gray-500 font-medium'>Work Setup</p>
-                          <p className='font-semibold text-gray-800'>
-                            {job.remote ? "Remote Friendly" : location}
+                          <p className='text-xs text-muted-foreground font-bold uppercase tracking-widest'>Location</p>
+                          <p className='font-bold text-foreground'>
+                            {job.remote ? "Remote First" : location}
                           </p>
                         </div>
                       </div>
 
-                      <div className='flex items-center gap-3'>
-                        <div className='w-10 h-10 bg-gradient-to-br from-green-50 to-green-100 rounded-lg flex items-center justify-center border border-green-200'>
-                          <svg className='w-5 h-5 text-green-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                      <div className='flex items-center gap-4'>
+                        <div className='w-10 h-10 bg-secondary/10 rounded-xl flex items-center justify-center border border-secondary/20'>
+                          <svg className='w-5 h-5 text-secondary' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                             <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1' />
                           </svg>
                         </div>
                         <div>
-                          <p className='text-xs text-gray-500 font-medium'>Salary Range</p>
-                          <p className='font-semibold text-[#6A38C2]'>{salaryDisplay}</p>
+                          <p className='text-xs text-muted-foreground font-bold uppercase tracking-widest'>Compensation</p>
+                          <p className='font-bold text-primary italic'>{salaryDisplay}</p>
                         </div>
                       </div>
                       {!!jobTags.length && (
-                        <div className="flex flex-wrap gap-2">
-                          {jobTags.slice(0, 4).map((tag) => (
+                        <div className="flex flex-wrap gap-2 pt-2">
+                          {jobTags.slice(0, 3).map((tag) => (
                             <span
                               key={tag}
-                              className="px-3 py-1 rounded-full bg-indigo-50 text-xs font-semibold text-indigo-600"
+                              className="px-3 py-1.5 rounded-lg bg-muted text-[10px] font-extrabold text-muted-foreground border border-border uppercase tracking-tighter"
                             >
                               {tag}
                             </span>
@@ -195,23 +192,19 @@ const OtherJobs = () => {
                       )}
                     </div>
 
-                    {/* Job Description */}
-                    <div className='mb-6'>
-                      <p className='text-gray-600 text-sm line-clamp-3 leading-relaxed'>
-                        {cleanDescription}
-                      </p>
-                    </div>
+                    <p className='text-muted-foreground text-sm line-clamp-3 leading-relaxed mb-8'>
+                      {cleanDescription}...
+                    </p>
 
-                    {/* Action Button */}
                     <a
                       href={job.url || job.apply_url}
                       target='_blank'
                       rel='noopener noreferrer'
-                      className='group/btn w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] hover:from-[#5b30a6] hover:to-[#4a2580] text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105'
+                      className='group/btn w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-primary text-primary-foreground font-bold rounded-xl transition-all duration-300 shadow-neon hover:scale-105 border-none'
                     >
-                      <span>View Job Details</span>
-                      <svg className='w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-200' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14' />
+                      <span>Explore Opportunity</span>
+                      <svg className='w-5 h-5 group-hover/btn:translate-x-1 transition-transform duration-300' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 7l5 5m0 0l-5 5m5-5H6' />
                       </svg>
                     </a>
                   </div>
@@ -220,41 +213,41 @@ const OtherJobs = () => {
             </div>
           )}
 
-          {/* Pagination Controls */}
           {!loading && !error && (
-            <div className='flex justify-center items-center gap-6 mt-16'>
+            <div className='flex flex-col sm:flex-row justify-center items-center gap-8 mt-24 mb-12'>
               <button
                 onClick={handlePrevious}
                 disabled={page === 1}
-                className={`group flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                className={`group flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-bold transition-all duration-300 min-w-[160px] ${
                   page === 1
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "bg-white/95 backdrop-blur-sm text-gray-700 hover:bg-gradient-to-r hover:from-[#6A38C2] hover:to-[#5b30a6] hover:text-white shadow-lg hover:shadow-xl transform hover:scale-105 border-2 border-gray-200/60 hover:border-[#6A38C2]"
+                    ? "bg-muted text-muted-foreground cursor-not-allowed opacity-50 border border-border"
+                    : "bg-card text-foreground hover:bg-muted border border-border hover:border-primary/30 shadow-custom hover:shadow-neon hover:scale-105"
                 }`}
               >
-                <svg className={`w-4 h-4 transition-transform duration-200 ${page !== 1 ? 'group-hover:-translate-x-1' : ''}`} fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <svg className={`w-5 h-5 transition-transform duration-300 ${page !== 1 ? 'group-hover:-translate-x-1' : ''}`} fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                   <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
                 </svg>
                 Previous
               </button>
               
-              <div className='flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-xl px-6 py-3 shadow-lg border-2 border-gray-200/60'>
-                <div className='w-2.5 h-2.5 bg-gradient-to-r from-[#6A38C2] to-[#F83002] rounded-full animate-pulse'></div>
-                <span className='font-bold text-lg text-gray-800'>Page {page}</span>
-                <div className='w-2.5 h-2.5 bg-gradient-to-r from-[#F83002] to-[#6A38C2] rounded-full animate-pulse'></div>
+              <div className='flex items-center gap-4 bg-card rounded-2xl px-10 py-4 shadow-custom border border-border relative overflow-hidden'>
+                <div className='absolute inset-0 bg-primary/5 animate-pulse'></div>
+                <div className='w-3 h-3 bg-primary rounded-full shadow-neon-sm relative z-10'></div>
+                <span className='font-extrabold text-2xl text-foreground relative z-10 tracking-tight'>Page {page}</span>
+                <div className='w-3 h-3 bg-secondary rounded-full relative z-10'></div>
               </div>
               
               <button
                 onClick={handleNext}
                 disabled={!hasNext}
-                className={`group flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                className={`group flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-bold transition-all duration-300 min-w-[160px] ${
                   hasNext
-                    ? "bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] hover:from-[#5b30a6] hover:to-[#4a2580] text-white shadow-lg hover:shadow-xl transform hover:scale-105"
-                    : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    ? "bg-primary text-primary-foreground shadow-neon hover:scale-105"
+                    : "bg-muted text-muted-foreground cursor-not-allowed opacity-50 border border-border"
                 }`}
               >
                 Next
-                <svg className='w-4 h-4 transition-transform duration-200 group-hover:translate-x-1' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <svg className='w-5 h-5 transition-transform duration-300 group-hover:translate-x-1' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                   <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
                 </svg>
               </button>

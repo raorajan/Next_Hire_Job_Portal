@@ -2,6 +2,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Link } from "react-router-dom";
 import { FaBook, FaMagic, FaUserTie, FaCheckCircle } from "react-icons/fa";
+import ReactHelmet from "@/components/common/ReactHelmet";
 
 const guideBlocks = [
   {
@@ -10,7 +11,7 @@ const guideBlocks = [
       "Structured prep checklists, behavioral prompts, and whiteboard drills to help you walk into interviews with confidence.",
     to: "/other-jobs",
     action: "Explore Practice Sets",
-    icon: <FaUserTie className="text-indigo-500 text-2xl" />,
+    icon: <FaUserTie className="text-primary text-2xl group-hover:scale-110 transition-transform duration-300" />,
   },
   {
     title: "ATS-Friendly Resume Tips",
@@ -18,7 +19,7 @@ const guideBlocks = [
       "Learn how to tailor your profile for every submission, with examples that score well across the top ATS scanners.",
     to: "/profile",
     action: "Review My Profile",
-    icon: <FaCheckCircle className="text-emerald-500 text-2xl" />,
+    icon: <FaCheckCircle className="text-green-400 text-2xl group-hover:scale-110 transition-transform duration-300" />,
   },
   {
     title: "Career Playbooks",
@@ -26,7 +27,7 @@ const guideBlocks = [
       "Step-by-step pathways for popular roles so you can upskill, benchmark compensation, and target the right companies.",
     to: "/jobs",
     action: "See Matching Roles",
-    icon: <FaBook className="text-purple-500 text-2xl" />,
+    icon: <FaBook className="text-secondary text-2xl group-hover:scale-110 transition-transform duration-300" />,
   },
 ];
 
@@ -47,32 +48,47 @@ const workflowCards = [
 
 function CareerResources() {
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-background relative overflow-hidden">
+      {/* Background decorations */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[120px] animate-pulse"></div>
+      </div>
+
       <Navbar />
+      <ReactHelmet
+        title="Career Resources - NextHire"
+        description="Access curated job-seeker playbooks, interview readiness tools, and resume tips to land your next role."
+        canonicalUrl="/career-resources"
+      />
+
       <main className="flex-1">
-        <section className="pt-28 pb-16 bg-gradient-to-b from-indigo-50/80 to-white">
-          <div className="max-w-6xl mx-auto px-4 text-center space-y-6">
-            <span className="px-4 py-2 text-sm font-semibold text-indigo-600 bg-white rounded-full border border-indigo-100 inline-flex items-center gap-2 justify-center">
-              <FaMagic className="text-indigo-500" />
+        <section className="pt-32 pb-16 relative">
+          <div className="max-w-6xl mx-auto px-4 text-center space-y-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold text-primary bg-primary/10 rounded-full border border-primary/20 shadow-neon-sm animate-bounce">
+              <FaMagic />
               Job-Seeker Playbook
-            </span>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
-              Tools that make the job search less overwhelming.
+            </div>
+            
+            <h1 className="text-4xl md:text-6xl font-extrabold text-foreground tracking-tight max-w-4xl mx-auto leading-tight">
+              Tools that make the job search <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent italic">painless.</span>
             </h1>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               From resume polish to interview practice, this workspace brings together curated
-              workflows, templates, and quick actions to keep you moving forward on NextHire.
+              workflows, templates, and quick actions to keep you moving forward.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
+            <div className="flex flex-col sm:flex-row gap-5 justify-center pt-4">
               <Link
                 to="/jobs"
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-700 transition"
+                className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-primary text-primary-foreground font-bold shadow-neon hover:scale-105 transition-all duration-300"
               >
                 Jump to Open Roles
               </Link>
               <Link
                 to="/browse-jobs"
-                className="inline-flex items-center justify-center px-6 py-3 rounded-lg border border-indigo-200 text-indigo-600 font-semibold hover:bg-indigo-50 transition"
+                className="inline-flex items-center justify-center px-8 py-4 rounded-xl border border-border text-foreground hover:bg-muted/50 hover:border-primary/30 font-bold transition-all duration-300"
               >
                 Use Filters & Alerts
               </Link>
@@ -80,39 +96,40 @@ function CareerResources() {
           </div>
         </section>
 
-        <section className="py-14 px-4">
-          <div className="max-w-6xl mx-auto grid gap-6 md:grid-cols-3">
+        <section className="py-20 px-4 relative">
+          <div className="max-w-6xl mx-auto grid gap-8 md:grid-cols-3">
             {guideBlocks.map((item) => (
               <article
                 key={item.title}
-                className="rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-xl transition group bg-white"
+                className="rounded-2xl border border-border p-8 shadow-custom hover:shadow-neon hover:border-primary/20 transition-all duration-500 group bg-card backdrop-blur-sm"
               >
-                <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center mb-4">
+                <div className="w-14 h-14 rounded-2xl bg-muted/50 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-all duration-500">
                   {item.icon}
                 </div>
-                <h2 className="text-xl font-semibold text-gray-900 mb-2">{item.title}</h2>
-                <p className="text-sm text-gray-600 mb-4">{item.description}</p>
+                <h2 className="text-2xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">{item.title}</h2>
+                <p className="text-muted-foreground mb-6 leading-relaxed">{item.description}</p>
                 <Link
                   to={item.to}
-                  className="text-indigo-600 font-semibold inline-flex items-center gap-2 group-hover:gap-3 transition"
+                  className="text-primary font-bold inline-flex items-center gap-2 group-hover:gap-3 transition-all"
                 >
                   {item.action}
-                  <span aria-hidden>→</span>
+                  <span className="text-xl">→</span>
                 </Link>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="py-16 bg-slate-900">
-          <div className="max-w-6xl mx-auto px-4 grid gap-6 md:grid-cols-3">
+        <section className="py-24 bg-muted/10 border-y border-border relative overflow-hidden">
+          {/* Subtle noise pattern or grid could go here */}
+          <div className="max-w-6xl mx-auto px-4 grid gap-8 md:grid-cols-3">
             {workflowCards.map((card) => (
               <article
                 key={card.title}
-                className="p-6 bg-white/5 border border-white/10 rounded-2xl text-white space-y-4"
+                className="p-8 bg-card/40 backdrop-blur-md border border-border/50 rounded-2xl text-foreground space-y-4 hover:border-secondary/20 transition-all duration-300 shadow-inner"
               >
-                <h3 className="text-xl font-semibold">{card.title}</h3>
-                <p className="text-sm text-slate-200">{card.body}</p>
+                <h3 className="text-xl font-bold text-secondary">{card.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{card.body}</p>
               </article>
             ))}
           </div>

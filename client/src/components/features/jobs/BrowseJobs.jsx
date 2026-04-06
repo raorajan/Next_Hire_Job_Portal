@@ -112,39 +112,39 @@ const BrowseJobs = () => {
   };
 
   return (
-    <div className='min-h-screen bg-gradient-to-b from-white via-gray-50/30 to-white relative overflow-hidden'>
+    <div className='min-h-screen bg-background relative overflow-hidden'>
       {/* Background decorations */}
       <div className='absolute inset-0 -z-10 overflow-hidden'>
-        <div className='absolute top-0 left-1/4 w-96 h-96 bg-[#6A38C2]/5 rounded-full blur-3xl'></div>
-        <div className='absolute bottom-0 right-1/4 w-96 h-96 bg-[#F83002]/5 rounded-full blur-3xl'></div>
+        <div className='absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] animate-pulse'></div>
+        <div className='absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[100px] animate-pulse'></div>
       </div>
 
       <Navbar />
       <ReactHelmet
-        title='Browse Jobs - Next_Hire'
+        title='Browse Jobs - NextHire'
         description='Browse a wide range of job openings across various industries and locations.'
         canonicalUrl='/browse'
       />
 
-      <div className='max-w-7xl mx-auto mt-24 px-4 py-8 relative z-10'>
-        <div className='flex flex-col sm:flex-row justify-between items-center w-full mb-8 gap-4'>
+      <div className='max-w-7xl mx-auto mt-24 px-4 py-12 relative z-10'>
+        <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center w-full mb-12 gap-6'>
           <div>
-            <h1 className='text-3xl md:text-4xl font-extrabold mb-2'>
-              <span className='bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent'>
+            <h1 className='text-4xl md:text-5xl font-extrabold mb-3 tracking-tight'>
+              <span className='text-foreground'>
                 {isAuthenticated ? 'Search Results' : 'Browse Jobs'}
               </span>
               {isAuthenticated && (
-                <span className='bg-gradient-to-r from-[#6A38C2] to-[#F83002] bg-clip-text text-transparent'>
-                  {' '}({searchResult.length})
+                <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent italic ml-3'>
+                   ({searchResult.length})
                 </span>
               )}
             </h1>
-            <p className='text-gray-600'>Discover opportunities that match your profile</p>
+            <p className='text-lg text-muted-foreground'>Discover targeted opportunities that match your professional trajectory.</p>
           </div>
           {isAuthenticated && (
             <button
               onClick={handleClearSearchHistory}
-              className='bg-gradient-to-r from-[#F83002] to-[#d62828] hover:from-[#d62828] hover:to-[#F83002] text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300'
+              className='bg-destructive/10 hover:bg-destructive text-destructive hover:text-white px-8 py-3 rounded-xl font-bold border border-destructive/20 hover:border-destructive transition-all duration-300 shadow-sm hover:shadow-neon'
             >
               Clear Search History
             </button>
@@ -153,44 +153,50 @@ const BrowseJobs = () => {
 
         {/* Login prompt for non-authenticated users */}
         {!isAuthenticated && (
-          <div className='bg-white/95 backdrop-blur-sm border-2 border-[#6A38C2]/20 rounded-2xl p-6 mb-8 shadow-lg'>
-            <div className='flex items-center gap-4'>
-              <div className='w-12 h-12 bg-gradient-to-br from-[#6A38C2]/10 to-[#F83002]/10 rounded-xl flex items-center justify-center flex-shrink-0'>
-                <svg className='w-6 h-6 text-[#6A38C2]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' />
+          <div className='bg-card backdrop-blur-md border border-primary/20 rounded-2xl p-8 mb-12 shadow-custom relative overflow-hidden group'>
+            <div className='absolute top-0 right-0 w-32 h-32 bg-primary/5 -mr-16 -mt-16 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors duration-500'></div>
+            <div className='flex flex-col md:flex-row items-center gap-8 relative z-10'>
+              <div className='w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center flex-shrink-0 border border-primary/20 shadow-neon-sm'>
+                <svg className='w-8 h-8 text-primary' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1' />
                 </svg>
               </div>
-              <div className='flex-1'>
-                <h3 className='text-lg font-bold text-gray-900 mb-1'>Login Required</h3>
-                <p className='text-gray-600 mb-4'>Please login to view your personalized job search results and recommendations.</p>
-                <div className='flex gap-3'>
-                  <a 
-                    href='/login' 
-                    className='bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] hover:from-[#5b30a6] hover:to-[#4a2580] text-white px-6 py-2 rounded-xl font-semibold transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105'
-                  >
-                    Login
-                  </a>
-                  <a 
-                    href='/signup' 
-                    className='bg-white text-[#6A38C2] border-2 border-[#6A38C2] px-6 py-2 rounded-xl font-semibold hover:bg-[#6A38C2]/10 transition-all duration-300'
-                  >
-                    Sign Up
-                  </a>
-                </div>
+              <div className='flex-1 text-center md:text-left'>
+                <h3 className='text-2xl font-extrabold text-foreground mb-2 italic'>Access Personalized Results</h3>
+                <p className='text-muted-foreground text-lg'>Log in to view high-relevance matches tailored specifically to your skills and preferences.</p>
+              </div>
+              <div className='flex gap-4 w-full md:w-auto'>
+                <a 
+                  href='/login' 
+                  className='flex-1 md:flex-none text-center bg-primary hover:bg-primary/80 text-primary-foreground px-8 py-3 rounded-xl font-bold transition-all duration-300 shadow-neon hover:scale-105 border-none'
+                >
+                  Login
+                </a>
+                <a 
+                  href='/signup' 
+                  className='flex-1 md:flex-none text-center bg-transparent text-foreground border border-border px-8 py-3 rounded-xl font-bold hover:bg-muted/50 transition-all duration-300 hover:border-primary/30'
+                >
+                  Sign Up
+                </a>
               </div>
             </div>
           </div>
         )}
 
         {/* Job Listings */}
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8'>
           {searchResult.length > 0 ? (
             searchResult?.map((job) => <Job key={job._id} job={job} />)
           ) : (
-            <div className='col-span-full text-center py-12'>
-              <div className='bg-white/80 backdrop-blur-sm rounded-2xl p-8 border-2 border-gray-200/60 shadow-lg max-w-md mx-auto'>
-                <p className='text-gray-600 text-lg'>
-                  {isAuthenticated ? 'No jobs found.' : 'Login to view your job search results.'}
+            <div className='col-span-full text-center py-20'>
+              <div className='bg-card backdrop-blur-sm rounded-2xl p-12 border border-border shadow-custom max-w-lg mx-auto'>
+                <div className='w-20 h-20 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-6'>
+                  <svg className='w-10 h-10 text-muted-foreground' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' />
+                  </svg>
+                </div>
+                <p className='text-muted-foreground text-xl font-semibold'>
+                  {isAuthenticated ? 'Query yielded no matches. Try refining filters.' : 'Authentication required for result display.'}
                 </p>
               </div>
             </div>
@@ -199,28 +205,33 @@ const BrowseJobs = () => {
 
         {/* Loading Spinner */}
         {loading && (
-          <div className='flex justify-center items-center py-12'>
+          <div className='flex justify-center items-center py-16'>
             <Loader />
           </div>
         )}
 
         {/* Error Message */}
         {error && (
-          <div className='text-center py-8'>
-            <div className='bg-red-50/80 backdrop-blur-sm border-2 border-red-200 rounded-2xl p-6 max-w-md mx-auto'>
-              <p className='text-red-600 font-semibold'>{error}</p>
+          <div className='text-center py-12'>
+            <div className='bg-destructive/10 backdrop-blur-sm border border-destructive/20 rounded-2xl p-8 max-w-md mx-auto shadow-custom'>
+              <div className='w-16 h-16 bg-destructive/20 rounded-full flex items-center justify-center mx-auto mb-4'>
+                <svg className='w-8 h-8 text-destructive' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z' />
+                </svg>
+              </div>
+              <p className='text-destructive font-bold text-lg'>{error}</p>
             </div>
           </div>
         )}
 
         {/* Load More Button */}
         {hasMore && !loading && isAuthenticated && (
-          <div className='text-center mt-8'>
+          <div className='text-center mt-16'>
             <button
               onClick={fetchSearchResult}
-              className='bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] hover:from-[#5b30a6] hover:to-[#4a2580] text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300'
+              className='bg-primary hover:bg-primary/80 text-primary-foreground px-10 py-4 rounded-xl font-bold shadow-neon hover:scale-105 transition-all duration-300 border-none'
             >
-              Load More Jobs
+              Load More Results
             </button>
           </div>
         )}

@@ -36,20 +36,20 @@ const LatestJobs = () => {
     <div className="max-w-7xl mx-auto py-20 px-4 relative">
       {/* Background decoration */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-1/2 left-0 w-96 h-96 bg-[#6A38C2]/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#F83002]/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl"></div>
       </div>
 
       <div className="text-center mb-12">
         <h2 className="text-4xl md:text-5xl font-extrabold mb-4">
-          <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+          <span className="text-foreground">
             Latest & Top{" "}
           </span>
-          <span className="bg-gradient-to-r from-[#6A38C2] to-[#F83002] bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(0,229,255,0.3)]">
             Job Openings
           </span>
         </h2>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
           Discover the most recent opportunities from top companies. Apply now and take the next step in your career!
         </p>
       </div>
@@ -68,7 +68,7 @@ const LatestJobs = () => {
           <div className="text-center">
             <Button
               onClick={() => navigate("/jobs")}
-              className="bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] hover:from-[#5b30a6] hover:to-[#4a2580] text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 font-semibold"
+              className="bg-primary hover:bg-primary/80 text-primary-foreground px-8 py-3 rounded-full shadow-neon transform hover:scale-105 transition-all duration-300 font-semibold"
             >
               View All Jobs
             </Button>
@@ -76,7 +76,7 @@ const LatestJobs = () => {
         </>
       ) : (
         <div className="text-center py-20">
-          <p className="text-gray-500 text-lg">No jobs available at the moment.</p>
+          <p className="text-muted-foreground text-lg">No jobs available at the moment.</p>
         </div>
       )}
     </div>

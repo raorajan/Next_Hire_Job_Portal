@@ -96,24 +96,26 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
     <Dialog open={open}>
       {loading && <Loader />}
       <DialogContent
-        className='sm:max-w-[425px]'
+        className='sm:max-w-[425px] bg-card border-border shadow-custom'
         onInteractOutside={() => setOpen(false)}
       >
-        <DialogHeader>
-          <DialogTitle>Update Profile</DialogTitle>
+        <DialogHeader className="relative">
+          <DialogTitle className="text-2xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            Update Profile
+          </DialogTitle>
           <Button
             variant='ghost'
-            className='absolute top-2 right-2'
+            className='absolute -top-2 -right-2 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full transition-all duration-300'
             onClick={() => setOpen(false)}
           >
-            <X className='w-5 h-5' /> {/* Cross icon */}
+            <X className='w-5 h-5' />
           </Button>
         </DialogHeader>
-        <form onSubmit={submitHandler}>
-          <div className='grid gap-4 py-4'>
+        <form onSubmit={submitHandler} className="mt-4">
+          <div className='grid gap-5 py-4'>
             {/* Fullname input */}
             <div className='grid grid-cols-4 items-center gap-4'>
-              <Label htmlFor='fullname' className='text-right'>
+              <Label htmlFor='fullname' className='text-right text-foreground font-semibold'>
                 Name
               </Label>
               <Input
@@ -122,13 +124,14 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
                 type='text'
                 value={input.fullname}
                 onChange={changeEventHandler}
-                className='col-span-3'
+                className='col-span-3 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 rounded-xl'
+                placeholder="Your full name"
               />
             </div>
 
             {/* Email input */}
             <div className='grid grid-cols-4 items-center gap-4'>
-              <Label htmlFor='email' className='text-right'>
+              <Label htmlFor='email' className='text-right text-foreground font-semibold'>
                 Email
               </Label>
               <Input
@@ -137,13 +140,14 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
                 type='email'
                 value={input.email}
                 onChange={changeEventHandler}
-                className='col-span-3'
+                className='col-span-3 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 rounded-xl'
+                placeholder="example@gmail.com"
               />
             </div>
 
             {/* Bio input */}
             <div className='grid grid-cols-4 items-center gap-4'>
-              <Label htmlFor='bio' className='text-right'>
+              <Label htmlFor='bio' className='text-right text-foreground font-semibold'>
                 Bio
               </Label>
               <Input
@@ -151,7 +155,8 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
                 name='bio'
                 value={input.bio}
                 onChange={changeEventHandler}
-                className='col-span-3'
+                className='col-span-3 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 rounded-xl'
+                placeholder="A short bio about yourself"
               />
             </div>
 
@@ -159,7 +164,7 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
             {user?.role === "student" && (
               <>
                 <div className='grid grid-cols-4 items-center gap-4'>
-                  <Label htmlFor='skills' className='text-right'>
+                  <Label htmlFor='skills' className='text-right text-foreground font-semibold'>
                     Skills
                   </Label>
                   <Input
@@ -167,39 +172,40 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
                     name='skills'
                     value={input.skills}
                     onChange={changeEventHandler}
-                    className='col-span-3'
+                    className='col-span-3 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 rounded-xl'
+                    placeholder="React, Node.js, Python..."
                   />
                 </div>
 
                 {/* Resume file input */}
                 <div className='grid grid-cols-4 items-center gap-4'>
-                  <Label htmlFor='file' className='text-right'>
+                  <Label htmlFor='file' className='text-right text-foreground font-semibold'>
                     Resume
                   </Label>
-                  <Input
-                    id='file'
-                    name='file'
-                    type='file'
-                    accept='image/png, image/jpeg, application/pdf'
-                    onChange={fileChangeHandler}
-                    className='col-span-3'
-                  />
+                  <div className="col-span-3">
+                    <Input
+                      id='file'
+                      name='file'
+                      type='file'
+                      accept='image/png, image/jpeg, application/pdf'
+                      onChange={fileChangeHandler}
+                      className='bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 rounded-xl file:bg-primary file:text-primary-foreground file:border-none file:rounded-lg file:px-3 file:py-1 file:mr-3 hover:file:bg-primary/80 transition-all cursor-pointer'
+                    />
+                    <p className="text-[10px] text-muted-foreground mt-1 ml-1">Accepts PNG, JPG, or PDF</p>
+                  </div>
                 </div>
               </>
             )}
           </div>
 
-          {/* Submit button with loading state */}
-          <DialogFooter>
-            {loading ? (
-              <Button className='w-full my-4' disabled>
-                Please wait
-              </Button>
-            ) : (
-              <Button type='submit' className='w-full my-4'>
-                Update
-              </Button>
-            )}
+          <DialogFooter className="mt-6">
+            <Button 
+              type='submit' 
+              className='w-full bg-primary hover:bg-primary/80 text-primary-foreground font-bold py-5 rounded-xl shadow-neon hover:scale-[1.02] transition-all duration-300 border-none'
+              disabled={loading}
+            >
+              {loading ? "Updating Profile..." : "Update Profile"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

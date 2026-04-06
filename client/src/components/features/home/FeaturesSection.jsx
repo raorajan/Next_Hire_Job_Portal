@@ -42,24 +42,24 @@ const FeaturesSection = () => {
   ];
 
   return (
-    <div className="py-20 px-4 bg-gradient-to-b from-white via-gray-50/50 to-white relative overflow-hidden">
+    <div className="py-20 px-4 bg-background relative overflow-hidden">
       {/* Background decorations */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#6A38C2]/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#F83002]/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl"></div>
       </div>
 
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-extrabold mb-4">
-            <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+            <span className="text-foreground">
               Why Choose{" "}
             </span>
-            <span className="bg-gradient-to-r from-[#6A38C2] to-[#F83002] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(0,229,255,0.2)]">
               NextHire?
             </span>
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Experience the future of job searching with our innovative platform designed for both job seekers and employers.
           </p>
         </div>
@@ -68,7 +68,7 @@ const FeaturesSection = () => {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="group relative bg-white/80 backdrop-blur-sm rounded-2xl p-8 border border-gray-200/60 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 hover:scale-105"
+              className="group relative bg-card backdrop-blur-sm rounded-2xl p-8 border border-border shadow-custom hover:shadow-neon hover:border-primary/30 transition-all duration-300 transform hover:-translate-y-2"
             >
               {/* Gradient background on hover */}
               <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 rounded-2xl transition-opacity duration-300`}></div>
@@ -77,10 +77,10 @@ const FeaturesSection = () => {
                 {feature.icon}
               </div>
               
-              <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-[#6A38C2] transition-colors duration-300">
+              <h3 className="text-2xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
                 {feature.title}
               </h3>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-muted-foreground leading-relaxed">
                 {feature.description}
               </p>
             </div>

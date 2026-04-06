@@ -108,11 +108,11 @@ const JobDescription = () => {
   if (!singleJob) return <Loader />;
 
   return (
-    <div className='min-h-screen bg-gradient-to-b from-white via-gray-50/30 to-white relative overflow-hidden'>
+    <div className='min-h-screen bg-background relative overflow-hidden'>
       {/* Background decorations */}
       <div className='absolute inset-0 -z-10 overflow-hidden'>
-        <div className='absolute top-0 left-1/4 w-96 h-96 bg-[#6A38C2]/5 rounded-full blur-3xl'></div>
-        <div className='absolute bottom-0 right-1/4 w-96 h-96 bg-[#F83002]/5 rounded-full blur-3xl'></div>
+        <div className='absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl'></div>
+        <div className='absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl'></div>
       </div>
 
       <Navbar />
@@ -125,25 +125,25 @@ const JobDescription = () => {
 
         <Button
           onClick={() => navigate(-1)}
-          className='mb-6 rounded-xl bg-white/95 backdrop-blur-sm border-2 border-gray-200/60 hover:border-[#6A38C2] text-gray-700 hover:text-[#6A38C2] shadow-md hover:shadow-lg transition-all duration-300'
+          className='mb-6 rounded-xl bg-card backdrop-blur-sm border border-border hover:border-primary text-foreground hover:text-primary shadow-custom hover:shadow-neon transition-all duration-300'
         >
           ← Go Back
         </Button>
 
         <div className='flex flex-col md:flex-row gap-6'>
-          <div className='flex-1 bg-white/95 backdrop-blur-sm rounded-2xl p-8 border-2 border-gray-200/60 shadow-lg'>
+          <div className='flex-1 bg-card backdrop-blur-sm rounded-2xl p-8 border border-border shadow-custom'>
             <div className='flex flex-col mb-6'>
-              <h1 className='font-extrabold text-3xl md:text-4xl mb-4 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent'>
+              <h1 className='font-extrabold text-3xl md:text-4xl mb-4 text-foreground'>
                 {singleJob.title}
               </h1>
               <div className='flex items-center gap-3 flex-wrap'>
-                <Badge className='text-blue-700 font-semibold bg-blue-100 border border-blue-200 px-4 py-1.5' variant='ghost'>
+                <Badge className='text-secondary font-semibold bg-secondary/10 border border-secondary/30 px-4 py-1.5' variant='ghost'>
                   {singleJob.position} Position{singleJob.position > 1 ? 's' : ''}
                 </Badge>
-                <Badge className='text-[#F83002] font-semibold bg-red-100 border border-red-200 px-4 py-1.5' variant='ghost'>
+                <Badge className='text-primary font-semibold bg-primary/10 border border-primary/30 px-4 py-1.5' variant='ghost'>
                   {singleJob.jobType}
                 </Badge>
-                <Badge className='text-[#6A38C2] font-semibold bg-purple-100 border border-purple-200 px-4 py-1.5' variant='ghost'>
+                <Badge className='text-secondary font-semibold bg-secondary/10 border border-secondary/30 px-4 py-1.5' variant='ghost'>
                   ₹{singleJob.salary} LPA
                 </Badge>
               </div>
@@ -153,10 +153,10 @@ const JobDescription = () => {
               <Button
                 onClick={isApplied ? null : applyJobHandler}
                 disabled={isApplied || applying}
-                className={`flex-1 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ${
+                className={`flex-1 rounded-xl font-semibold shadow-neon transform hover:scale-105 transition-all duration-300 ${
                   isApplied
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] hover:from-[#5b30a6] hover:to-[#4a2580] text-white"
+                    ? "bg-muted text-muted-foreground cursor-not-allowed"
+                    : "bg-primary hover:bg-primary/80 text-primary-foreground"
                 }`}
               >
                 {isApplied ? "✓ Applied" : applying ? "Applying..." : "Apply Now"}
@@ -164,7 +164,7 @@ const JobDescription = () => {
 
               <Button
                 onClick={viewCompanyDetails}
-                className='flex-1 rounded-xl bg-white border-2 border-[#6A38C2] text-[#6A38C2] hover:bg-[#6A38C2] hover:text-white font-semibold shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300'
+                className='flex-1 rounded-xl bg-card border border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold shadow-custom hover:shadow-neon transform hover:scale-105 transition-all duration-300'
               >
                 View Company Details
               </Button>
@@ -172,7 +172,7 @@ const JobDescription = () => {
               {user?.role === "student" && (
                 <Button
                   onClick={fetchSkillGap}
-                  className='flex-1 rounded-xl bg-white border-2 border-[#F83002] text-[#F83002] hover:bg-[#F83002] hover:text-white font-semibold shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300'
+                  className='flex-1 rounded-xl bg-card border border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground font-semibold shadow-custom hover:shadow-neon transform hover:scale-105 transition-all duration-300'
                 >
                   Check Skill Gap
                 </Button>
@@ -180,17 +180,17 @@ const JobDescription = () => {
             </div>
 
             {showSkillGap && skillGap && (
-              <div className='mb-8 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border-2 border-blue-200/60'>
-                <h3 className='font-extrabold text-xl mb-4 bg-gradient-to-r from-[#6A38C2] to-[#F83002] bg-clip-text text-transparent'>
+              <div className='mb-8 bg-muted/30 rounded-2xl p-6 border border-primary/20'>
+                <h3 className='font-extrabold text-xl mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
                   Skill Gap Analysis
                 </h3>
                 {skillGap.missingSkills && skillGap.missingSkills.length > 0 ? (
                   <div className='space-y-4'>
                     <div>
-                      <p className='font-semibold text-gray-900 mb-2'>Missing Skills:</p>
+                      <p className='font-semibold text-foreground mb-2'>Missing Skills:</p>
                       <div className='flex flex-wrap gap-2'>
                         {skillGap.missingSkills.map((skill, idx) => (
-                          <span key={idx} className='bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold'>
+                          <span key={idx} className='bg-destructive/10 text-destructive px-3 py-1 rounded-full text-sm font-semibold border border-destructive/30'>
                             {skill}
                           </span>
                         ))}
@@ -198,7 +198,7 @@ const JobDescription = () => {
                     </div>
                     {skillGap.suggestedResources && skillGap.suggestedResources.length > 0 && (
                       <div>
-                        <p className='font-semibold text-gray-900 mb-2'>Suggested Resources:</p>
+                        <p className='font-semibold text-foreground mb-2'>Suggested Resources:</p>
                         <div className='space-y-2'>
                           {skillGap.suggestedResources.map((resource, idx) => (
                             <a
@@ -206,11 +206,11 @@ const JobDescription = () => {
                               href={resource.url}
                               target='_blank'
                               rel='noopener noreferrer'
-                              className='block bg-white/80 rounded-xl p-3 border border-gray-200 hover:border-[#6A38C2] hover:shadow-md transition-all'
+                              className='block bg-card rounded-xl p-3 border border-border hover:border-primary hover:shadow-neon transition-all'
                             >
-                              <p className='font-semibold text-[#6A38C2]'>{resource.title}</p>
+                              <p className='font-semibold text-primary'>{resource.title}</p>
                               {resource.category && (
-                                <p className='text-sm text-gray-600'>{resource.category}</p>
+                                <p className='text-sm text-muted-foreground'>{resource.category}</p>
                               )}
                             </a>
                           ))}
@@ -219,18 +219,18 @@ const JobDescription = () => {
                     )}
                   </div>
                 ) : (
-                  <p className='text-green-700 font-semibold'>Great! You have all the required skills for this position.</p>
+                  <p className='text-green-400 font-semibold'>Great! You have all the required skills for this position.</p>
                 )}
                 <button
                   onClick={() => setShowSkillGap(false)}
-                  className='mt-4 text-gray-600 hover:text-gray-900 text-sm font-semibold'
+                  className='mt-4 text-muted-foreground hover:text-foreground text-sm font-semibold'
                 >
                   Close
                 </button>
               </div>
             )}
 
-            <h2 className='border-b-2 border-gray-200 font-bold text-xl py-4 mb-6 text-gray-900'>
+            <h2 className='border-b-2 border-border font-bold text-xl py-4 mb-6 text-foreground'>
               Job Description
             </h2>
             <div className='my-4 space-y-4'>
@@ -254,25 +254,25 @@ const JobDescription = () => {
           </div>
 
           {/* Similar Jobs Section */}
-          <div className='w-full md:w-1/3 bg-white/95 backdrop-blur-sm border-2 border-gray-200/60 rounded-2xl shadow-lg p-6 sticky top-24 max-h-[85vh] overflow-hidden flex flex-col'>
-            <h2 className='border-b-2 border-gray-200 font-bold text-xl py-3 mb-4 text-gray-900'>
+          <div className='w-full md:w-1/3 bg-card backdrop-blur-sm border border-border rounded-2xl shadow-custom p-6 sticky top-24 max-h-[85vh] overflow-hidden flex flex-col'>
+            <h2 className='border-b-2 border-border font-bold text-xl py-3 mb-4 text-foreground'>
               Similar Jobs
             </h2>
-            <div className='flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-[#6A38C2] scrollbar-track-gray-100'>
+            <div className='flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-muted'>
               {similarJobs.length > 0 ? (
                 <div className='space-y-4'>
                   {similarJobs?.map((job) => (
                     <div
                       key={job._id}
-                      className='p-4 border-2 border-gray-200/60 rounded-xl hover:border-[#6A38C2]/30 hover:shadow-md transition-all duration-300 bg-white/80 backdrop-blur-sm'
+                      className='p-4 border border-border rounded-xl hover:border-primary/50 hover:shadow-neon transition-all duration-300 bg-card/80'
                     >
-                      <h3 className='font-bold text-lg mb-2 text-gray-900'>{job.title}</h3>
-                      <p className='text-gray-600 text-sm mb-2'>{job.location}</p>
-                      <p className='text-[#6A38C2] font-semibold mb-2'>₹{job.salary} LPA</p>
-                      <p className='text-gray-500 text-sm mb-3'>{job.jobType}</p>
+                      <h3 className='font-bold text-lg mb-2 text-foreground'>{job.title}</h3>
+                      <p className='text-muted-foreground text-sm mb-2'>{job.location}</p>
+                      <p className='text-primary font-semibold mb-2'>₹{job.salary} LPA</p>
+                      <p className='text-muted-foreground text-sm mb-3'>{job.jobType}</p>
                       <Button
                         onClick={() => navigate(`/description/${job._id}`)}
-                        className='w-full rounded-xl bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] hover:from-[#5b30a6] hover:to-[#4a2580] text-white font-semibold shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300'
+                        className='w-full rounded-xl bg-primary hover:bg-primary/80 text-primary-foreground font-semibold shadow-neon hover:scale-105 transition-all duration-300'
                       >
                         View Job
                       </Button>
@@ -281,7 +281,7 @@ const JobDescription = () => {
                 </div>
               ) : (
                 <div className='text-center py-8'>
-                  <p className='text-gray-500'>No similar jobs found.</p>
+                  <p className='text-muted-foreground'>No similar jobs found.</p>
                 </div>
               )}
             </div>
@@ -293,9 +293,9 @@ const JobDescription = () => {
 };
 
 const JobDetail = ({ label, value }) => (
-  <div className='bg-gray-50/80 rounded-xl p-4 border border-gray-200/60'>
-    <h3 className='font-bold text-gray-900 mb-1'>{label}</h3>
-    <p className='text-gray-700 leading-relaxed'>{value}</p>
+  <div className='bg-muted/30 rounded-xl p-4 border border-border'>
+    <h3 className='font-bold text-primary mb-1'>{label}</h3>
+    <p className='text-foreground leading-relaxed'>{value}</p>
   </div>
 );
 

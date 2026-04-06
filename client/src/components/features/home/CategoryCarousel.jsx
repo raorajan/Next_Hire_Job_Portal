@@ -81,37 +81,37 @@ const CategoryCarousel = () => {
     return (
       <div className='relative'>
         <div className='text-center mb-8'>
-          <h2 className='text-3xl font-bold text-gray-800 mb-2'>
-            Popular <span className='text-[#6A38C2]'>Job Categories</span>
+          <h2 className='text-3xl font-bold text-foreground mb-2'>
+            Popular <span className='text-primary drop-shadow-[0_0_15px_rgba(0,229,255,0.3)]'>Job Categories</span>
           </h2>
-          <p className='text-gray-600'>Explore trending job categories and find your perfect match</p>
+          <p className='text-muted-foreground'>Explore trending job categories and find your perfect match</p>
         </div>
         <div className='text-center py-8'>
-          <p className='text-gray-500'>No categories available at the moment.</p>
+          <p className='text-muted-foreground'>No categories available at the moment.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className='relative py-20 md:py-24 px-4 md:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50/30 overflow-visible'>
+    <div className='relative py-20 md:py-24 px-4 md:px-6 lg:px-8 bg-background overflow-visible'>
       {/* Background decoration */}
       <div className='absolute inset-0 -z-10 overflow-hidden'>
-        <div className='absolute top-1/4 right-1/4 w-96 h-96 bg-[#6A38C2]/5 rounded-full blur-3xl'></div>
-        <div className='absolute bottom-1/4 left-1/4 w-96 h-96 bg-[#F83002]/5 rounded-full blur-3xl'></div>
+        <div className='absolute top-1/4 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl'></div>
+        <div className='absolute bottom-1/4 left-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl'></div>
       </div>
 
       <div className='max-w-7xl mx-auto'>
         <div className='text-center mb-12 md:mb-16'>
           <h2 className='text-4xl md:text-5xl font-extrabold mb-4'>
-            <span className='bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent'>
+            <span className='text-foreground'>
               Popular{" "}
             </span>
-            <span className='bg-gradient-to-r from-[#6A38C2] to-[#F83002] bg-clip-text text-transparent'>
+            <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(0,229,255,0.3)]'>
               Job Categories
             </span>
           </h2>
-          <p className='text-lg text-gray-600 max-w-2xl mx-auto'>
+          <p className='text-lg text-muted-foreground max-w-2xl mx-auto'>
             Explore trending job categories and find your perfect match across various industries
           </p>
         </div>
@@ -128,18 +128,18 @@ const CategoryCarousel = () => {
                     <Button
                       onClick={() => searchJobHandler(cat)}
                       variant='outline'
-                      className='rounded-2xl w-full max-w-full truncate px-6 py-5 text-base font-semibold text-start whitespace-nowrap overflow-hidden border-2 border-gray-200/60 hover:border-[#6A38C2] hover:bg-gradient-to-r hover:from-[#6A38C2]/10 hover:to-[#F83002]/10 hover:text-[#6A38C2] transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-110 group bg-white/95 backdrop-blur-sm'
+                      className='rounded-2xl w-full max-w-full truncate px-6 py-5 text-base font-semibold text-start whitespace-nowrap overflow-hidden border border-border hover:border-primary hover:bg-muted/50 hover:text-primary transition-all duration-300 shadow-md hover:shadow-neon transform hover:scale-110 group bg-card backdrop-blur-sm'
                     >
                       <div className='flex items-center gap-3 w-full'>
-                        <div className='w-3 h-3 bg-gradient-to-r from-[#6A38C2] to-[#F83002] rounded-full group-hover:scale-125 transition-transform duration-300 flex-shrink-0'></div>
-                        <span className='truncate'>{cat?.title}</span>
+                        <div className='w-3 h-3 bg-primary rounded-full group-hover:scale-125 transition-transform duration-300 flex-shrink-0 group-hover:shadow-neon'></div>
+                        <span className='truncate text-foreground group-hover:text-primary'>{cat?.title}</span>
                       </div>
                     </Button>
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className='left-0 md:left-4 bg-white/95 backdrop-blur-md border-2 border-gray-200/60 hover:border-[#6A38C2] hover:bg-gradient-to-r hover:from-[#6A38C2] hover:to-[#5b30a6] hover:text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110 z-10 h-10 w-10' />
-              <CarouselNext className='right-0 md:right-4 bg-white/95 backdrop-blur-md border-2 border-gray-200/60 hover:border-[#6A38C2] hover:bg-gradient-to-r hover:from-[#6A38C2] hover:to-[#5b30a6] hover:text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-110 z-10 h-10 w-10' />
+              <CarouselPrevious className='left-0 md:left-4 bg-card border border-border hover:border-primary hover:bg-primary/20 hover:text-primary shadow-xl hover:shadow-neon transition-all duration-300 transform hover:scale-110 z-10 h-10 w-10 text-foreground' />
+              <CarouselNext className='right-0 md:right-4 bg-card border border-border hover:border-primary hover:bg-primary/20 hover:text-primary shadow-xl hover:shadow-neon transition-all duration-300 transform hover:scale-110 z-10 h-10 w-10 text-foreground' />
             </Carousel>
           </div>
         </div>

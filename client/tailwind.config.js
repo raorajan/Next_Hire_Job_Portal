@@ -14,6 +14,7 @@ export default {
       boxShadow: {
         custom:
           "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
+        neon: "0 0 15px rgba(0, 229, 255, 0.15), 0 0 3px rgba(0, 229, 255, 0.3)",
       },
       colors: {
         background: "hsl(var(--background))",

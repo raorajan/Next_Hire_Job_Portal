@@ -25,93 +25,102 @@ const AdminJobsTable = ({ jobs, onDeleteJob }) => {
   };
 
   return (
-    <div className='max-w-6xl mx-auto p-4'>
+    <div className='container mx-auto p-6'>
       {jobs?.length > 0 ? (
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8'>
           {jobs?.map((job) => (
             <div
               key={job?._id}
-              className='flex flex-col border border-gray-300 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow h-full'
+              className='group relative bg-card/60 backdrop-blur-md rounded-3xl border border-border shadow-custom p-8 hover:shadow-neon-sm transform hover:-translate-y-2 transition-all duration-500 ease-in-out flex flex-col justify-between h-[480px] overflow-hidden'
             >
-              <div className='flex items-center justify-between mb-2'>
-                <img
-                  src={
-                    job?.company?.logo?.url || "https://via.placeholder.com/100"
-                  }
-                  alt={job?.company?.companyName || "Company Logo"}
-                  className='w-12 h-12 object-cover rounded-full'
-                />
-                <div className='text-sm text-gray-500'>
-                  {job?.createdAt &&
-                    new Date(job.createdAt).toLocaleDateString()}
+              <div className='absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none'></div>
+              
+              <div className='relative z-10'>
+                <div className='flex items-center justify-between mb-6'>
+                  <div className='relative'>
+                    <div className='absolute inset-0 bg-primary/20 blur-xl rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
+                    <img
+                      src={job?.company?.logo?.url || "https://via.placeholder.com/100"}
+                      alt={job?.company?.companyName || "Company Logo"}
+                      className='w-14 h-14 object-cover rounded-2xl border-2 border-border group-hover:border-primary/50 transition-all duration-500 relative z-10'
+                    />
+                  </div>
+                  <div className='px-3 py-1 bg-muted/50 rounded-lg border border-border text-[10px] font-black text-muted-foreground uppercase tracking-widest'>
+                    {job?.createdAt && new Date(job.createdAt).toLocaleDateString()}
+                  </div>
+                </div>
+
+                <h2 className='text-2xl font-black text-foreground mb-1 tracking-tight group-hover:text-primary transition-colors duration-300'>
+                  {job?.title}
+                </h2>
+                <p className='text-primary font-extrabold italic text-sm mb-4'>
+                  {job?.company?.companyName || "Unknown Enterprise"}
+                </p>
+                <p className='text-muted-foreground text-sm mb-6 font-medium leading-relaxed line-clamp-3'>
+                  {job?.description}
+                </p>
+
+                <div className='space-y-3 bg-muted/30 rounded-2xl p-5 border border-border/50 group-hover:bg-muted/50 transition-all duration-300'>
+                  <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider">
+                    <span className='text-muted-foreground'>Location</span>
+                    <span className="text-foreground">{job?.location}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider pt-2 border-t border-border/50">
+                    <span className='text-muted-foreground'>Compensation</span>
+                    <span className='text-primary italic'>₹{job?.salary?.toLocaleString?.()} LPA</span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider pt-2 border-t border-border/50">
+                    <span className='text-muted-foreground'>Expertise Level</span>
+                    <span className="text-foreground">{job?.experienceLevel} Years</span>
+                  </div>
                 </div>
               </div>
 
-              <h2 className='text-lg font-bold'>{job?.title}</h2>
-              <p className='text-gray-600'>
-                {job?.company?.companyName || "Unknown Company"}
-              </p>
-              <p className='text-gray-500 text-sm mt-2 flex-grow'>
-                {job?.description?.length > 100
-                  ? job?.description?.substring(0, 100) + "..."
-                  : job?.description}
-              </p>
-
-              <div className='mt-4'>
-                <p className='text-gray-700 font-medium'>
-                  Location: {job?.location}
-                </p>
-                <p className='text-gray-700 font-medium'>
-                  Salary: ₹{job?.salary?.toLocaleString?.()}
-                </p>
-                <p className='text-gray-700 font-medium'>
-                  Experience Level: {job?.experienceLevel} years
-                </p>
-              </div>
-
-              <div className='flex items-center justify-between mt-4 space-x-2'>
+              <div className='relative z-10 flex gap-3 pt-6 mt-auto border-t border-border/50'>
                 <Button
                   variant='outline'
-                  className='bg-blue-500 hover:bg-blue-600 text-white border-blue-500 text-sm px-1 py-1 min-w-[120px]'
-                  onClick={() =>
-                    navigate(`/profile/admin/jobs/${job?._id}/applicants`)
-                  }
+                  className='flex-1 h-12 rounded-xl bg-muted/20 border-border hover:border-primary/50 text-foreground hover:text-primary transition-all duration-300'
+                  onClick={() => navigate(`/profile/admin/jobs/${job?._id}/applicants`)}
                 >
-                  <Eye className='w-4 h-4 mr-1' /> View Applicants (
-                  {job?.applications?.length || 0})
+                  <Eye className='w-4 h-4 mr-2' /> Applicants ({job?.applications?.length || 0})
                 </Button>
 
-                <Button
-                  variant='outline'
-                  className='bg-yellow-500 hover:bg-yellow-600 text-white border-yellow-500 text-sm px-1 py-1 min-w-[80px]'
-                  onClick={() =>
-                    navigate(`/profile/admin/jobs/${job?._id}/edit`)
-                  }
-                >
-                  <Edit2 className='w-4 h-4 mr-1' /> Edit
-                </Button>
-
-                <Button
-                  variant='secondary'
-                  className='bg-green-500 hover:bg-green-600 text-white border-green-500 text-sm px-1 py-1 min-w-[80px]'
-                  onClick={() => handleDeleteJob(job?._id)}
-                >
-                  <MdDelete className='w-4 h-4 mr-1' /> Delete
-                </Button>
+                <div className='flex gap-2 text-primary'>
+                  <Button
+                    variant='outline'
+                    className='w-12 h-12 rounded-xl bg-muted/20 border-border hover:border-secondary/50 text-foreground hover:text-secondary p-0'
+                    onClick={() => navigate(`/profile/admin/jobs/${job?._id}/edit`)}
+                  >
+                    <Edit2 className='w-4 h-4' />
+                  </Button>
+                  <Button
+                    variant='outline'
+                    className='w-12 h-12 rounded-xl bg-muted/20 border-border hover:border-destructive/50 text-foreground hover:text-destructive p-0'
+                    onClick={() => handleDeleteJob(job?._id)}
+                  >
+                    <MdDelete className='w-5 h-5' />
+                  </Button>
+                </div>
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <div className='flex flex-col items-center justify-center space-y-4 mt-10'>
-          <h2 className='text-xl font-semibold text-gray-600 text-center'>
-            No jobs available. Start by posting a new job!
+        <div className='flex flex-col items-center justify-center py-20 border-2 border-dashed border-border rounded-3xl bg-muted/10'>
+          <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-6">
+            <svg className="w-8 h-8 text-muted-foreground opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+          </div>
+          <h2 className='text-3xl font-black text-foreground mb-4 tracking-tight italic'>
+            Operational Registry Empty
           </h2>
+          <p className='text-muted-foreground font-medium mb-8'>Begin by deploying a new opportunity to the platform.</p>
           <Button
-            className='bg-blue-500 hover:bg-blue-600 text-white'
+            className='bg-primary text-primary-foreground rounded-xl px-10 py-6 font-extrabold shadow-neon-sm hover:shadow-neon transition-all duration-300 border-none'
             onClick={() => navigate("/profile/admin/jobs/create")}
           >
-            Post a New Job
+            Deploy New Role
           </Button>
         </div>
       )}

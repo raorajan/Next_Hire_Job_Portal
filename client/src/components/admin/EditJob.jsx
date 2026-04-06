@@ -127,125 +127,129 @@ const EditJob = () => {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-b from-white via-gray-50/30 to-white relative overflow-hidden'>
+    <div className='min-h-screen bg-background relative overflow-hidden'>
+      {/* Background decorations */}
       <div className='absolute inset-0 -z-10 overflow-hidden'>
-        <div className='absolute top-0 left-1/4 w-96 h-96 bg-[#6A38C2]/5 rounded-full blur-3xl'></div>
-        <div className='absolute bottom-0 right-1/4 w-96 h-96 bg-[#F83002]/5 rounded-full blur-3xl'></div>
+        <div className='absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] animate-pulse'></div>
+        <div className='absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[120px] animate-pulse'></div>
       </div>
 
       <Navbar />
       {loading && <Loader />}
       <ReactHelmet
-        title='Edit Job - Next_Hire'
-        description='Update job details including role, responsibilities, and requirements.'
-        canonicalUrl='/edit-job'
+        title='Modify Opportunity - Admin'
+        description='Update job parameters, refine role requirements, and adjust compensation scales for active postings.'
+        canonicalUrl='/admin/jobs/edit'
       />
 
-      <div className='flex items-center justify-center w-full my-5 px-4 pt-24 pb-8 md:px-0 relative z-10'>
+      <div className='flex items-center justify-center w-full my-5 px-6 pt-24 pb-12 relative z-10'>
         <form
           onSubmit={submitHandler}
-          className='p-8 max-w-4xl bg-white/95 backdrop-blur-sm border-2 border-gray-200/60 shadow-xl rounded-2xl w-full'
+          className='p-10 max-w-4xl bg-card/60 backdrop-blur-xl border border-border shadow-custom rounded-3xl w-full relative overflow-hidden group'
         >
-          <h1 className='text-3xl md:text-4xl font-extrabold mb-6 text-center'>
-            <span className='bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent'>
-              Edit{" "}
+          <div className='absolute top-0 right-0 w-32 h-32 bg-primary/5 -mr-16 -mt-16 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors duration-500'></div>
+          
+          <h1 className='text-4xl font-black mb-10 text-center tracking-tight'>
+            <span className='bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent italic'>
+              Modify{" "}
             </span>
-            <span className='bg-gradient-to-r from-[#6A38C2] to-[#F83002] bg-clip-text text-transparent'>
-              Job
+            <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
+              Opportunity
             </span>
           </h1>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-            <div>
-              <Label className='font-bold text-gray-900 mb-2'>Title</Label>
+
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
+            <div className='space-y-2'>
+              <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>Role Title</Label>
               <Input
                 type='text'
                 name='title'
                 value={input.title}
                 onChange={changeEventHandler}
-                className='w-full rounded-xl border-2 border-gray-200/60 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 bg-white/80 backdrop-blur-sm'
+                className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold tracking-tight'
                 required
               />
             </div>
-            <div>
-              <Label className='font-bold text-gray-900 mb-2'>Description</Label>
+            <div className='space-y-2'>
+              <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>Operational Context</Label>
               <Input
                 type='text'
                 name='description'
                 value={input.description}
                 onChange={changeEventHandler}
-                className='w-full rounded-xl border-2 border-gray-200/60 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 bg-white/80 backdrop-blur-sm'
+                className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold tracking-tight'
                 required
               />
             </div>
-            <div>
-              <Label className='font-bold text-gray-900 mb-2'>Requirements</Label>
+            <div className='space-y-2'>
+              <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>Technical Stack</Label>
               <Input
                 type='text'
                 name='requirements'
                 value={input.requirements}
                 onChange={changeEventHandler}
-                className='w-full rounded-xl border-2 border-gray-200/60 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 bg-white/80 backdrop-blur-sm'
+                className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold tracking-tight'
                 placeholder='e.g., React, Node.js, Python'
               />
             </div>
-            <div>
-              <Label className='font-bold text-gray-900 mb-2'>Salary</Label>
+            <div className='space-y-2'>
+              <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>Annual Compensation (LPA)</Label>
               <Input
                 type='text'
                 name='salary'
                 value={input.salary}
                 onChange={changeEventHandler}
-                className='w-full rounded-xl border-2 border-gray-200/60 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 bg-white/80 backdrop-blur-sm'
+                className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold tracking-tight'
                 placeholder='e.g., 500000'
               />
             </div>
-            <div>
-              <Label className='font-bold text-gray-900 mb-2'>Location</Label>
+            <div className='space-y-2'>
+              <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>Deployment Zone</Label>
               <Input
                 type='text'
                 name='location'
                 value={input.location}
                 onChange={changeEventHandler}
-                className='w-full rounded-xl border-2 border-gray-200/60 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 bg-white/80 backdrop-blur-sm'
-                placeholder='e.g., Mumbai, India'
+                className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold tracking-tight'
+                placeholder='e.g., Mumbai Hub'
               />
             </div>
-            <div>
-              <Label className='font-bold text-gray-900 mb-2'>Job Type</Label>
+            <div className='space-y-2'>
+              <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>Contract Syntax</Label>
               <Input
                 type='text'
                 name='jobType'
                 value={input.jobType}
                 onChange={changeEventHandler}
-                className='w-full rounded-xl border-2 border-gray-200/60 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 bg-white/80 backdrop-blur-sm'
-                placeholder='e.g., Full-time, Part-time'
+                className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold tracking-tight'
+                placeholder='e.g., Full-cycle, Remote'
               />
             </div>
-            <div>
-              <Label className='font-bold text-gray-900 mb-2'>Experience Level</Label>
+            <div className='space-y-2'>
+              <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>Expertise Threshold (Years)</Label>
               <Input
                 type='text'
                 name='experience'
                 value={input.experience}
                 onChange={changeEventHandler}
-                className='w-full rounded-xl border-2 border-gray-200/60 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 bg-white/80 backdrop-blur-sm'
-                placeholder='e.g., 2-5 years'
+                className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold tracking-tight'
+                placeholder='e.g., 2-5'
               />
             </div>
-            <div>
-              <Label className='font-bold text-gray-900 mb-2'>No of Positions</Label>
+            <div className='space-y-2'>
+              <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>Operational Scale</Label>
               <Input
                 type='number'
                 name='position'
                 value={input.position}
                 onChange={changeEventHandler}
-                className='w-full rounded-xl border-2 border-gray-200/60 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 bg-white/80 backdrop-blur-sm'
+                className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold tracking-tight'
                 min='1'
               />
             </div>
             {company?.companies?.length > 0 && (
-              <div>
-                <Label className='font-bold text-gray-900 mb-2'>Select Company</Label>
+              <div className='md:col-span-2 space-y-2'>
+                <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>Enterprise Entity</Label>
                 <Select
                   value={
                     company?.companies?.find((c) => c._id === input.companyId)
@@ -253,13 +257,13 @@ const EditJob = () => {
                   }
                   onValueChange={selectChangeHandler}
                 >
-                  <SelectTrigger className='w-full rounded-xl border-2 border-gray-200/60 focus:border-[#6A38C2] focus:ring-2 focus:ring-[#6A38C2]/20 bg-white/80 backdrop-blur-sm'>
-                    <SelectValue placeholder='Select a Company' />
+                  <SelectTrigger className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold'>
+                    <SelectValue placeholder='Select an enterprise profile' />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className='bg-card border-border'>
                     <SelectGroup>
                       {company?.companies?.map((company) => (
-                        <SelectItem key={company?._id} value={company?.companyName}>
+                        <SelectItem key={company?._id} value={company?.companyName} className='focus:bg-primary/10 focus:text-primary transition-colors'>
                           {company?.companyName}
                         </SelectItem>
                       ))}
@@ -270,21 +274,23 @@ const EditJob = () => {
             )}
           </div>
 
-          {loading ? (
-            <Button
-              className='w-full my-6 bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] hover:from-[#5b30a6] hover:to-[#4a2580] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300'
-              disabled
-            >
-              <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait
-            </Button>
-          ) : (
-            <Button
-              type='submit'
-              className='w-full my-6 bg-gradient-to-r from-[#6A38C2] to-[#5b30a6] hover:from-[#5b30a6] hover:to-[#4a2580] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300'
-            >
-              Update Job
-            </Button>
-          )}
+          <div className='mt-10'>
+            {loading ? (
+              <Button
+                className='w-full h-16 rounded-2xl bg-muted border border-border text-muted-foreground font-black text-xl'
+                disabled
+              >
+                <Loader2 className='mr-3 h-5 w-5 animate-spin' /> Finalizing Update...
+              </Button>
+            ) : (
+              <Button
+                type='submit'
+                className='w-full h-16 rounded-2xl bg-gradient-to-r from-primary to-secondary text-primary-foreground font-black text-xl shadow-neon hover:scale-[1.01] transition-all duration-300 border-none'
+              >
+                Update Hub Record
+              </Button>
+            )}
+          </div>
         </form>
       </div>
     </div>

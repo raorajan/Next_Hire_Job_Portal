@@ -51,34 +51,56 @@ const AdminJobs = () => {
   };
 
   return (
-    <div>
+    <div className='min-h-screen bg-background relative overflow-hidden'>
+      {/* Background decorations */}
+      <div className='absolute inset-0 -z-10 overflow-hidden'>
+        <div className='absolute top-0 right-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] animate-pulse'></div>
+        <div className='absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[120px] animate-pulse'></div>
+      </div>
+
       <Navbar />
       {loading && <Loader />}
       <ReactHelmet
-        title="Admin Jobs - Next_Hire"
-        description="Browse a variety of administrative job opportunities across different sectors. Find roles that match your skills in organization, communication, and management."
-        canonicalUrl="/admin-jobs"
+        title='Recruiter Terminal - Admin'
+        description='Coordinate recruitment efforts, monitor active postings, and analyze candidate engagement across your enterprise portfolio.'
+        canonicalUrl='/admin/jobs'
       />
 
-      <div className="max-w-6xl mx-auto my-10 mt-20 px-4">
-        <div className="flex items-center justify-between my-5">
-          <Button variant="outline" onClick={() => navigate(-1)}>
-            Go Back
+      <div className='max-w-6xl mx-auto pt-24 pb-12 px-6 relative z-10'>
+        <div className='flex flex-col md:flex-row items-start md:items-center justify-between mb-10 gap-6'>
+          <div>
+            <h1 className='text-4xl font-black tracking-tight text-foreground mb-2'>
+              Recruiter <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent italic'>Terminal</span>
+            </h1>
+            <p className='text-muted-foreground font-medium'>Command active postings and streamline your talent acquisition pipeline.</p>
+          </div>
+          <Button
+            onClick={() => navigate("/profile/admin/jobs/create")}
+            className='rounded-xl bg-primary text-primary-foreground font-black px-8 py-6 shadow-neon-sm hover:shadow-neon hover:scale-[1.02] transition-all duration-300 border-none'
+          >
+            <FaPlus className='mr-2' /> Deploy New Posting
           </Button>
+        </div>
 
-          <div className="flex items-center space-x-4">
+        <div className='space-y-8'>
+          <div className='relative group'>
+            <div className='absolute inset-y-0 left-4 flex items-center pointer-events-none'>
+              <svg className='w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z' />
+              </svg>
+            </div>
             <Input
-              className="w-full max-w-md"
-              placeholder="Filter by name, role"
+              className='w-full bg-card/50 backdrop-blur-md border-border border-2 h-16 rounded-2xl pl-12 focus:ring-primary/20 focus:border-primary/50 text-xl font-bold tracking-tight placeholder:text-muted-foreground'
+              placeholder='Filter postings by role, context, or status...'
               value={input}
               onChange={(e) => setInput(e.target.value)}
             />
-            <Button onClick={() => navigate("/profile/admin/jobs/create")}>
-              New Job
-            </Button>
+          </div>
+          
+          <div className='bg-card/40 backdrop-blur-md rounded-3xl border border-border shadow-custom p-2 overflow-hidden'>
+            <AdminJobsTable jobs={filteredJobs} onDeleteJob={handleJobDeletion} />
           </div>
         </div>
-        <AdminJobsTable jobs={filteredJobs} onDeleteJob={handleJobDeletion} />
       </div>
     </div>
   );
