@@ -14,6 +14,22 @@ const HeroSection = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const dropdownRef = useRef(null);
+  const searchContainerRef = useRef(null);
+  const [dropdownPosition, setDropdownPosition] = useState("bottom");
+
+  useEffect(() => {
+    if (dropdownVisible && searchContainerRef.current) {
+      const rect = searchContainerRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+      
+      if (spaceBelow < 320 && spaceAbove > spaceBelow) {
+        setDropdownPosition("top");
+      } else {
+        setDropdownPosition("bottom");
+      }
+    }
+  }, [dropdownVisible, searchResults]);
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -95,7 +111,7 @@ const HeroSection = () => {
   };
 
   return (
-    <div className='text-center mt-[80px] relative overflow-hidden pb-20'>
+    <div className='text-center mt-[80px] relative z-30 pb-12'>
       {/* Enhanced Background decoration with animations */}
       <div className='absolute inset-0 -z-10 overflow-hidden'>
         <div className='absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse'></div>
@@ -104,7 +120,7 @@ const HeroSection = () => {
         <div className='absolute top-1/2 right-1/4 w-64 h-64 bg-secondary/5 rounded-full blur-3xl animate-pulse delay-3000'></div>
       </div>
       
-      <div className='flex flex-col gap-8 my-12 relative z-10 px-4'>
+      <div className='flex flex-col gap-8 mt-12 mb-0 relative z-10 px-4'>
         <span className='mx-auto px-6 py-3 rounded-full bg-primary/10 text-primary font-semibold text-sm border border-primary/30 shadow-neon backdrop-blur-sm hover:scale-105 transition-transform duration-300'>
           ✨ Your Gateway to Opportunities
         </span>
@@ -120,7 +136,7 @@ const HeroSection = () => {
           Explore thousands of job listings across various industries. Take the
           next step towards your career success with our intelligent job matching platform!
         </p>
-        <div className='relative w-full max-w-3xl mx-auto mt-4'>
+        <div ref={searchContainerRef} className='relative w-full max-w-3xl mx-auto mt-4'>
           <div className='relative flex w-full shadow-2xl border border-border bg-card/95 backdrop-blur-md pl-6 pr-2 rounded-full items-center gap-4 hover:shadow-neon hover:border-primary/50 transition-all duration-300 transform hover:scale-[1.02]'>
             <Search className='h-6 w-6 text-muted-foreground flex-shrink-0' />
             <input
@@ -147,7 +163,11 @@ const HeroSection = () => {
           {dropdownVisible && searchResults.length > 0 && !loading && (
             <div
               ref={dropdownRef}
-              className='absolute top-full left-0 w-full max-h-72 overflow-y-auto bg-card/98 backdrop-blur-xl shadow-2xl rounded-2xl z-[9999] border border-border mt-4 animate-in slide-in-from-top-2 duration-300'
+              className={`absolute left-0 w-full max-h-72 overflow-y-auto overflow-x-hidden bg-card/98 backdrop-blur-xl shadow-2xl rounded-2xl z-[9999] border border-border duration-300 ${
+                dropdownPosition === "top"
+                  ? "bottom-full mb-4 animate-in slide-in-from-bottom-2"
+                  : "top-full mt-4 animate-in slide-in-from-top-2"
+              }`}
             >
               {searchResults?.map((job) => (
                 <div

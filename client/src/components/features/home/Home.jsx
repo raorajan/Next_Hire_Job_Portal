@@ -35,7 +35,7 @@ const Home = () => {
 
 const HighlightsSection = ({ highlights }) => {
   return (
-    <section className="py-16 px-4 bg-background">
+    <section className="py-12 px-4 bg-background">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
