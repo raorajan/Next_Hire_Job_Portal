@@ -9,6 +9,15 @@ const OtherJobs = () => {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [hasNext, setHasNext] = useState(true);
+  const [frontendPage, setFrontendPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
+
+  useEffect(() => {
+    setFrontendPage(1);
+  }, [jobs]);
+
+  const totalFrontendPages = Math.ceil((jobs?.length || 0) / ITEMS_PER_PAGE) || 1;
+  const displayedJobs = jobs?.slice((frontendPage - 1) * ITEMS_PER_PAGE, frontendPage * ITEMS_PER_PAGE) || [];
 
   useEffect(() => {
     const fetchJobData = async () => {
@@ -43,12 +52,22 @@ const OtherJobs = () => {
   }, [page]);
 
   const handlePrevious = () => {
-    if (page > 1) setPage((prev) => prev - 1);
+    if (frontendPage > 1) {
+      setFrontendPage((prev) => prev - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (page > 1) {
+      setPage((prev) => prev - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleNext = () => {
-    if (hasNext) {
+    if (frontendPage < totalFrontendPages) {
+      setFrontendPage((prev) => prev + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (hasNext) {
       setPage((prev) => prev + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -109,7 +128,7 @@ const OtherJobs = () => {
           {/* Job Cards Grid */}
           {!loading && !error && (
             <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8'>
-              {jobs?.map((job, index) => {
+              {displayedJobs?.map((job, index) => {
                 const cleanDescription = job?.description
                   ?.replace(/<[^>]+>/g, "")
                   ?.slice(0, 200);
@@ -217,14 +236,14 @@ const OtherJobs = () => {
             <div className='flex flex-col sm:flex-row justify-center items-center gap-8 mt-24 mb-12'>
               <button
                 onClick={handlePrevious}
-                disabled={page === 1}
+                disabled={page === 1 && frontendPage === 1}
                 className={`group flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-bold transition-all duration-300 min-w-[160px] ${
-                  page === 1
+                  page === 1 && frontendPage === 1
                     ? "bg-muted text-muted-foreground cursor-not-allowed opacity-50 border border-border"
                     : "bg-card text-foreground hover:bg-muted border border-border hover:border-primary/30 shadow-custom hover:shadow-neon hover:scale-105"
                 }`}
               >
-                <svg className={`w-5 h-5 transition-transform duration-300 ${page !== 1 ? 'group-hover:-translate-x-1' : ''}`} fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <svg className={`w-5 h-5 transition-transform duration-300 ${(page !== 1 || frontendPage !== 1) ? 'group-hover:-translate-x-1' : ''}`} fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                   <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
                 </svg>
                 Previous
@@ -233,15 +252,19 @@ const OtherJobs = () => {
               <div className='flex items-center gap-4 bg-card rounded-2xl px-10 py-4 shadow-custom border border-border relative overflow-hidden'>
                 <div className='absolute inset-0 bg-primary/5 animate-pulse'></div>
                 <div className='w-3 h-3 bg-primary rounded-full shadow-neon-sm relative z-10'></div>
-                <span className='font-extrabold text-2xl text-foreground relative z-10 tracking-tight'>Page {page}</span>
+                <span className='font-extrabold text-2xl text-foreground relative z-10 tracking-tight'>
+                  {jobs?.length > ITEMS_PER_PAGE 
+                    ? `Page ${page} (${frontendPage}/${totalFrontendPages})` 
+                    : `Page ${page}`}
+                </span>
                 <div className='w-3 h-3 bg-secondary rounded-full relative z-10'></div>
               </div>
               
               <button
                 onClick={handleNext}
-                disabled={!hasNext}
+                disabled={!hasNext && frontendPage === totalFrontendPages}
                 className={`group flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-bold transition-all duration-300 min-w-[160px] ${
-                  hasNext
+                  hasNext || frontendPage < totalFrontendPages
                     ? "bg-primary text-primary-foreground shadow-neon hover:scale-105"
                     : "bg-muted text-muted-foreground cursor-not-allowed opacity-50 border border-border"
                 }`}

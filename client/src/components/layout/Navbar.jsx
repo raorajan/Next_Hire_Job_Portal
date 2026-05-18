@@ -5,7 +5,6 @@ import { FiMenu, FiX } from "react-icons/fi";
 import { FaBell, FaBriefcase } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { RiMenu2Fill } from "react-icons/ri";
-import NextHireLogo from "@/assets/nexthire.png";
 import { getProfilePic, getToken } from "@/utils/constant";
 import { FaUser, FaCog, FaShieldAlt, FaSignOutAlt, FaBook, FaStar } from "react-icons/fa";
 import { logoutUser } from "@/redux/slices/user.slice";
@@ -91,7 +90,7 @@ const Navbar = () => {
           <h1 className='text-2xl font-bold text-foreground flex items-center group'>
             <Link to='/' className='flex items-center group-hover:scale-105 transition-transform duration-200'>
               <img
-                src={NextHireLogo}
+                src='/favicon.svg'
                 alt='NextHire Logo'
                 className='h-8 mr-2 drop-shadow-sm'
               />

@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import NextHireLogo from "@/assets/nexthire.png";
 
 const RegisterNavbar = () => {
   return (
@@ -10,7 +9,7 @@ const RegisterNavbar = () => {
           <h1 className="text-2xl font-bold text-foreground flex items-center">
             <Link to="/" className="flex items-center group">
               <img
-                src={NextHireLogo}
+                src="/favicon.svg"
                 alt="NextHire Logo"
                 className="h-8 mr-2 group-hover:scale-110 transition-transform duration-300"
               />
