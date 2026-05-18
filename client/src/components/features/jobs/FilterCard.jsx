@@ -96,7 +96,7 @@ const FilterCard = ({ setSearchParams, filterOptions }) => {
   }, [selectedFilters, debouncedSearchTerm, setSearchParams]);
 
   return (
-    <div className='bg-card/95 backdrop-blur-sm border border-border rounded-2xl p-6 shadow-custom sticky top-24'>
+    <div className='bg-card/95 backdrop-blur-sm border border-border rounded-2xl p-6 shadow-custom'>
       <h2 className='font-extrabold text-xl mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
         Filters
       </h2>

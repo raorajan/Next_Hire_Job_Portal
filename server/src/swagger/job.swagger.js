@@ -246,7 +246,7 @@
 
 /**
  * @swagger
- * /api/v1/job/getadminjobs:
+ * /api/v1/adminjobs:
  *   get:
  *     summary: Get jobs posted by authenticated admin/recruiter
  *     tags: [Job]

@@ -34,42 +34,60 @@ const Jobs = () => {
     limit: 10,
   });
 
-  const observerRef = useRef(null);
   const currentPageRef = useRef(1);
   const totalPagesRef = useRef(null);
-  const lastScrollTopRef = useRef(0);
+  const isLoadingRef = useRef(false);
+  const debounceTimerRef = useRef(null);
+  const isFetchingRef = useRef(false); // New ref to track fetching state
+  const lastScrollPositionRef = useRef(0); // Track last scroll position
 
   const fetchJobs = () => {
-    if (!hasMore || loading) return;
+    if (!hasMore || isLoadingRef.current || isFetchingRef.current) return;
+    
+    isFetchingRef.current = true;
+    isLoadingRef.current = true;
     setLoading(true);
     setError(null);
+    
     const sanitizedParams = {
       ...searchParams,
       page: currentPageRef.current,
       limit: searchParams.limit || 10,
     };
+    
     dispatch(getAllJobs(sanitizedParams))
       .then((res) => {
         if (res?.payload?.status === 200) {
           const newJobs = res?.payload?.jobs;
+          
           if (currentPageRef.current === 1) {
             setAllJobs(newJobs);
             setFilterJobs(newJobs);
           } else {
-            const uniqueJobs = [
-              ...new Set([...allJobs, ...newJobs]?.map((job) => job._id)),
-            ]?.map((id) =>
-              [...allJobs, ...newJobs].find((job) => job._id === id)
-            );
-
-            setAllJobs(uniqueJobs);
-            setFilterJobs(uniqueJobs);
+            setAllJobs(prevJobs => {
+              const uniqueJobs = [
+                ...new Set([...prevJobs, ...newJobs]?.map((job) => job._id)),
+              ]?.map((id) =>
+                [...prevJobs, ...newJobs].find((job) => job._id === id)
+              );
+              return uniqueJobs;
+            });
+            
+            setFilterJobs(prevJobs => {
+              const uniqueJobs = [
+                ...new Set([...prevJobs, ...newJobs]?.map((job) => job._id)),
+              ]?.map((id) =>
+                [...prevJobs, ...newJobs].find((job) => job._id === id)
+              );
+              return uniqueJobs;
+            });
           }
 
           const { currentPage, totalPages } = res.payload;
           totalPagesRef.current = totalPages;
           setHasMore(currentPage < totalPages);
-          if (sanitizedParams.page === currentPageRef.current) {
+          
+          if (currentPage === currentPageRef.current) {
             currentPageRef.current += 1;
           }
         } else {
@@ -81,19 +99,29 @@ const Jobs = () => {
         setError("An error occurred while fetching jobs.");
       })
       .finally(() => {
+        isLoadingRef.current = false;
         setLoading(false);
+        // Small delay before allowing next fetch to prevent rapid successive calls
+        setTimeout(() => {
+          isFetchingRef.current = false;
+        }, 500);
       });
   };
 
   const fetchRecommendedJobs = () => {
-    if (!hasMore || loading) return;
+    if (!hasMore || isLoadingRef.current || isFetchingRef.current) return;
+    
+    isFetchingRef.current = true;
+    isLoadingRef.current = true;
     setLoading(true);
     setError(null);
+    
     const sanitizedParams = {
       ...searchParams,
       page: currentPageRef.current,
       limit: searchParams.limit || 10,
     };
+    
     dispatch(getRecommendedJobs(sanitizedParams))
       .then((res) => {
         if (res?.payload?.status === 200) {
@@ -103,22 +131,30 @@ const Jobs = () => {
             setRecommendedJobs(newJobs);
             setFilterJobs(newJobs);
           } else {
-            const uniqueJobs = [
-              ...new Set(
-                [...recommendedJobs, ...newJobs]?.map((job) => job._id)
-              ),
-            ]?.map((id) =>
-              [...recommendedJobs, ...newJobs].find((job) => job._id === id)
-            );
-
-            setRecommendedJobs(uniqueJobs);
-            setFilterJobs(uniqueJobs);
+            setRecommendedJobs(prevJobs => {
+              const uniqueJobs = [
+                ...new Set([...prevJobs, ...newJobs]?.map((job) => job._id)),
+              ]?.map((id) =>
+                [...prevJobs, ...newJobs].find((job) => job._id === id)
+              );
+              return uniqueJobs;
+            });
+            
+            setFilterJobs(prevJobs => {
+              const uniqueJobs = [
+                ...new Set([...prevJobs, ...newJobs]?.map((job) => job._id)),
+              ]?.map((id) =>
+                [...prevJobs, ...newJobs].find((job) => job._id === id)
+              );
+              return uniqueJobs;
+            });
           }
 
           const { currentPage, totalPages } = res.payload;
           totalPagesRef.current = totalPages;
           setHasMore(currentPage < totalPages);
-          if (sanitizedParams.page === currentPageRef.current) {
+          
+          if (currentPage === currentPageRef.current) {
             currentPageRef.current += 1;
           }
         } else {
@@ -130,59 +166,107 @@ const Jobs = () => {
         setError("An error occurred while fetching recommended jobs.");
       })
       .finally(() => {
+        isLoadingRef.current = false;
         setLoading(false);
+        setTimeout(() => {
+          isFetchingRef.current = false;
+        }, 500);
       });
   };
 
   const handleScroll = () => {
-    if (observerRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = observerRef.current;
-      const lastScrollTop = lastScrollTopRef.current;
-      if (scrollTop > lastScrollTop) {
-        if (
-          scrollTop + clientHeight >= scrollHeight - 50 &&
-          hasMore &&
-          !loading &&
-          currentPageRef.current <= totalPagesRef.current
-        ) {
-          if (currentCategory === "recommended") {
-            fetchRecommendedJobs();
-          } else if (currentCategory === "trending") {
-          } else {
-            fetchJobs();
-          }
+    // Clear previous debounce timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+    
+    // Debounce scroll event
+    debounceTimerRef.current = setTimeout(() => {
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = window.innerHeight;
+      
+      // Store current scroll position
+      lastScrollPositionRef.current = scrollTop;
+      
+      // Calculate if we're near the bottom (within 300px)
+      const distanceToBottom = scrollHeight - (scrollTop + clientHeight);
+      const isNearBottom = distanceToBottom <= 300;
+      
+      // Prevent fetching if we're already fetching or no more data
+      if (isFetchingRef.current || isLoadingRef.current || !hasMore) {
+        return;
+      }
+      
+      // Check if we should load more
+      const shouldLoadMore = 
+        isNearBottom && 
+        hasMore && 
+        !isLoadingRef.current && 
+        !isFetchingRef.current &&
+        (totalPagesRef.current === null || currentPageRef.current <= totalPagesRef.current);
+      
+      if (shouldLoadMore) {
+        if (currentCategory === "recommended") {
+          fetchRecommendedJobs();
+        } else if (currentCategory === "trending") {
+          // Handle trending if needed
+        } else {
+          fetchJobs();
         }
       }
-      lastScrollTopRef.current = scrollTop;
-    }
+    }, 200); // Increased debounce delay to 200ms
   };
 
-  useEffect(() => {
+  // Reset everything when category or search params change
+  const resetAndFetch = () => {
     currentPageRef.current = 1;
     setHasMore(true);
+    isLoadingRef.current = false;
+    isFetchingRef.current = false;
+    lastScrollPositionRef.current = 0;
+    
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+    
     if (currentCategory === "recommended") {
       fetchRecommendedJobs();
     } else {
       fetchJobs();
     }
-  }, [searchParams]);
+  };
 
   useEffect(() => {
-    if (observerRef.current) {
-      observerRef.current.addEventListener("scroll", handleScroll);
-    }
+    resetAndFetch();
+  }, [searchParams, currentCategory]);
+
+  useEffect(() => {
+    // Add scroll listener with passive option for better performance
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
-      if (observerRef.current) {
-        observerRef.current.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleScroll);
+      // Clean up debounce timer
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
       }
     };
-  }, [hasMore, loading]);
+  }, [hasMore, currentCategory]);
 
   const handleCategoryChange = (category) => {
+    if (category === currentCategory) return; // Prevent unnecessary re-fetch
+    
     setCurrentCategory(category);
     currentPageRef.current = 1;
     setHasMore(true);
-
+    isLoadingRef.current = false;
+    isFetchingRef.current = false;
+    lastScrollPositionRef.current = 0;
+    
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+    
     if (category === "recommended") {
       fetchRecommendedJobs();
     } else {
@@ -201,7 +285,7 @@ const Jobs = () => {
   }, []);
 
   return (
-    <div className='min-h-screen bg-background relative overflow-hidden'>
+    <div className='min-h-screen bg-background relative'>
       {/* Background decorations */}
       <div className='absolute inset-0 -z-10 overflow-hidden'>
         <div className='absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl'></div>
@@ -237,7 +321,7 @@ const Jobs = () => {
 
         <div className='flex flex-col md:flex-row gap-6'>
           {currentCategory !== "searchedBased" ? (
-            <div className='w-full md:w-1/4 lg:w-1/5'>
+            <div className='w-full md:w-1/4 lg:w-1/5 md:sticky md:top-28 self-start max-h-[calc(100vh-140px)] overflow-y-auto pr-1'>
               <FilterCard
                 setFilterJobs={setFilterJobs}
                 setSearchParams={setSearchParams}
@@ -246,10 +330,7 @@ const Jobs = () => {
             </div>
           ) : null}
 
-          <div
-            className='flex-1 h-[85vh] overflow-y-auto pb-5'
-            ref={observerRef}
-          >
+          <div className='flex-1 pb-5'>
             <div className='flex flex-col sm:flex-row items-center justify-between mb-6 gap-4'>
               <button
                 onClick={() => handleCategoryChange("all")}
@@ -299,7 +380,13 @@ const Jobs = () => {
                 </div>
               )}
             </div>
-            {loading && <Loader />}
+            {loading && currentPageRef.current === 1 ? (
+              <Loader />
+            ) : loading ? (
+              <div className='flex justify-center items-center py-6 w-full'>
+                <div className='w-8 h-8 border-4 border-primary/20 border-t-primary rounded-full animate-spin shadow-neon'></div>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
