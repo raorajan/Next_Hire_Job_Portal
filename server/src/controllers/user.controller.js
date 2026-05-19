@@ -1757,6 +1757,44 @@ const getRecommendedJobs = asyncErrorHandler(async (req, res, next) => {
   });
 });
 
+const getRecruiterStats = asyncErrorHandler(async (req, res, next) => {
+  const userId = req.user.id;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    const error = new ErrorHandler("User not found", 404);
+    return error.sendError(res);
+  }
+
+  if (user.role !== "recruiter") {
+    const error = new ErrorHandler("Access denied. Only recruiters can view admin stats.", 403);
+    return error.sendError(res);
+  }
+
+  const totalCompanies = await Company.countDocuments({ userId });
+  const jobs = await Job.find({ created_by: userId }).select("_id").lean();
+  const totalJobs = jobs.length;
+  const jobIds = jobs.map((job) => job._id);
+
+  const totalApplications = await Application.countDocuments({ job: { $in: jobIds } });
+  const hiredCount = await Application.countDocuments({ job: { $in: jobIds }, status: "accepted" });
+  const pendingCount = await Application.countDocuments({ job: { $in: jobIds }, status: "pending" });
+  const rejectedCount = await Application.countDocuments({ job: { $in: jobIds }, status: "rejected" });
+
+  return res.status(200).json({
+    success: true,
+    status: 200,
+    stats: {
+      totalCompanies,
+      totalJobs,
+      totalApplications,
+      hiredCount,
+      pendingCount,
+      rejectedCount,
+    },
+  });
+});
+
 module.exports = {
   registerUser,
   loginUser,
@@ -1782,4 +1820,6 @@ module.exports = {
   createQuickTemplate,
   updateQuickTemplate,
   deleteQuickTemplate,
+  getRecruiterStats,
 };
+

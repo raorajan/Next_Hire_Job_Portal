@@ -24,6 +24,7 @@ import {
   saveSavedSearchApi,
   deleteSavedSearchApi,
   getSkillGapInsightsApi,
+  getRecruiterStatsApi,
 } from "../actions/user.action";
 
 // Initial state for user
@@ -38,6 +39,7 @@ const initialState = {
   quickTemplates: [],
   savedSearches: [],
   skillGapInsights: null,
+  recruiterStats: null,
   loading: false,
   error: null,
   message: null,
@@ -356,6 +358,18 @@ export const getSkillGapInsights = createAsyncThunk(
   }
 );
 
+export const getRecruiterStats = createAsyncThunk(
+  "user/getRecruiterStats",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getRecruiterStatsApi();
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data || "Failed to fetch recruiter stats");
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -631,6 +645,10 @@ const userSlice = createSlice({
       })
       .addCase(getSkillGapInsights.rejected, (state) => {
         state.skillGapInsights = null;
+      })
+      // Recruiter stats
+      .addCase(getRecruiterStats.fulfilled, (state, action) => {
+        state.recruiterStats = action.payload.stats;
       });
   },
 });

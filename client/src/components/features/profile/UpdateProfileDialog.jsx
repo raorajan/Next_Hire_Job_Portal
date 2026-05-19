@@ -24,6 +24,7 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
     bio: "",
     skills: "",
     file: null,
+    avatarFile: null,
   });
 
   // useEffect to update state when the user prop changes
@@ -35,6 +36,7 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
         bio: user.profile?.bio || "",
         skills: user.profile?.skills ? user.profile.skills.join(", ") : "",
         file: null,
+        avatarFile: null,
       });
     }
   }, [user]); // Only runs when user prop changes
@@ -48,6 +50,12 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
   const fileChangeHandler = (e) => {
     const file = e.target.files?.[0];
     setInput({ ...input, file });
+  };
+
+  // Handle avatar input change
+  const avatarChangeHandler = (e) => {
+    const avatarFile = e.target.files?.[0];
+    setInput({ ...input, avatarFile });
   };
 
   // Handle form submission to update profile
@@ -72,6 +80,10 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
     if (input.file) {
       formData.append("resume", input.file);
     }
+    
+    if (input.avatarFile) {
+      formData.append("avatar", input.avatarFile);
+    }
 
     dispatch(updateUserProfile(formData))
       .unwrap()
@@ -88,6 +100,7 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
         setLoading(false);
       });
   };
+
 
   return (
     <Dialog open={open}>
@@ -156,6 +169,25 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
                 placeholder="A short bio about yourself"
               />
             </div>
+
+            {/* Avatar input */}
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label htmlFor='avatar' className='text-right text-white font-semibold tracking-wide'>
+                Avatar
+              </Label>
+              <div className="col-span-3">
+                <Input
+                  id='avatar'
+                  name='avatar'
+                  type='file'
+                  accept='image/png, image/jpeg, image/webp'
+                  onChange={avatarChangeHandler}
+                  className='bg-[#050810] border-white/5 text-[#E6EDF3] focus:border-[#00C8FF] focus:ring-[#00C8FF]/20 rounded-xl file:bg-[#8040FF] file:text-white file:border-none file:rounded-lg file:px-3 file:py-1 file:mr-3 hover:file:bg-[#9050FF] transition-all cursor-pointer'
+                />
+                <p className="text-[10px] text-muted-foreground mt-1 ml-1">Accepts PNG, JPG, or WEBP</p>
+              </div>
+            </div>
+
 
             {/* Conditional rendering for student role */}
             {user?.role === "student" && (

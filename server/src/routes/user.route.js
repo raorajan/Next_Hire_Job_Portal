@@ -24,6 +24,7 @@ const {
   createQuickTemplate,
   updateQuickTemplate,
   deleteQuickTemplate,
+  getRecruiterStats,
 } = require("../controllers/user.controller.js");
 const isAuthenticated = require("../middlewares/auth.js");
 
@@ -36,6 +37,8 @@ userRouter.route("/change-password").post(isAuthenticated, changePassword);
 userRouter.route("/forget-password").post(forgetPassword);
 userRouter.route("/reset-password/:token").post(resetPassword);
 userRouter.route("/profile/update").post(isAuthenticated, updateProfile);
+userRouter.route("/profile/recruiter-stats").get(isAuthenticated, getRecruiterStats);
+
 userRouter
   .route("/job-alerts")
   .get(isAuthenticated, getJobAlerts)

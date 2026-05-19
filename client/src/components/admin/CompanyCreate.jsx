@@ -95,7 +95,7 @@ const CompanyCreate = () => {
             <div className='flex flex-col sm:flex-row items-center gap-4 pt-6'>
               <Button 
                 variant='outline' 
-                onClick={() => navigate("/profile/admin/companies")}
+                onClick={() => navigate("/profile")}
                 className='w-full sm:w-auto h-14 px-10 rounded-xl bg-white/5 border border-white/10 hover:border-[#00C8FF]/50 text-muted-foreground hover:text-white transition-all duration-300 font-bold'
               >
                 Abort

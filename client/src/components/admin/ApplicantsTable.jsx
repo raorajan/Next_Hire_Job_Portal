@@ -142,7 +142,7 @@ const ApplicantsTable = ({ applicants }) => {
                 <div className='mt-auto flex gap-3'>
                   <Button
                     onClick={() => statusHandler("accept", item?._id)}
-                    className={`flex-1 h-12 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 border-none \${
+                    className={`flex-1 h-12 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 border-none ${
                         isAccepted 
                           ? "bg-emerald-500 text-white cursor-default" 
                           : isRejected 
@@ -156,7 +156,7 @@ const ApplicantsTable = ({ applicants }) => {
 
                   <Button
                     onClick={() => statusHandler("reject", item?._id)}
-                    className={`flex-1 h-12 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 border-none \${
+                    className={`flex-1 h-12 rounded-xl font-black text-xs uppercase tracking-widest transition-all duration-300 border-none ${
                         isRejected 
                           ? "bg-destructive text-white cursor-default" 
                           : isAccepted 

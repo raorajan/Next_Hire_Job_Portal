@@ -137,3 +137,8 @@ export const readDocumentContentApi = async (data) => {
   const url = `api/v1/user/read-content`;
   return await fetchFromApiServer("POST", url, data);
 };
+
+export const getRecruiterStatsApi = async () => {
+  const url = `api/v1/user/profile/recruiter-stats`;
+  return await fetchFromApiServer("GET", url);
+};

@@ -14,7 +14,7 @@ import {
 
 import { Loader2 } from "lucide-react";
 import ReactHelmet from "../common/ReactHelmet";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { getCompanies } from "@/redux/slices/company.slice";
@@ -23,6 +23,8 @@ import Loader from "../common/Loader";
 
 const PostJob = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [company, setCompany] = useState([]);
   const [input, setInput] = useState({
     title: "",
@@ -36,7 +38,6 @@ const PostJob = () => {
     companyId: "",
   });
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -62,13 +63,22 @@ const PostJob = () => {
             toast.info("Create a company first to continue posting jobs.");
             navigate("/profile/admin/companies/create");
           }
+          
+          // Pre-populate if companyId was passed via navigate state
+          if (location.state?.companyId) {
+            setInput((prev) => ({
+              ...prev,
+              companyId: location.state.companyId,
+            }));
+          }
         }
       })
       .catch((error) => {
         console.error("Error fetching companies:", error);
       })
       .finally(() => setLoading(false));
-  }, [dispatch, navigate]);
+  }, [dispatch, navigate, location]);
+
 
   const validateForm = () => {
     const requiredFields = [
@@ -278,7 +288,13 @@ const PostJob = () => {
             {company?.companies?.length > 0 && (
               <div className='md:col-span-2 space-y-2'>
                 <Label className='font-extrabold text-white uppercase tracking-wider text-[10px] ml-1'>Target Enterprise Entity</Label>
-                <Select onValueChange={selectChangeHandler}>
+                <Select
+                  value={
+                    company?.companies?.find((c) => c._id === input.companyId)
+                      ?.companyName || ""
+                  }
+                  onValueChange={selectChangeHandler}
+                >
                   <SelectTrigger className='w-full rounded-2xl bg-[#080C1E]/80 border-white/5 border-2 h-14 focus:ring-[#00C8FF]/20 focus:border-[#00C8FF]/50 text-white font-bold'>
                     <SelectValue placeholder='Select an enterprise profile' />
                   </SelectTrigger>

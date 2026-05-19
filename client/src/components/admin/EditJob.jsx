@@ -146,7 +146,17 @@ const EditJob = () => {
         canonicalUrl='/admin/jobs/edit'
       />
 
-      <div className='flex items-center justify-center w-full my-5 px-6 pt-24 pb-12 relative z-10'>
+      <div className='flex flex-col items-center justify-center w-full my-5 px-6 pt-24 pb-12 relative z-10'>
+        {/* Back Button */}
+        <div className="w-full max-w-4xl mb-6">
+          <Button
+            onClick={() => navigate(-1)}
+            className='rounded-xl bg-white/5 border border-white/10 hover:border-[#00C8FF]/50 text-muted-foreground hover:text-white transition-all duration-300 px-6 py-2'
+          >
+            <span className="mr-2 italic">←</span> Back
+          </Button>
+        </div>
+
         <form
           onSubmit={submitHandler}
           className='p-10 max-w-4xl bg-[#080C1E]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_50px_rgba(0,100,220,0.03)] rounded-3xl w-full relative overflow-hidden group'

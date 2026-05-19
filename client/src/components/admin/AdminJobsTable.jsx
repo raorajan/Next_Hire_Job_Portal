@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
-import { Eye, Edit2 } from "lucide-react";
-import { MdDelete } from "react-icons/md";
+import { Eye, Edit2, MapPin, Award, DollarSign, Calendar } from "lucide-react";
+import { MdDeleteForever } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { deleteJob } from "@/redux/slices/job.slice";
 import { toast } from "react-toastify";
@@ -38,64 +38,82 @@ const AdminJobsTable = ({ jobs, onDeleteJob }) => {
   };
 
   return (
-    <div className='container mx-auto p-6'>
+    <div className='container mx-auto p-6 relative z-10'>
       {jobs?.length > 0 ? (
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8'>
           {jobs?.map((job) => (
             <div
               key={job?._id}
-              className='group relative bg-[#080C1E]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_50px_rgba(0,100,220,0.03)] p-8 hover:shadow-[0_0_30px_rgba(0,200,255,0.2)] transform hover:-translate-y-2 transition-all duration-500 ease-in-out flex flex-col justify-between h-[480px] overflow-hidden'
+              className='group relative bg-[#080C1E]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_50px_rgba(0,100,220,0.03)] p-6 sm:p-8 hover:shadow-[0_0_40px_rgba(0,200,255,0.15)] hover:border-[#00C8FF]/30 transform hover:-translate-y-2 transition-all duration-500 ease-in-out flex flex-col justify-between h-[490px] overflow-hidden rounded-3xl'
             >
+              {/* Outer light glow effect */}
               <div className='absolute inset-0 bg-gradient-to-br from-[#00C8FF]/5 to-[#8040FF]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none'></div>
               
-              <div className='relative z-10'>
-                <div className='flex items-center justify-between mb-6'>
+              <div className='relative z-10 space-y-4'>
+                <div className='flex items-center justify-between'>
                   <div className='relative'>
                     <div className='absolute inset-0 bg-[#00C8FF]/20 blur-xl rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
                     <img
                       src={job?.company?.logo?.url || "https://via.placeholder.com/100"}
                       alt={job?.company?.companyName || "Company Logo"}
-                      className='w-14 h-14 object-cover rounded-2xl border-2 border-white/5 group-hover:border-[#00C8FF]/50 transition-all duration-500 relative z-10'
+                      className='w-14 h-14 object-cover rounded-2xl border border-white/10 group-hover:border-[#00C8FF]/50 transition-all duration-500 relative z-10 shadow-[0_0_15px_rgba(0,0,0,0.3)]'
                     />
                   </div>
-                  <div className='px-3 py-1 bg-white/5 rounded-lg border border-white/5 text-[10px] font-black text-white/60 uppercase tracking-widest'>
-                    {job?.createdAt && new Date(job.createdAt).toLocaleDateString()}
+                  <div className='flex items-center gap-1 px-3 py-1.5 bg-[#00C8FF]/10 border border-[#00C8FF]/20 text-[9px] font-black text-[#00C8FF] uppercase tracking-widest rounded-xl shadow-[0_0_10px_rgba(0,200,255,0.1)]'>
+                    <Calendar className="w-3 h-3" />
+                    <span>{job?.createdAt && new Date(job.createdAt).toLocaleDateString()}</span>
                   </div>
                 </div>
 
-                <h2 className='text-2xl font-black text-white mb-1 tracking-tight group-hover:text-[#00C8FF] transition-colors duration-300'>
-                  {job?.title}
-                </h2>
-                <p className='text-[#00C8FF] font-extrabold italic text-sm mb-4 drop-shadow-[0_0_10px_rgba(0,200,255,0.2)]'>
-                  {job?.company?.companyName || "Unknown Enterprise"}
-                </p>
-                <p className='text-muted-foreground text-sm mb-6 font-medium leading-relaxed line-clamp-3'>
+                <div>
+                  <h2 className='text-2xl font-black text-white tracking-tight group-hover:text-[#00C8FF] transition-colors duration-300 line-clamp-1'>
+                    {job?.title}
+                  </h2>
+                  <p className='text-[#00C8FF] font-extrabold italic text-xs drop-shadow-[0_0_10px_rgba(0,200,255,0.2)] mt-0.5'>
+                    {job?.company?.companyName || "Unknown Enterprise"}
+                  </p>
+                </div>
+
+                <p className='text-muted-foreground text-sm font-medium leading-relaxed line-clamp-3'>
                   {job?.description}
                 </p>
 
-                <div className='space-y-3 bg-white/5 rounded-2xl p-5 border border-white/5 group-hover:bg-white/10 transition-all duration-300'>
+                {/* Cyber Metadata Grid */}
+                <div className='space-y-2.5 bg-[#050810]/40 rounded-2xl p-4 border border-white/5 group-hover:bg-white/5 transition-all duration-300'>
                   <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider">
-                    <span className='text-muted-foreground'>Location</span>
+                    <div className="flex items-center gap-1.5 text-muted-foreground">
+                      <MapPin className="w-3.5 h-3.5 text-[#00C8FF]" />
+                      <span className="text-[9px]">Location</span>
+                    </div>
                     <span className="text-white">{job?.location}</span>
                   </div>
-                  <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider pt-2 border-t border-white/5">
-                    <span className='text-muted-foreground'>Compensation</span>
+                  
+                  <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider pt-2.5 border-t border-white/5">
+                    <div className="flex items-center gap-1.5 text-muted-foreground">
+                      <DollarSign className="w-3.5 h-3.5 text-[#00C8FF]" />
+                      <span className="text-[9px]">Compensation</span>
+                    </div>
                     <span className='text-[#00C8FF] italic drop-shadow-[0_0_10px_rgba(0,200,255,0.2)]'>₹{job?.salary?.toLocaleString?.()} LPA</span>
                   </div>
-                  <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider pt-2 border-t border-white/5">
-                    <span className='text-muted-foreground'>Expertise Level</span>
+                  
+                  <div className="flex justify-between items-center text-xs font-bold uppercase tracking-wider pt-2.5 border-t border-white/5">
+                    <div className="flex items-center gap-1.5 text-muted-foreground">
+                      <Award className="w-3.5 h-3.5 text-[#00C8FF]" />
+                      <span className="text-[9px]">Threshold</span>
+                    </div>
                     <span className="text-white">{job?.experienceLevel} Years</span>
                   </div>
                 </div>
               </div>
 
+              {/* Action Operations */}
               <div className='relative z-10 flex gap-3 pt-6 mt-auto border-t border-white/5'>
                 <Button
                   variant='outline'
-                  className='flex-1 h-12 rounded-xl bg-[#080C1E] border-white/10 hover:border-[#00C8FF]/50 text-muted-foreground hover:text-white transition-all duration-300'
+                  className='flex-1 h-12 rounded-xl bg-[#080C1E] border-white/10 hover:border-[#00C8FF]/50 text-muted-foreground hover:text-white font-bold transition-all duration-300'
                   onClick={() => navigate(`/profile/admin/jobs/${job?._id}/applicants`)}
                 >
-                  <Eye className='w-4 h-4 mr-2' /> Applicants ({job?.applications?.length || 0})
+                  <Eye className='w-4 h-4 mr-2 text-[#00C8FF]' /> Applicants ({job?.applications?.length || 0})
                 </Button>
 
                 <div className='flex gap-2 text-white'>
@@ -111,7 +129,7 @@ const AdminJobsTable = ({ jobs, onDeleteJob }) => {
                     className='w-12 h-12 rounded-xl bg-[#080C1E] border-white/10 hover:border-red-500/50 text-muted-foreground hover:text-red-400 p-0'
                     onClick={() => handleDeleteClick(job?._id)}
                   >
-                    <MdDelete className='w-5 h-5' />
+                    <MdDeleteForever className='w-6 h-6' />
                   </Button>
                 </div>
               </div>
