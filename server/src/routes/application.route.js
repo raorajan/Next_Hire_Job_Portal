@@ -6,6 +6,7 @@ const {
   getAppliedJobs,
   updateStatus,
   getApplicationTimeline,
+  getApplicationAiScore,
 } = require("../controllers/application.controller.js");
 
 const applicationRouter = express.Router();
@@ -19,5 +20,8 @@ applicationRouter
 applicationRouter
   .route("/:applicationId/timeline")
   .get(isAuthenticated, getApplicationTimeline);
+applicationRouter
+  .route("/:applicationId/ai-score")
+  .get(isAuthenticated, getApplicationAiScore);
 
 module.exports = applicationRouter;

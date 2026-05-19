@@ -49,6 +49,21 @@ const applicationSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    aiScore: {
+      type: Number,
+      min: 0,
+      max: 100,
+    },
+    aiReason: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
+    aiSummarizedProfile: {
+      type: String,
+      trim: true,
+    },
   },
   { timestamps: true }
 );

@@ -5,6 +5,7 @@ const asyncErrorHandler = require("./../middlewares/asyncErrorHandler");
 const {
   notifyApplicationReceived,
   notifyStatusUpdate,
+  calculateCandidateMatchScore,
 } = require("../services/openai.service");
 
 const ErrorHandler = require("../utils/errorHandler");
@@ -294,4 +295,58 @@ const getApplicationTimeline = asyncErrorHandler(async (req, res) => {
   });
 });
 
-module.exports = { applyJob, getAppliedJobs, getApplicants, updateStatus, getApplicationTimeline };
+const getApplicationAiScore = asyncErrorHandler(async (req, res) => {
+  try {
+    const applicationId = req.params.applicationId;
+    if (!applicationId) {
+      return new ErrorHandler("Application ID is required", 400).sendError(res);
+    }
+
+    const application = await Application.findById(applicationId)
+      .populate("job")
+      .populate("applicant");
+
+    if (!application) {
+      return new ErrorHandler("Application not found", 404).sendError(res);
+    }
+
+    // Check if score is already cached
+    if (application.aiScore !== undefined && application.aiScore !== null) {
+      return res.status(200).json({
+        success: true,
+        status: 200,
+        aiScore: application.aiScore,
+        aiReason: application.aiReason,
+        aiSummarizedProfile: application.aiSummarizedProfile,
+      });
+    }
+
+    // Otherwise calculate match score
+    const aiResult = await calculateCandidateMatchScore(application.job, application.applicant);
+
+    // Save to database
+    application.aiScore = aiResult.match_score;
+    application.aiReason = aiResult.reasons;
+    application.aiSummarizedProfile = aiResult.profile_summary;
+    await application.save();
+
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      aiScore: application.aiScore,
+      aiReason: application.aiReason,
+      aiSummarizedProfile: application.aiSummarizedProfile,
+    });
+  } catch (error) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("AI Match score calculation error:", error.message);
+    }
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+      status: 500,
+    });
+  }
+});
+
+module.exports = { applyJob, getAppliedJobs, getApplicants, updateStatus, getApplicationTimeline, getApplicationAiScore };
