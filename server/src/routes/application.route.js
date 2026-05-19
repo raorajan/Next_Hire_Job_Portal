@@ -7,6 +7,8 @@ const {
   updateStatus,
   getApplicationTimeline,
   getApplicationAiScore,
+  getApplicationInterviewQuestions,
+  getApplicationEmailDraft,
 } = require("../controllers/application.controller.js");
 
 const applicationRouter = express.Router();
@@ -23,5 +25,11 @@ applicationRouter
 applicationRouter
   .route("/:applicationId/ai-score")
   .get(isAuthenticated, getApplicationAiScore);
+applicationRouter
+  .route("/:applicationId/interview-questions")
+  .get(isAuthenticated, getApplicationInterviewQuestions);
+applicationRouter
+  .route("/:applicationId/email-draft")
+  .post(isAuthenticated, getApplicationEmailDraft);
 
 module.exports = applicationRouter;

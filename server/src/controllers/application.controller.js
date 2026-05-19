@@ -6,6 +6,8 @@ const {
   notifyApplicationReceived,
   notifyStatusUpdate,
   calculateCandidateMatchScore,
+  generateInterviewQuestionsAi,
+  generateEmailDraftAi,
 } = require("../services/openai.service");
 
 const ErrorHandler = require("../utils/errorHandler");
@@ -349,4 +351,91 @@ const getApplicationAiScore = asyncErrorHandler(async (req, res) => {
   }
 });
 
-module.exports = { applyJob, getAppliedJobs, getApplicants, updateStatus, getApplicationTimeline, getApplicationAiScore };
+const getApplicationInterviewQuestions = asyncErrorHandler(async (req, res) => {
+  try {
+    const applicationId = req.params.applicationId;
+    if (!applicationId) {
+      return new ErrorHandler("Application ID is required", 400).sendError(res);
+    }
+
+    const application = await Application.findById(applicationId)
+      .populate("job")
+      .populate("applicant");
+
+    if (!application) {
+      return new ErrorHandler("Application not found", 404).sendError(res);
+    }
+
+    // Check if questions are already cached
+    if (application.interviewQuestions && application.interviewQuestions.length > 0) {
+      return res.status(200).json({
+        success: true,
+        status: 200,
+        interviewQuestions: application.interviewQuestions,
+      });
+    }
+
+    // Generate interview questions
+    const questions = await generateInterviewQuestionsAi(application.job, application.applicant);
+
+    // Save to database
+    application.interviewQuestions = questions;
+    await application.save();
+
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      interviewQuestions: application.interviewQuestions,
+    });
+  } catch (error) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("AI Interview Questions error:", error.message);
+    }
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+      status: 500,
+    });
+  }
+});
+
+const getApplicationEmailDraft = asyncErrorHandler(async (req, res) => {
+  try {
+    const applicationId = req.params.applicationId;
+    const { type } = req.body;
+    
+    if (!applicationId) {
+      return new ErrorHandler("Application ID is required", 400).sendError(res);
+    }
+    if (!type || !["invite", "rejection"].includes(type)) {
+      return new ErrorHandler("Valid draft type ('invite' or 'rejection') is required", 400).sendError(res);
+    }
+
+    const application = await Application.findById(applicationId)
+      .populate("job")
+      .populate("applicant");
+
+    if (!application) {
+      return new ErrorHandler("Application not found", 404).sendError(res);
+    }
+
+    const draft = await generateEmailDraftAi(application.job, application.applicant, application, type);
+
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      draft,
+    });
+  } catch (error) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("AI Email Draft generation error:", error.message);
+    }
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+      status: 500,
+    });
+  }
+});
+
+module.exports = { applyJob, getAppliedJobs, getApplicants, updateStatus, getApplicationTimeline, getApplicationAiScore, getApplicationInterviewQuestions, getApplicationEmailDraft };

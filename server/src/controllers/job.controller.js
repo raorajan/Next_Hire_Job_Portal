@@ -8,6 +8,7 @@ const Company = require("../models/company.model");
 const {
   processJobAndNotifyUsers,
   notifyJobDeletion,
+  generateJobDescriptionAi,
 } = require("../services/openai.service");
 
 const postJob = asyncErrorHandler(async (req, res) => {
@@ -574,6 +575,23 @@ const getJobsForCarousel = asyncErrorHandler(async (req, res) => {
   }
 });
 
+const generateJobDescription = asyncErrorHandler(async (req, res) => {
+  const { title, skills, experience } = req.body;
+
+  if (!title) {
+    const error = new ErrorHandler("Role Title is required to generate a description", 400);
+    return error.sendError(res);
+  }
+
+  const generated = await generateJobDescriptionAi(title, skills, experience);
+
+  return res.status(200).json({
+    success: true,
+    data: generated,
+    message: "AI job description generated successfully."
+  });
+});
+
 module.exports = {
   postJob,
   getAllJobs,
@@ -584,4 +602,5 @@ module.exports = {
   getSimilarJobs,
   getJobFilters,
   getJobsForCarousel,
+  generateJobDescription,
 };

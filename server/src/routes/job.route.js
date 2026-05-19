@@ -10,12 +10,13 @@ const {
   updateJob,
   getJobFilters,
   getJobsForCarousel,
-
+  generateJobDescription,
 } = require("../controllers/job.controller.js");
 
 const jobRouter = express.Router();
 
 jobRouter.route("/post").post(isAuthenticated, postJob);
+jobRouter.route("/generate-description").post(isAuthenticated, generateJobDescription);
 jobRouter.route("/get").get(getAllJobs);
 jobRouter.route("/getadminjobs").get(isAuthenticated, getAdminJobs);
 jobRouter.route("/get/:id").get(getJobById);

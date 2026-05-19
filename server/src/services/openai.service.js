@@ -5,7 +5,7 @@ const cron = require("node-cron");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY);
 
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
 async function generateEmailContent(job, user, companyName) {
   const content = `
@@ -337,6 +337,132 @@ async function calculateCandidateMatchScore(job, user) {
   }
 }
 
+async function generateJobDescriptionAi(title, skills, experience) {
+  try {
+    const prompt = `You are an elite, inclusive, and professional technical recruitment assistant. Write an outstanding, highly detailed, and SEO-friendly job description for the following role:
+    - Role Title: ${title}
+    - Target Skills/Keywords: ${skills || "Standard industry stack"}
+    - Experience Level Required: ${experience || "Not specified"} years
+
+    The generated content must follow this exact format:
+    1. A compelling 2-sentence introduction section about the role and target scope.
+    2. A markdown bulleted list of 5 key Responsibilities.
+    3. A markdown bulleted list of 5 key Requirements.
+    
+    Return ONLY a raw valid JSON object with the keys:
+    - description: String (A beautifully crafted professional description paragraph, incorporating the responsibilities and requirements clearly)
+    - requirements: String (A comma-separated list of extracted core technical skill tags, e.g., 'React, TypeScript, Redux')
+    
+    Do not enclose the JSON inside markdown codeblocks (no \`\`\`json or similar). Just return raw JSON.`;
+
+    const result = await model.generateContent(prompt);
+    const responseText = result.response.text().trim();
+    
+    // Clean up potential markdown formatting
+    const jsonString = responseText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+    
+    const parsedData = JSON.parse(jsonString);
+    return {
+      description: parsedData.description || `Outstanding opportunity for a ${title} seeking an impactful role. Join our premium, fast-scaling enterprise team to develop core software products, establish operational standards, and streamline system deliveries.`,
+      requirements: parsedData.requirements || skills || "Software Engineering, Development, Scalability"
+    };
+  } catch (error) {
+    console.error("AI description generation failed:", error);
+    return {
+      description: `Outstanding opportunity for a ${title} seeking an impactful role. Join our premium, fast-scaling enterprise team to develop core software products, establish operational standards, and streamline system deliveries.`,
+      requirements: skills || "Software Engineering, Development, Scalability"
+    };
+  }
+}
+
+async function generateInterviewQuestionsAi(job, user) {
+  try {
+    const prompt = `You are a world-class technical interviewer, staff engineer, and recruitment lead. Compare the following Candidate's resume details and bio against the target Job Description:
+    - Job Title: ${job.title}
+    - Job Description: ${job.description}
+    - Job Requirements: ${job.requirements.join(", ")}
+    - Candidate Name: ${user.fullname}
+    - Candidate Bio: ${user.profile?.bio || "Not specified"}
+    - Candidate Skills: ${user.profile?.skills?.join(", ") || "Not specified"}
+
+    Based on this comparison, generate exactly 5 targeted, highly relevant interview questions specifically designed to test this candidate's fit for this role.
+    For each question, provide an 'Ideal Answer Checklist' or expectations the interviewer should look for.
+
+    Return ONLY a raw valid JSON array of objects, where each object has EXACTLY these keys:
+    - question: String (the targeted question)
+    - guidelines: String (expectations/guidelines for the ideal answer)
+    
+    Do not enclose the JSON inside markdown codeblocks (no \`\`\`json or similar). Just return raw JSON.`;
+
+    const result = await model.generateContent(prompt);
+    const responseText = result.response.text().trim();
+    
+    // Clean up potential markdown formatting
+    const jsonString = responseText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+    
+    const parsedData = JSON.parse(jsonString);
+    if (Array.isArray(parsedData)) {
+      return parsedData;
+    }
+    return [
+      {
+        question: `Based on your experience with ${job.requirements[0] || "relevant skills"}, can you describe a challenging engineering problem you solved recently?`,
+        guidelines: `Look for candidate demonstrating deep technical knowledge, practical problem-solving flow, and active ownership.`
+      }
+    ];
+  } catch (error) {
+    console.error("AI interview questions generation failed:", error);
+    return [
+      {
+        question: `Based on your experience with ${job.requirements[0] || "relevant skills"}, can you describe a challenging engineering problem you solved recently?`,
+        guidelines: `Look for candidate demonstrating deep technical knowledge, practical problem-solving flow, and active ownership.`
+      }
+    ];
+  }
+}
+
+async function generateEmailDraftAi(job, user, application, type) {
+  try {
+    const isInvite = type === "invite";
+    const prompt = `You are an elite, highly empathetic, and professional technical recruiter. Draft a personalized email outreach to the candidate.
+    - Candidate Name: ${user.fullname}
+    - Role: ${job.title}
+    - Company: Target Hiring Team
+    - Match Suitability Score: ${application.aiScore || "N/A"}%
+    - Outreach Type: ${isInvite ? "Interview Invitation" : "Polite Rejection"}
+
+    If Outreach Type is 'Interview Invitation': Draft a warm, highly enthusiastic, and professional interview invitation email.
+    If Outreach Type is 'Polite Rejection': Draft a highly constructive, encouraging, and empathetic rejection email, thanking them for their application and encouraging them for future roles.
+
+    Return ONLY a raw valid JSON object with the keys:
+    - subject: String (email subject line)
+    - body: String (email body text, formatted with linebreaks)
+    
+    Do not enclose the JSON inside markdown codeblocks (no \`\`\`json or similar). Just return raw JSON.`;
+
+    const result = await model.generateContent(prompt);
+    const responseText = result.response.text().trim();
+    
+    // Clean up potential markdown formatting
+    const jsonString = responseText.replace(/^```json\s*/i, "").replace(/```$/, "").trim();
+    
+    const parsedData = JSON.parse(jsonString);
+    return {
+      subject: parsedData.subject || (isInvite ? `Interview Invitation: ${job.title}` : `Application Update: ${job.title}`),
+      body: parsedData.body || (isInvite ? `Hi ${user.fullname},\n\nWe were impressed by your profile and would love to invite you for an interview...` : `Hi ${user.fullname},\n\nThank you for your application...`)
+    };
+  } catch (error) {
+    console.error("AI email draft generation failed:", error);
+    const isInvite = type === "invite";
+    return {
+      subject: isInvite ? `Interview Invitation: ${job.title}` : `Application Update: ${job.title}`,
+      body: isInvite 
+        ? `Hi ${user.fullname},\n\nThank you for applying for the ${job.title} position. We were impressed by your technical profile and would love to schedule an introductory interview with you.\n\nPlease let us know your availability over the next few days.\n\nBest regards,\nRecruitment Team`
+        : `Hi ${user.fullname},\n\nThank you for applying for the ${job.title} position. After careful review of all applications, we regret to inform you that we will not be moving forward with your candidacy at this time.\n\nWe appreciate your interest in joining our team and wish you the best in your professional search.\n\nBest regards,\nRecruitment Team`
+    };
+  }
+}
+
 module.exports = {
   processJobAndNotifyUsers,
   notifyUsersToCompleteProfile,
@@ -344,4 +470,7 @@ module.exports = {
   notifyJobDeletion,
   notifyStatusUpdate,
   calculateCandidateMatchScore,
+  generateJobDescriptionAi,
+  generateInterviewQuestionsAi,
+  generateEmailDraftAi,
 };

@@ -64,6 +64,12 @@ const applicationSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    interviewQuestions: [
+      {
+        question: { type: String, trim: true },
+        guidelines: { type: String, trim: true },
+      }
+    ],
   },
   { timestamps: true }
 );

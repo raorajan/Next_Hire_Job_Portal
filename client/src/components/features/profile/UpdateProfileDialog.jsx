@@ -9,15 +9,17 @@ import {
 import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
-import { X } from "lucide-react";
+import { X, Sparkles, Cpu } from "lucide-react";
 import Loader from "../../common/Loader";
 import { useDispatch } from "react-redux";
 import { updateUserProfile } from "@/redux/slices/user.slice";
 import { toast } from "react-toastify";
+import fetchFromApiServer from "@/services";
 
 const UpdateProfileDialog = ({ open, setOpen, user }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [autoFilling, setAutoFilling] = useState(false);
   const [input, setInput] = useState({
     fullname: "",
     email: "",
@@ -56,6 +58,82 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
   const avatarChangeHandler = (e) => {
     const avatarFile = e.target.files?.[0];
     setInput({ ...input, avatarFile });
+  };
+
+  // AI Resume Scanner & Autopopulate helper
+  const handleAiAutofill = async () => {
+    if (!input.file) {
+      toast.error("Please select a resume file first.");
+      return;
+    }
+    setAutoFilling(true);
+    toast.info("🧠 Gemini is scanning your document...");
+
+    const formData = new FormData();
+    formData.append("document", input.file);
+
+    try {
+      const response = await fetchFromApiServer("POST", "api/v1/user/read-content", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response?.data?.success && response?.data?.extractedContent) {
+        const extracted = response.data.extractedContent;
+        let foundSkills = [];
+        let foundBio = "";
+
+        Object.keys(extracted).forEach((key) => {
+          const lowerKey = key.toLowerCase();
+          if (
+            lowerKey.includes("skill") ||
+            lowerKey.includes("technology") ||
+            lowerKey.includes("language") ||
+            lowerKey.includes("framework")
+          ) {
+            const val = extracted[key];
+            if (Array.isArray(val)) {
+              foundSkills = [...foundSkills, ...val];
+            } else if (typeof val === "string") {
+              foundSkills = [...foundSkills, ...val.split(",").map((s) => s.trim())];
+            }
+          }
+          if (
+            lowerKey.includes("summary") ||
+            lowerKey.includes("bio") ||
+            lowerKey.includes("objective") ||
+            lowerKey.includes("profile") ||
+            lowerKey.includes("about")
+          ) {
+            const val = extracted[key];
+            if (typeof val === "string") {
+              foundBio = val;
+            } else if (Array.isArray(val)) {
+              foundBio = val.join(" ");
+            }
+          }
+        });
+
+        // Clean up found skills
+        const uniqueSkills = [...new Set(foundSkills.filter(Boolean))];
+
+        setInput((prev) => ({
+          ...prev,
+          skills: uniqueSkills.length > 0 ? uniqueSkills.join(", ") : prev.skills,
+          bio: foundBio || prev.bio,
+        }));
+        
+        toast.success("✨ Skills & Bio auto-populated successfully!");
+      } else {
+        toast.error("Failed to parse resume content. Try a different format.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("AI engine could not extract skills. Please enter manually.");
+    } finally {
+      setAutoFilling(false);
+    }
   };
 
   // Handle form submission to update profile
@@ -101,10 +179,9 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
       });
   };
 
-
   return (
     <Dialog open={open}>
-      {loading && <Loader />}
+      {(loading || autoFilling) && <Loader />}
       <DialogContent
         className='sm:max-w-[425px] bg-[#080C1E] border border-white/5 shadow-[0_0_50px_rgba(0,100,220,0.05)]'
         onInteractOutside={() => setOpen(false)}
@@ -188,7 +265,6 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
               </div>
             </div>
 
-
             {/* Conditional rendering for student role */}
             {user?.role === "student" && (
               <>
@@ -221,6 +297,19 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
                       className='bg-[#050810] border-white/5 text-[#E6EDF3] focus:border-[#00C8FF] focus:ring-[#00C8FF]/20 rounded-xl file:bg-[#00C8FF] file:text-[#050810] file:border-none file:rounded-lg file:px-3 file:py-1 file:mr-3 hover:file:bg-[#00E5FF] transition-all cursor-pointer'
                     />
                     <p className="text-[10px] text-muted-foreground mt-1 ml-1">Accepts PNG, JPG, or PDF</p>
+                    
+                    {input.file && (
+                      <Button
+                        type="button"
+                        onClick={handleAiAutofill}
+                        disabled={autoFilling}
+                        variant="outline"
+                        className="w-full mt-3 rounded-xl bg-[#00C8FF]/5 border border-[#00C8FF]/20 hover:border-[#00C8FF]/50 text-[#00C8FF] hover:text-white font-extrabold text-[10px] uppercase tracking-widest transition-all duration-300 h-9"
+                      >
+                        <Sparkles className="w-3.5 h-3.5 mr-1.5 text-[#00C8FF] animate-pulse" />
+                        {autoFilling ? "Scanning Resume..." : "✨ AI Auto-fill Skills & Bio"}
+                      </Button>
+                    )}
                   </div>
                 </div>
               </>
@@ -231,7 +320,7 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
             <Button 
               type='submit' 
               className='w-full bg-[#00C8FF] hover:bg-[#00E5FF] text-[#050810] font-bold py-5 rounded-xl shadow-[0_0_20px_rgba(0,200,255,0.3)] hover:shadow-[0_0_30px_rgba(0,200,255,0.5)] hover:scale-[1.02] transition-all duration-300 border-none'
-              disabled={loading}
+              disabled={loading || autoFilling}
             >
               {loading ? "Updating Profile..." : "Update Profile"}
             </Button>
