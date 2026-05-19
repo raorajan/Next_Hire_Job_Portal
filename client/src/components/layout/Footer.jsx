@@ -127,22 +127,22 @@ const Footer = () => {
               </h3>
               <ul className="space-y-3 text-sm font-bold">
                 <li>
-                  <Link to="/admin/jobs/create" className="text-muted-foreground hover:text-white transition-colors duration-200">
+                  <Link to="/profile/admin/jobs/create" className="text-muted-foreground hover:text-white transition-colors duration-200">
                     Deploy Opportunity
                   </Link>
                 </li>
                 <li>
-                  <Link to="/admin/companies/create" className="text-muted-foreground hover:text-white transition-colors duration-200">
+                  <Link to="/profile/admin/companies/create" className="text-muted-foreground hover:text-white transition-colors duration-200">
                     Create Enterprise
                   </Link>
                 </li>
                 <li>
-                  <Link to="/admin/jobs" className="text-muted-foreground hover:text-white transition-colors duration-200">
-                    Job Registry
+                  <Link to="/profile/admin/candidates" className="text-[#00C8FF] hover:text-[#00E5FF] transition-colors duration-200 flex items-center gap-1 font-black">
+                    <Sparkles className="w-3.5 h-3.5 animate-pulse" /> Talent Radar Search
                   </Link>
                 </li>
                 <li>
-                  <Link to="/admin/companies" className="text-muted-foreground hover:text-white transition-colors duration-200">
+                  <Link to="/profile/admin/companies" className="text-muted-foreground hover:text-white transition-colors duration-200">
                     Active Registry
                   </Link>
                 </li>

@@ -113,54 +113,97 @@ const Navbar = () => {
           {/* Desktop Menu */}
           <div className='hidden md:flex items-center gap-12'>
             <ul className='flex items-center gap-8 font-medium text-muted-foreground'>
-              <li>
-                <Link
-                  to='/'
-                  className={`px-4 py-2 rounded-lg transition-all duration-200 ${
-                    isActive("/")
-                      ? "bg-primary/10 text-primary font-semibold shadow-sm shadow-neon"
-                      : "hover:text-primary hover:bg-muted"
-                  }`}
-                >
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to='/jobs'
-                  className={`px-4 py-2 rounded-lg transition-all duration-200 ${
-                    isActive("/jobs")
-                      ? "bg-primary/10 text-primary font-semibold shadow-sm shadow-neon"
-                      : "hover:text-primary hover:bg-muted"
-                  }`}
-                >
-                  Jobs
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to='/resources'
-                  className={`px-4 py-2 rounded-lg transition-all duration-200 ${
-                    isActive("/resources")
-                      ? "bg-primary/10 text-primary font-semibold shadow-sm shadow-neon"
-                      : "hover:text-primary hover:bg-muted"
-                  }`}
-                >
-                  Resources
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to='/other-jobs'
-                  className={`px-4 py-2 rounded-lg transition-all duration-200 ${
-                    isActive("/other-jobs")
-                      ? "bg-primary/10 text-primary font-semibold shadow-sm shadow-neon"
-                      : "hover:text-primary hover:bg-muted"
-                  }`}
-                >
-                  Other Jobs
-                </Link>
-              </li>
+              {user?.role === "recruiter" ? (
+                <>
+                  <li>
+                    <Link
+                      to='/'
+                      className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+                        isActive("/")
+                          ? "bg-primary/10 text-primary font-semibold shadow-sm shadow-neon"
+                          : "hover:text-primary hover:bg-muted"
+                      }`}
+                    >
+                      Home
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to='/profile/admin/companies'
+                      className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+                        isActive("/profile/admin/companies")
+                          ? "bg-primary/10 text-primary font-semibold shadow-sm shadow-neon"
+                          : "hover:text-primary hover:bg-muted"
+                      }`}
+                    >
+                      Active Registry
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to='/profile/admin/candidates'
+                      className={`px-4 py-2 rounded-lg transition-all duration-200 font-extrabold ${
+                        isActive("/profile/admin/candidates")
+                          ? "bg-[#00C8FF]/10 text-[#00C8FF] shadow-sm shadow-[0_0_15px_rgba(0,200,255,0.25)]"
+                          : "hover:text-[#00C8FF] hover:bg-[#00C8FF]/5"
+                      }`}
+                    >
+                      Talent Radar
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link
+                      to='/'
+                      className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+                        isActive("/")
+                          ? "bg-primary/10 text-primary font-semibold shadow-sm shadow-neon"
+                          : "hover:text-primary hover:bg-muted"
+                      }`}
+                    >
+                      Home
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to='/jobs'
+                      className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+                        isActive("/jobs")
+                          ? "bg-primary/10 text-primary font-semibold shadow-sm shadow-neon"
+                          : "hover:text-primary hover:bg-muted"
+                      }`}
+                    >
+                      Jobs
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to='/resources'
+                      className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+                        isActive("/resources")
+                          ? "bg-primary/10 text-primary font-semibold shadow-sm shadow-neon"
+                          : "hover:text-primary hover:bg-muted"
+                      }`}
+                    >
+                      Resources
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to='/other-jobs'
+                      className={`px-4 py-2 rounded-lg transition-all duration-200 ${
+                        isActive("/other-jobs")
+                          ? "bg-primary/10 text-primary font-semibold shadow-sm shadow-neon"
+                          : "hover:text-primary hover:bg-muted"
+                      }`}
+                    >
+                      Other Jobs
+                    </Link>
+                  </li>
+                </>
+              )}
             </ul>
 
             {/* Post Job Button for Recruiters */}
@@ -209,6 +252,17 @@ const Navbar = () => {
                           <FaUser className='mr-3 text-sm text-muted-foreground' /> Profile
                         </Link>
                       </li>
+                      {user?.role === "recruiter" && (
+                        <li className='flex items-center w-11/12 m-auto rounded-lg px-4 py-3 hover:bg-muted cursor-pointer transition-colors duration-150'>
+                          <Link
+                            to='/profile/admin/candidates'
+                            onClick={handleLinkClick}
+                            className='flex items-center w-full text-[#00C8FF] hover:text-[#00E5FF] font-black'
+                          >
+                            <FaStar className='mr-3 text-sm text-[#00C8FF]' /> Talent Radar
+                          </Link>
+                        </li>
+                      )}
                       <li className='flex items-center w-11/12 m-auto rounded-lg px-4 py-3 hover:bg-muted cursor-pointer transition-colors duration-150'>
                         <Link
                           to='/settings?page=settings'
@@ -273,58 +327,104 @@ const Navbar = () => {
         {isOpen && (
           <div ref={mobileMenuRef} className='md:hidden bg-background/95 backdrop-blur-md shadow-lg border-t border-border animate-in slide-in-from-top-2 duration-300'>
             <ul className='flex flex-col gap-2 p-6'>
-              <li>
-                <Link
-                  to='/'
-                  onClick={handleLinkClick}
-                  className={`block px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
-                    isActive("/")
-                      ? "bg-primary/10 text-primary"
-                      : "text-foreground hover:text-primary hover:bg-muted"
-                  }`}
-                >
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to='/jobs'
-                  onClick={handleLinkClick}
-                  className={`block px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
-                    isActive("/jobs")
-                      ? "bg-primary/10 text-primary"
-                      : "text-foreground hover:text-primary hover:bg-muted"
-                  }`}
-                >
-                  Jobs
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to='/resources'
-                  onClick={handleLinkClick}
-                  className={`block px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
-                    isActive("/resources")
-                      ? "bg-primary/10 text-primary"
-                      : "text-foreground hover:text-primary hover:bg-muted"
-                  }`}
-                >
-                  Resources
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to='/other-jobs'
-                  onClick={handleLinkClick}
-                  className={`block px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
-                    isActive("/other-jobs")
-                      ? "bg-primary/10 text-primary"
-                      : "text-foreground hover:text-primary hover:bg-muted"
-                  }`}
-                >
-                  Other Jobs
-                </Link>
-              </li>
+              {user?.role === "recruiter" ? (
+                <>
+                  <li>
+                    <Link
+                      to='/'
+                      onClick={handleLinkClick}
+                      className={`block px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
+                        isActive("/")
+                          ? "bg-primary/10 text-primary font-bold shadow-neon"
+                          : "text-foreground hover:text-primary hover:bg-muted"
+                      }`}
+                    >
+                      Home
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to='/profile/admin/companies'
+                      onClick={handleLinkClick}
+                      className={`block px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
+                        isActive("/profile/admin/companies")
+                          ? "bg-primary/10 text-primary font-bold shadow-neon"
+                          : "text-foreground hover:text-primary hover:bg-muted"
+                      }`}
+                    >
+                      Active Registry
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to='/profile/admin/candidates'
+                      onClick={handleLinkClick}
+                      className={`block px-4 py-2 rounded-lg transition-all duration-200 font-extrabold ${
+                        isActive("/profile/admin/candidates")
+                          ? "bg-[#00C8FF]/10 text-[#00C8FF] shadow-[0_0_15px_rgba(0,200,255,0.25)]"
+                          : "text-[#00C8FF] hover:text-[#00E5FF] hover:bg-[#00C8FF]/5"
+                      }`}
+                    >
+                      Talent Radar
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link
+                      to='/'
+                      onClick={handleLinkClick}
+                      className={`block px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
+                        isActive("/")
+                          ? "bg-primary/10 text-primary"
+                          : "text-foreground hover:text-primary hover:bg-muted"
+                      }`}
+                    >
+                      Home
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to='/jobs'
+                      onClick={handleLinkClick}
+                      className={`block px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
+                        isActive("/jobs")
+                          ? "bg-primary/10 text-primary"
+                          : "text-foreground hover:text-primary hover:bg-muted"
+                      }`}
+                    >
+                      Jobs
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to='/resources'
+                      onClick={handleLinkClick}
+                      className={`block px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
+                        isActive("/resources")
+                          ? "bg-primary/10 text-primary"
+                          : "text-foreground hover:text-primary hover:bg-muted"
+                      }`}
+                    >
+                      Resources
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to='/other-jobs'
+                      onClick={handleLinkClick}
+                      className={`block px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
+                        isActive("/other-jobs")
+                          ? "bg-primary/10 text-primary"
+                          : "text-foreground hover:text-primary hover:bg-muted"
+                      }`}
+                    >
+                      Other Jobs
+                    </Link>
+                  </li>
+                </>
+              )}
 
               {/* User Section for Mobile */}
               {token ? (
@@ -361,6 +461,15 @@ const Navbar = () => {
                       <div className='border-t border-border w-full my-2'></div>
                       <li className='text-xs font-semibold text-muted-foreground px-4 py-2 uppercase'>
                         Admin Panel
+                      </li>
+                      <li>
+                        <Link
+                          to="/profile/admin/candidates"
+                          onClick={handleLinkClick}
+                          className='flex items-center text-[#00C8FF] hover:text-[#00E5FF] px-4 py-2 rounded-lg hover:bg-muted transition-all duration-200 font-extrabold'
+                        >
+                          <FaStar className='mr-3 text-sm text-[#00C8FF]' /> Talent Radar
+                        </Link>
                       </li>
                       <li>
                         <Link

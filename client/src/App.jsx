@@ -23,6 +23,7 @@ import OtherJobs from "./components/features/jobs/OtherJobs";
 import Settings from "./components/features/profile/Settings";
 import NotFound from "./components/common/NotFound";
 import CareerResources from "./components/features/resources/CareerResources";
+import CandidateSearch from "./components/admin/CandidateSearch";
 
 // Router setup
 const appRouter = createBrowserRouter([
@@ -81,6 +82,14 @@ const appRouter = createBrowserRouter([
   {
     path: "/profile",
     element: <Profile />,
+  },
+  {
+    path: "/profile/admin/candidates",
+    element: (
+      <ProtectedRoute>
+        <CandidateSearch />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/profile/admin/companies",

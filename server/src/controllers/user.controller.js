@@ -1394,12 +1394,15 @@ const updateProfile = asyncErrorHandler(async (req, res, next) => {
 
   if (req.files && req.files.resume && req.files.resume.tempFilePath) {
     if (user.profile.resume && user.profile.resume.public_id) {
-      await cloudinary.uploader.destroy(user.profile.resume.public_id);
+      await cloudinary.uploader.destroy(user.profile.resume.public_id, {
+        resource_type: "raw",
+      });
     }
     const resumeUpload = await cloudinary.uploader.upload(
       req.files.resume.tempFilePath,
       {
         folder: "resumes",
+        resource_type: "raw",
       }
     );
     user.profile.resume = {
@@ -1815,6 +1818,47 @@ const upgradeToPro = asyncErrorHandler(async (req, res, next) => {
   });
 });
 
+const searchCandidates = asyncErrorHandler(async (req, res, next) => {
+  if (req.user.role !== "recruiter") {
+    const error = new ErrorHandler("Access denied. Only recruiters can search candidates.", 403);
+    return error.sendError(res);
+  }
+
+  const { role, skills } = req.query;
+  let filter = { role: "student" };
+
+  if (role) {
+    const cleanRole = role.trim();
+    filter.$or = [
+      { fullname: { $regex: cleanRole, $options: "i" } },
+      { "profile.bio": { $regex: cleanRole, $options: "i" } },
+      { "profile.profileRole": { $regex: cleanRole, $options: "i" } }
+    ];
+  }
+
+  if (skills) {
+    const skillList = skills
+      .split(",")
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0)
+      .map((s) => new RegExp(s, "i"));
+
+    if (skillList.length > 0) {
+      filter["profile.skills"] = { $in: skillList };
+    }
+  }
+
+  const candidates = await User.find(filter)
+    .select("-password -verificationToken")
+    .sort({ createdAt: -1 });
+
+  return res.status(200).json({
+    success: true,
+    status: 200,
+    candidates,
+  });
+});
+
 module.exports = {
   registerUser,
   loginUser,
@@ -1842,5 +1886,6 @@ module.exports = {
   deleteQuickTemplate,
   getRecruiterStats,
   upgradeToPro,
+  searchCandidates,
 };
 
