@@ -37,6 +37,14 @@ const userSchema = new mongoose.Schema(
       default: false,
       index: true, // Index for verification status queries
     },
+    isPro: {
+      type: Boolean,
+      default: false,
+    },
+    aiCredits: {
+      type: Number,
+      default: 5,
+    },
     verificationToken: {
       type: String,
       index: true, // Index for email verification lookups

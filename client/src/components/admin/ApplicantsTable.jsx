@@ -7,11 +7,13 @@ import { toast } from "react-toastify";
 import Loader from "../common/Loader";
 import fetchFromApiServer from "@/services";
 import { Sparkles, Brain, Award, CheckCircle, HelpCircle, X, ShieldAlert, Cpu } from "lucide-react";
+import SaaSUpgradeModal from "../common/SaaSUpgradeModal";
 
 const ApplicantsTable = ({ applicants: initialApplicants }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [applicantActions, setApplicantActions] = useState({});
   const [applicants, setApplicants] = useState([]);
+  const [paywallOpen, setPaywallOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -125,8 +127,13 @@ const ApplicantsTable = ({ applicants: initialApplicants }) => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("AI service is currently establishing connectivity. Please try again.");
-      setModalOpen(false);
+      if (error?.response?.status === 403 || error?.response?.data?.needsUpgrade) {
+        setModalOpen(false);
+        setPaywallOpen(true);
+      } else {
+        toast.error("AI service is currently establishing connectivity. Please try again.");
+        setModalOpen(false);
+      }
     } finally {
       clearInterval(interval);
       setAiLoading(false);
@@ -160,7 +167,11 @@ const ApplicantsTable = ({ applicants: initialApplicants }) => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("AI service is currently establishing connectivity. Please try again.");
+      if (error?.response?.status === 403 || error?.response?.data?.needsUpgrade) {
+        setPaywallOpen(true);
+      } else {
+        toast.error("AI service is currently establishing connectivity. Please try again.");
+      }
     } finally {
       clearInterval(interval);
       setQuestionsLoading(false);
@@ -196,7 +207,11 @@ const ApplicantsTable = ({ applicants: initialApplicants }) => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("AI service is currently establishing connectivity. Please try again.");
+      if (error?.response?.status === 403 || error?.response?.data?.needsUpgrade) {
+        setPaywallOpen(true);
+      } else {
+        toast.error("AI service is currently establishing connectivity. Please try again.");
+      }
     } finally {
       clearInterval(interval);
       setDraftLoading(false);
@@ -770,6 +785,7 @@ const ApplicantsTable = ({ applicants: initialApplicants }) => {
         </div>
       )}
 
+      <SaaSUpgradeModal open={paywallOpen} setOpen={setPaywallOpen} />
     </div>
   );
 };

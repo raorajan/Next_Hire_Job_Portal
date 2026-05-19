@@ -1795,6 +1795,26 @@ const getRecruiterStats = asyncErrorHandler(async (req, res, next) => {
   });
 });
 
+const upgradeToPro = asyncErrorHandler(async (req, res, next) => {
+  const userId = req.user.id;
+  const user = await User.findById(userId);
+
+  if (!user) {
+    return next(new ErrorHandler("User not found", 404));
+  }
+
+  user.isPro = true;
+  user.aiCredits = 999;
+  await user.save();
+
+  return res.status(200).json({
+    success: true,
+    status: 200,
+    message: "Successfully upgraded to NextHire Pro! Unlimited AI operations unlocked.",
+    user,
+  });
+});
+
 module.exports = {
   registerUser,
   loginUser,
@@ -1821,5 +1841,6 @@ module.exports = {
   updateQuickTemplate,
   deleteQuickTemplate,
   getRecruiterStats,
+  upgradeToPro,
 };
 

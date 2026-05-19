@@ -21,8 +21,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCompanies } from "@/redux/slices/company.slice";
 import { postJob } from "@/redux/slices/job.slice";
 import Loader from "../common/Loader";
+import SaaSUpgradeModal from "../common/SaaSUpgradeModal";
 
 const PostJob = () => {
+  const [paywallOpen, setPaywallOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -192,7 +194,11 @@ const PostJob = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("AI service is currently establishing connectivity. Please try again.");
+      if (error?.response?.status === 403 || error?.response?.data?.needsUpgrade) {
+        setPaywallOpen(true);
+      } else {
+        toast.error("AI service is currently establishing connectivity. Please try again.");
+      }
     } finally {
       clearInterval(interval);
       setAiGenerating(false);
@@ -418,6 +424,7 @@ const PostJob = () => {
           )}
         </form>
       </div>
+      <SaaSUpgradeModal open={paywallOpen} setOpen={setPaywallOpen} />
     </div>
   );
 };

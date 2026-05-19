@@ -22,14 +22,16 @@ applicationRouter
 applicationRouter
   .route("/:applicationId/timeline")
   .get(isAuthenticated, getApplicationTimeline);
+const checkAiQuota = require("../middlewares/checkAiQuota.js");
+
 applicationRouter
   .route("/:applicationId/ai-score")
-  .get(isAuthenticated, getApplicationAiScore);
+  .get(isAuthenticated, checkAiQuota, getApplicationAiScore);
 applicationRouter
   .route("/:applicationId/interview-questions")
-  .get(isAuthenticated, getApplicationInterviewQuestions);
+  .get(isAuthenticated, checkAiQuota, getApplicationInterviewQuestions);
 applicationRouter
   .route("/:applicationId/email-draft")
-  .post(isAuthenticated, getApplicationEmailDraft);
+  .post(isAuthenticated, checkAiQuota, getApplicationEmailDraft);
 
 module.exports = applicationRouter;

@@ -25,6 +25,7 @@ const {
   updateQuickTemplate,
   deleteQuickTemplate,
   getRecruiterStats,
+  upgradeToPro,
 } = require("../controllers/user.controller.js");
 const isAuthenticated = require("../middlewares/auth.js");
 
@@ -37,6 +38,7 @@ userRouter.route("/change-password").post(isAuthenticated, changePassword);
 userRouter.route("/forget-password").post(forgetPassword);
 userRouter.route("/reset-password/:token").post(resetPassword);
 userRouter.route("/profile/update").post(isAuthenticated, updateProfile);
+userRouter.route("/profile/upgrade").post(isAuthenticated, upgradeToPro);
 userRouter.route("/profile/recruiter-stats").get(isAuthenticated, getRecruiterStats);
 
 userRouter
@@ -64,9 +66,11 @@ userRouter.route("/search-history").get(isAuthenticated, getUserSearchHistory);
 userRouter
   .route("/search-history/clear")
   .delete(isAuthenticated, clearUserSearchHistory);
+const checkAiQuota = require("../middlewares/checkAiQuota.js");
+
 userRouter.route("/recommended-jobs").get(isAuthenticated, getRecommendedJobs);
 userRouter.route("/search").get(isAuthenticated, getSearchResult);
 userRouter.route("/verify-email").post(verifyEmail);
-userRouter.route("/read-content").post(readDocumentContent);
+userRouter.route("/read-content").post(isAuthenticated, checkAiQuota, readDocumentContent);
 
 module.exports = userRouter;

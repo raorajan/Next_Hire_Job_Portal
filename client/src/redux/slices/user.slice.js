@@ -380,6 +380,12 @@ const userSlice = createSlice({
     clearMessage: (state) => {
       state.message = null;
     },
+    setProStatus: (state, action) => {
+      if (state.user) {
+        state.user.isPro = action.payload.isPro;
+        state.user.aiCredits = action.payload.aiCredits;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -654,7 +660,7 @@ const userSlice = createSlice({
 });
 
 // Export actions
-export const { clearErrors, clearMessage } = userSlice.actions;
+export const { clearErrors, clearMessage, setProStatus } = userSlice.actions;
 
 // Export reducer
 export default userSlice.reducer;

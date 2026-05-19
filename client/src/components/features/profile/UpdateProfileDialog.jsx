@@ -15,11 +15,13 @@ import { useDispatch } from "react-redux";
 import { updateUserProfile } from "@/redux/slices/user.slice";
 import { toast } from "react-toastify";
 import fetchFromApiServer from "@/services";
+import SaaSUpgradeModal from "../../common/SaaSUpgradeModal";
 
 const UpdateProfileDialog = ({ open, setOpen, user }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [autoFilling, setAutoFilling] = useState(false);
+  const [paywallOpen, setPaywallOpen] = useState(false);
   const [input, setInput] = useState({
     fullname: "",
     email: "",
@@ -67,17 +69,13 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
       return;
     }
     setAutoFilling(true);
-    toast.info("🧠 Gemini is scanning your document...");
+    toast.info("🧠 System is reading your document...");
 
     const formData = new FormData();
     formData.append("document", input.file);
 
     try {
-      const response = await fetchFromApiServer("POST", "api/v1/user/read-content", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await fetchFromApiServer("MULTIPART", "api/v1/user/read-content", formData);
 
       if (response?.data?.success && response?.data?.extractedContent) {
         const extracted = response.data.extractedContent;
@@ -130,7 +128,11 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("AI engine could not extract skills. Please enter manually.");
+      if (error?.response?.status === 403 || error?.response?.data?.needsUpgrade) {
+        setPaywallOpen(true);
+      } else {
+        toast.error("AI engine could not extract skills. Please enter manually.");
+      }
     } finally {
       setAutoFilling(false);
     }
@@ -327,6 +329,7 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
           </DialogFooter>
         </form>
       </DialogContent>
+      <SaaSUpgradeModal open={paywallOpen} setOpen={setPaywallOpen} />
     </Dialog>
   );
 };

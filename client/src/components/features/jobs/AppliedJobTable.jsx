@@ -140,12 +140,25 @@ const AppliedJobTable = () => {
           {/* Header with logo and status */}
           <div className='flex items-start justify-between mb-5 gap-3 overflow-visible'>
             <div className='flex items-center gap-4 flex-1 min-w-0'>
-              <div className='w-20 h-20 rounded-xl overflow-hidden border border-white/5 group-hover:border-[#00C8FF]/30 transition-colors duration-300 flex-shrink-0 bg-[#050810]/50'>
-                <img
-                  src={job?.company?.logo?.url}
-                  alt={job?.company?.companyName}
-                  className='w-full h-full object-cover'
-                />
+              <div className='w-20 h-20 rounded-xl overflow-hidden border border-white/5 group-hover:border-[#00C8FF]/30 transition-colors duration-300 flex-shrink-0 bg-[#050810]/50 flex items-center justify-center'>
+                {job?.company?.logo?.url ? (
+                  <img
+                    src={job?.company?.logo?.url}
+                    alt={job?.company?.companyName}
+                    className='w-full h-full object-cover'
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      const fallback = e.target.nextSibling;
+                      if (fallback) fallback.style.display = 'flex';
+                    }}
+                  />
+                ) : null}
+                <div 
+                  className='w-full h-full bg-gradient-to-br from-[#00C8FF]/20 to-[#8040FF]/20 flex items-center justify-center text-white font-black text-2xl uppercase select-none'
+                  style={{ display: job?.company?.logo?.url ? 'none' : 'flex' }}
+                >
+                  {job?.company?.companyName ? job.company.companyName.charAt(0) : "N"}
+                </div>
               </div>
               <div className='flex-1 min-w-0'>
                 <p className='text-base font-bold text-foreground truncate group-hover:text-[#00C8FF] transition-colors duration-300'>
