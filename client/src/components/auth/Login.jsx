@@ -77,12 +77,14 @@ const Login = () => {
   };
 
   return (
-    <div className='min-h-screen bg-background relative overflow-hidden'>
-      {/* Background decorations */}
+    <div className='min-h-screen bg-[#050810] text-[#E6EDF3] relative overflow-hidden'>
+      {/* Fine-lined cyber laser grid overlay */}
+      <div className="grid-overlay"></div>
+      
+      {/* Enhanced Background decorations with rotating orbits */}
       <div className='absolute inset-0 -z-10 overflow-hidden'>
-        <div className='absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl'></div>
-        <div className='absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl'></div>
-        <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/3 rounded-full blur-3xl'></div>
+        <div className='absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-[#00C8FF]/5 rounded-full blur-[130px] anim-spin-slow'></div>
+        <div className='absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-[#8040FF]/5 rounded-full blur-[140px] anim-spin-rev'></div>
       </div>
 
       <Navbar />
@@ -95,41 +97,41 @@ const Login = () => {
       <div className='container mx-auto px-4 py-12 md:py-20 relative z-10'>
         <div className='max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8'>
           {/* Left Side - Benefits Card */}
-          <div className='bg-card backdrop-blur-sm rounded-2xl border border-border shadow-custom p-8 lg:sticky lg:top-24 h-fit'>
+          <div className='bg-[#080C1E]/80 backdrop-blur-xl rounded-2xl border border-white/5 shadow-[0_0_50px_rgba(0,100,220,0.03)] hover:shadow-[0_0_35px_rgba(0,200,255,0.08)] transition-all duration-500 p-8 lg:sticky lg:top-24 h-fit'>
             <div className='text-center mb-6'>
-              <h2 className='text-3xl md:text-4xl font-extrabold mb-2'>
-                <span className='text-foreground'>
+              <h2 className='text-3xl md:text-4xl font-extrabold mb-2 tracking-wide'>
+                <span className='text-white'>
                   New to{" "}
                 </span>
-                <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
+                <span className='text-[#00C8FF] drop-shadow-[0_0_15px_rgba(0,200,255,0.4)]'>
                   NextHire
                 </span>
-                <span className='text-4xl text-foreground'>?</span>
+                <span className='text-4xl text-white'>?</span>
               </h2>
               <p className='text-muted-foreground mt-2'>Join thousands of job seekers and recruiters</p>
             </div>
 
             <ul className='space-y-4 mb-8'>
-              <li className='flex items-start gap-3 p-3 rounded-xl bg-primary/5 border border-primary/10'>
-                <span className='text-primary text-xl font-bold mt-0.5'>✓</span>
-                <span className='text-foreground font-medium'>One click apply using NextHire profile</span>
+              <li className='flex items-start gap-3 p-3 rounded-xl bg-[#00C8FF]/5 border border-white/5'>
+                <span className='text-[#00C8FF] text-xl font-bold mt-0.5'>✓</span>
+                <span className='text-white font-medium'>One click apply using NextHire profile</span>
               </li>
-              <li className='flex items-start gap-3 p-3 rounded-xl bg-primary/5 border border-primary/10'>
-                <span className='text-primary text-xl font-bold mt-0.5'>✓</span>
-                <span className='text-foreground font-medium'>Get relevant job recommendations</span>
+              <li className='flex items-start gap-3 p-3 rounded-xl bg-[#00C8FF]/5 border border-white/5'>
+                <span className='text-[#00C8FF] text-xl font-bold mt-0.5'>✓</span>
+                <span className='text-white font-medium'>Get relevant job recommendations</span>
               </li>
-              <li className='flex items-start gap-3 p-3 rounded-xl bg-primary/5 border border-primary/10'>
-                <span className='text-primary text-xl font-bold mt-0.5'>✓</span>
-                <span className='text-foreground font-medium'>Showcase profile to top companies</span>
+              <li className='flex items-start gap-3 p-3 rounded-xl bg-[#00C8FF]/5 border border-white/5'>
+                <span className='text-[#00C8FF] text-xl font-bold mt-0.5'>✓</span>
+                <span className='text-white font-medium'>Showcase profile to top companies</span>
               </li>
-              <li className='flex items-start gap-3 p-3 rounded-xl bg-primary/5 border border-primary/10'>
-                <span className='text-primary text-xl font-bold mt-0.5'>✓</span>
-                <span className='text-foreground font-medium'>Track application status in real-time</span>
+              <li className='flex items-start gap-3 p-3 rounded-xl bg-[#00C8FF]/5 border border-white/5'>
+                <span className='text-[#00C8FF] text-xl font-bold mt-0.5'>✓</span>
+                <span className='text-white font-medium'>Track application status in real-time</span>
               </li>
             </ul>
 
             <Link to='/signup'>
-              <Button className='w-full bg-primary hover:bg-primary/80 text-primary-foreground font-bold py-6 rounded-xl shadow-neon hover:scale-105 transition-all duration-300 text-lg'>
+              <Button className='w-full bg-[#00C8FF] hover:bg-[#00E5FF] text-[#050810] font-bold py-6 rounded-xl shadow-[0_0_20px_rgba(0,200,255,0.3)] hover:shadow-[0_0_30px_rgba(0,200,255,0.5)] hover:scale-[1.02] transition-all duration-300 text-lg border-none'>
                 Register for Free
               </Button>
             </Link>
@@ -144,13 +146,13 @@ const Login = () => {
           </div>
 
           {/* Right Side - Login Form */}
-          <div className='bg-card backdrop-blur-sm rounded-2xl border border-border shadow-custom p-8 md:p-10'>
+          <div className='bg-[#080C1E]/80 backdrop-blur-xl rounded-2xl border border-white/5 shadow-[0_0_50px_rgba(0,100,220,0.03)] hover:shadow-[0_0_35px_rgba(0,200,255,0.08)] transition-all duration-500 p-8 md:p-10'>
             <div className='text-center mb-8'>
-              <h1 className='text-4xl md:text-5xl font-extrabold mb-3'>
-                <span className='text-foreground'>
+              <h1 className='text-4xl md:text-5xl font-extrabold mb-3 tracking-wide'>
+                <span className='text-white'>
                   Welcome{" "}
                 </span>
-                <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
+                <span className='text-[#00C8FF] drop-shadow-[0_0_15px_rgba(0,200,255,0.4)]'>
                   Back
                 </span>
               </h1>
@@ -159,29 +161,29 @@ const Login = () => {
 
             <form onSubmit={submitHandler} className='space-y-6'>
               <div>
-                <Label className='text-base font-bold text-foreground mb-2 block'>Email</Label>
+                <Label className='text-base font-bold text-white mb-2 block tracking-wide'>Email</Label>
                 <Input
                   type='email'
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder='Enter your email'
-                  className='w-full rounded-xl border border-border p-4 focus:border-primary focus:ring-2 focus:ring-primary/20 bg-background text-foreground placeholder:text-muted-foreground text-base'
+                  className='w-full rounded-xl border border-white/5 p-4 focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 bg-[#050810] text-[#E6EDF3] placeholder:text-muted-foreground text-base'
                 />
               </div>
 
               <div>
-                <Label className='text-base font-bold text-foreground mb-2 block'>Password</Label>
+                <Label className='text-base font-bold text-white mb-2 block tracking-wide'>Password</Label>
                 <Input
                   type='password'
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder='Enter your password'
-                  className='w-full rounded-xl border border-border p-4 focus:border-primary focus:ring-2 focus:ring-primary/20 bg-background text-foreground placeholder:text-muted-foreground text-base'
+                  className='w-full rounded-xl border border-white/5 p-4 focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 bg-[#050810] text-[#E6EDF3] placeholder:text-muted-foreground text-base'
                 />
               </div>
 
-              <div className='bg-muted/30 rounded-xl p-4 border border-border'>
-                <Label className='text-base font-bold text-foreground mb-3 block'>I am a</Label>
+              <div className='bg-white/5 rounded-xl p-4 border border-white/5'>
+                <Label className='text-base font-bold text-white mb-3 block tracking-wide'>I am a</Label>
                 <div className='flex gap-6'>
                   <label className='flex items-center gap-3 cursor-pointer group'>
                     <input
@@ -190,9 +192,9 @@ const Login = () => {
                       value='student'
                       checked={role === "student"}
                       onChange={(e) => setRole(e.target.value)}
-                      className='w-5 h-5 accent-primary border-border focus:ring-primary focus:ring-2 cursor-pointer'
+                      className='w-5 h-5 accent-[#00C8FF] border-white/5 focus:ring-[#00C8FF] focus:ring-2 cursor-pointer bg-[#050810]'
                     />
-                    <span className='text-foreground font-semibold group-hover:text-primary transition-colors'>Student</span>
+                    <span className='text-white font-semibold group-hover:text-[#00C8FF] transition-colors'>Student</span>
                   </label>
                   <label className='flex items-center gap-3 cursor-pointer group'>
                     <input
@@ -201,9 +203,9 @@ const Login = () => {
                       value='recruiter'
                       checked={role === "recruiter"}
                       onChange={(e) => setRole(e.target.value)}
-                      className='w-5 h-5 accent-primary border-border focus:ring-primary focus:ring-2 cursor-pointer'
+                      className='w-5 h-5 accent-[#00C8FF] border-white/5 focus:ring-[#00C8FF] focus:ring-2 cursor-pointer bg-[#050810]'
                     />
-                    <span className='text-foreground font-semibold group-hover:text-primary transition-colors'>Recruiter</span>
+                    <span className='text-white font-semibold group-hover:text-[#00C8FF] transition-colors'>Recruiter</span>
                   </label>
                 </div>
               </div>
@@ -212,7 +214,7 @@ const Login = () => {
 
               <Button 
                 type='submit' 
-                className='w-full bg-primary hover:bg-primary/80 text-primary-foreground font-bold py-6 rounded-xl shadow-neon hover:scale-105 transition-all duration-300 text-lg'
+                className='w-full bg-[#00C8FF] hover:bg-[#00E5FF] text-[#050810] font-bold py-6 rounded-xl shadow-[0_0_20px_rgba(0,200,255,0.3)] hover:shadow-[0_0_30px_rgba(0,200,255,0.5)] hover:scale-[1.02] transition-all duration-300 text-lg border-none'
                 disabled={loading}
               >
                 {loading ? "Logging in..." : "Login"}
@@ -221,14 +223,14 @@ const Login = () => {
               <div className='text-center space-y-3'>
                 <p className='text-muted-foreground'>
                   Don't have an account?{" "}
-                  <Link to='/signup' className='text-primary hover:text-secondary font-bold transition-colors'>
+                  <Link to='/signup' className='text-[#00C8FF] hover:text-[#00E5FF] font-bold transition-colors'>
                     Sign Up
                   </Link>
                 </p>
 
                 <p className='text-sm text-muted-foreground'>
                   Forgot your password?{" "}
-                  <Link to='/forget-password' className='text-primary hover:text-secondary font-semibold transition-colors'>
+                  <Link to='/forget-password' className='text-[#00C8FF] hover:text-[#00E5FF] font-semibold transition-colors'>
                     Reset here
                   </Link>
                 </p>

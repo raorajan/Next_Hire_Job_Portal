@@ -108,12 +108,12 @@ const JobDescription = () => {
   if (!singleJob) return <Loader />;
 
   return (
-    <div className='min-h-screen bg-background relative overflow-hidden'>
-      {/* Background decorations */}
-      <div className='absolute inset-0 -z-10 overflow-hidden'>
-        <div className='absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl'></div>
-        <div className='absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl'></div>
-      </div>
+    <div className='min-h-screen bg-[#050810] text-[#F3F4F6] relative overflow-hidden font-sans antialiased'>
+      {/* Grid Overlay */}
+      <div className='grid-overlay absolute inset-0 pointer-events-none z-0 opacity-40'></div>
+      {/* Orbital Spheres */}
+      <div className='absolute top-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-[radial-gradient(circle,rgba(0,200,255,0.06)_0%,transparent_70%)] pointer-events-none z-0'></div>
+      <div className='absolute bottom-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-[radial-gradient(circle,rgba(128,64,255,0.06)_0%,transparent_70%)] pointer-events-none z-0'></div>
 
       <Navbar />
       <div className='max-w-7xl mx-auto mt-24 px-4 py-8 relative z-10'>
@@ -125,25 +125,25 @@ const JobDescription = () => {
 
         <Button
           onClick={() => navigate(-1)}
-          className='mb-6 rounded-xl bg-card backdrop-blur-sm border border-border hover:border-primary text-foreground hover:text-primary shadow-custom hover:shadow-neon transition-all duration-300'
+          className='mb-6 rounded-xl bg-[#080C1E]/60 backdrop-blur-xl border border-white/5 hover:border-[#00C8FF]/30 text-[#F3F4F6] hover:text-[#00C8FF] shadow-[0_0_15px_rgba(0,200,255,0.02)] hover:shadow-[0_0_20px_rgba(0,200,255,0.15)] transition-all duration-300'
         >
           ← Go Back
         </Button>
 
         <div className='flex flex-col md:flex-row gap-6'>
-          <div className='flex-1 bg-card backdrop-blur-sm rounded-2xl p-8 border border-border shadow-custom'>
+          <div className='flex-1 bg-[#080C1E]/60 backdrop-blur-xl rounded-2xl p-8 border border-white/5 shadow-custom text-start'>
             <div className='flex flex-col mb-6'>
-              <h1 className='font-extrabold text-3xl md:text-4xl mb-4 text-foreground'>
+              <h1 className='font-extrabold text-3xl md:text-4xl mb-4 text-[#F3F4F6]'>
                 {singleJob.title}
               </h1>
               <div className='flex items-center gap-3 flex-wrap'>
-                <Badge className='text-secondary font-semibold bg-secondary/10 border border-secondary/30 px-4 py-1.5' variant='ghost'>
+                <Badge className='text-[#8040FF] font-semibold bg-[#8040FF]/10 border border-[#8040FF]/20 px-4 py-1.5' variant='ghost'>
                   {singleJob.position} Position{singleJob.position > 1 ? 's' : ''}
                 </Badge>
-                <Badge className='text-primary font-semibold bg-primary/10 border border-primary/30 px-4 py-1.5' variant='ghost'>
+                <Badge className='text-[#00C8FF] font-semibold bg-[#00C8FF]/10 border border-[#00C8FF]/20 px-4 py-1.5' variant='ghost'>
                   {singleJob.jobType}
                 </Badge>
-                <Badge className='text-secondary font-semibold bg-secondary/10 border border-secondary/30 px-4 py-1.5' variant='ghost'>
+                <Badge className='text-[#00C8FF] font-semibold bg-[#00C8FF]/10 border border-[#00C8FF]/20 px-4 py-1.5' variant='ghost'>
                   ₹{singleJob.salary} LPA
                 </Badge>
               </div>
@@ -153,10 +153,10 @@ const JobDescription = () => {
               <Button
                 onClick={isApplied ? null : applyJobHandler}
                 disabled={isApplied || applying}
-                className={`flex-1 rounded-xl font-semibold shadow-neon transform hover:scale-105 transition-all duration-300 ${
+                className={`flex-1 rounded-xl font-extrabold py-6 transition-all duration-300 ${
                   isApplied
-                    ? "bg-muted text-muted-foreground cursor-not-allowed"
-                    : "bg-primary hover:bg-primary/80 text-primary-foreground"
+                    ? "bg-white/5 text-muted-foreground border border-white/10 cursor-not-allowed"
+                    : "bg-[#00C8FF] hover:bg-[#00E5FF] text-[#050810] shadow-[0_0_20px_rgba(0,200,255,0.3)] hover:shadow-[0_0_30px_rgba(0,200,255,0.5)] hover:scale-105"
                 }`}
               >
                 {isApplied ? "✓ Applied" : applying ? "Applying..." : "Apply Now"}
@@ -164,7 +164,7 @@ const JobDescription = () => {
 
               <Button
                 onClick={viewCompanyDetails}
-                className='flex-1 rounded-xl bg-card border border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold shadow-custom hover:shadow-neon transform hover:scale-105 transition-all duration-300'
+                className='flex-1 rounded-xl bg-transparent border border-[#00C8FF]/30 text-[#00C8FF] hover:bg-[#00C8FF] hover:text-[#050810] font-semibold shadow-custom hover:shadow-[0_0_20px_rgba(0,200,255,0.2)] transform hover:scale-105 transition-all duration-300 py-6'
               >
                 View Company Details
               </Button>
@@ -172,7 +172,7 @@ const JobDescription = () => {
               {user?.role === "student" && (
                 <Button
                   onClick={fetchSkillGap}
-                  className='flex-1 rounded-xl bg-card border border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground font-semibold shadow-custom hover:shadow-neon transform hover:scale-105 transition-all duration-300'
+                  className='flex-1 rounded-xl bg-transparent border border-[#8040FF]/30 text-[#8040FF] hover:bg-[#8040FF] hover:text-[#050810] font-semibold shadow-custom hover:shadow-[0_0_20px_rgba(128,64,255,0.2)] transform hover:scale-105 transition-all duration-300 py-6'
                 >
                   Check Skill Gap
                 </Button>
@@ -180,8 +180,8 @@ const JobDescription = () => {
             </div>
 
             {showSkillGap && skillGap && (
-              <div className='mb-8 bg-muted/30 rounded-2xl p-6 border border-primary/20'>
-                <h3 className='font-extrabold text-xl mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
+              <div className='mb-8 bg-[#8040FF]/5 rounded-2xl p-6 border border-[#8040FF]/20 shadow-[0_0_15px_rgba(128,64,255,0.05)]'>
+                <h3 className='font-extrabold text-xl mb-4 bg-gradient-to-r from-[#00C8FF] to-[#8040FF] bg-clip-text text-transparent'>
                   Skill Gap Analysis
                 </h3>
                 {skillGap.missingSkills && skillGap.missingSkills.length > 0 ? (
@@ -190,7 +190,7 @@ const JobDescription = () => {
                       <p className='font-semibold text-foreground mb-2'>Missing Skills:</p>
                       <div className='flex flex-wrap gap-2'>
                         {skillGap.missingSkills.map((skill, idx) => (
-                          <span key={idx} className='bg-destructive/10 text-destructive px-3 py-1 rounded-full text-sm font-semibold border border-destructive/30'>
+                          <span key={idx} className='bg-red-500/10 text-red-400 px-3 py-1 rounded-full text-sm font-semibold border border-red-500/20'>
                             {skill}
                           </span>
                         ))}
@@ -206,9 +206,9 @@ const JobDescription = () => {
                               href={resource.url}
                               target='_blank'
                               rel='noopener noreferrer'
-                              className='block bg-card rounded-xl p-3 border border-border hover:border-primary hover:shadow-neon transition-all'
+                              className='block bg-[#050810]/40 rounded-xl p-3 border border-white/5 hover:border-[#00C8FF]/30 hover:shadow-[0_0_15px_rgba(0,200,255,0.1)] transition-all'
                             >
-                              <p className='font-semibold text-primary'>{resource.title}</p>
+                              <p className='font-semibold text-[#00C8FF]'>{resource.title}</p>
                               {resource.category && (
                                 <p className='text-sm text-muted-foreground'>{resource.category}</p>
                               )}
@@ -230,8 +230,8 @@ const JobDescription = () => {
               </div>
             )}
 
-            <h2 className='border-b-2 border-border font-bold text-xl py-4 mb-6 text-foreground'>
-              Job Description
+            <h2 className='border-b border-white/5 font-extrabold text-xl py-4 mb-6 text-foreground tracking-wide uppercase text-start'>
+              Job Details & Description
             </h2>
             <div className='my-4 space-y-4'>
               <JobDetail label='Role' value={singleJob.title} />
@@ -254,8 +254,8 @@ const JobDescription = () => {
           </div>
 
           {/* Similar Jobs Section */}
-          <div className='w-full md:w-1/3 bg-card backdrop-blur-sm border border-border rounded-2xl shadow-custom p-6 sticky top-24 max-h-[85vh] overflow-hidden flex flex-col'>
-            <h2 className='border-b-2 border-border font-bold text-xl py-3 mb-4 text-foreground'>
+          <div className='w-full md:w-1/3 bg-[#080C1E]/60 backdrop-blur-xl border border-white/5 rounded-2xl shadow-custom p-6 sticky top-24 max-h-[85vh] overflow-hidden flex flex-col text-start'>
+            <h2 className='border-b border-white/5 font-extrabold text-xl py-3 mb-4 text-foreground tracking-wide uppercase'>
               Similar Jobs
             </h2>
             <div className='flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-muted'>
@@ -264,15 +264,15 @@ const JobDescription = () => {
                   {similarJobs?.map((job) => (
                     <div
                       key={job._id}
-                      className='p-4 border border-border rounded-xl hover:border-primary/50 hover:shadow-neon transition-all duration-300 bg-card/80'
+                      className='p-4 border border-white/5 rounded-xl hover:border-[#00C8FF]/30 hover:shadow-[0_0_20px_rgba(0,200,255,0.15)] transition-all duration-300 bg-[#050810]/30 hover:-translate-y-1'
                     >
                       <h3 className='font-bold text-lg mb-2 text-foreground'>{job.title}</h3>
                       <p className='text-muted-foreground text-sm mb-2'>{job.location}</p>
-                      <p className='text-primary font-semibold mb-2'>₹{job.salary} LPA</p>
+                      <p className='text-[#00C8FF] font-semibold mb-2'>₹{job.salary} LPA</p>
                       <p className='text-muted-foreground text-sm mb-3'>{job.jobType}</p>
                       <Button
                         onClick={() => navigate(`/description/${job._id}`)}
-                        className='w-full rounded-xl bg-primary hover:bg-primary/80 text-primary-foreground font-semibold shadow-neon hover:scale-105 transition-all duration-300'
+                        className='w-full rounded-xl bg-[#00C8FF] hover:bg-[#00E5FF] text-[#050810] font-extrabold shadow-[0_0_15px_rgba(0,200,255,0.2)] hover:scale-105 transition-all duration-300 py-4 border-none'
                       >
                         View Job
                       </Button>
@@ -292,10 +292,10 @@ const JobDescription = () => {
   );
 };
 
-const JobDetail = ({ label, value }) => (
-  <div className='bg-muted/30 rounded-xl p-4 border border-border'>
-    <h3 className='font-bold text-primary mb-1'>{label}</h3>
-    <p className='text-foreground leading-relaxed'>{value}</p>
+const JobDetail = ({ label, value }) => ( 
+  <div className='bg-[#050810]/40 rounded-xl p-4 border border-white/5 text-start'>
+    <h3 className='font-bold text-[#00C8FF] mb-1 font-mono tracking-wider text-sm uppercase'>{label}</h3>
+    <p className='text-[#F3F4F6] leading-relaxed font-semibold'>{value}</p>
   </div>
 );
 

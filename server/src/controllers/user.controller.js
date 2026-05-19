@@ -1132,9 +1132,8 @@ const loginUser = asyncErrorHandler(async (req, res, next) => {
     const error = new ErrorHandler("Please Enter Email And Password", 400);
     return error.sendError(res);
   }
-  // Optimize: Only select necessary fields for login
-  const user = await User.findOne({ email })
-    .select("+password fullname email role isVerified verificationToken profile.profilePhoto");
+  // Fetch user with password to verify, but without restricting other fields
+  const user = await User.findOne({ email }).select("+password");
   if (!user) {
     const error = new ErrorHandler("User does not exist. Please sign up.", 404);
     return error.sendError(res);
@@ -1204,6 +1203,7 @@ const loginUser = asyncErrorHandler(async (req, res, next) => {
   }
   
   // If email is verified, proceed with normal login
+  user.password = undefined;
   sendToken(user, 200, res);
 });
 
@@ -1357,11 +1357,16 @@ const updateProfile = asyncErrorHandler(async (req, res, next) => {
   if (!user) {
     return next(new ErrorHandler("User not found", 404));
   }
-  if (fullname) user.fullname = fullname;
-  if (email) user.email = email;
-  if (bio) user.profile.bio = bio;
-  if (skills) {
-    user.profile.skills = skills.split(",").map((skill) => skill.trim());
+  if (fullname !== undefined) user.fullname = fullname;
+  if (email !== undefined) user.email = email;
+  
+  if (!user.profile) {
+    user.profile = {};
+  }
+  
+  if (bio !== undefined) user.profile.bio = bio;
+  if (skills !== undefined) {
+    user.profile.skills = skills ? skills.split(",").map((skill) => skill.trim()).filter(Boolean) : [];
   }
 
   try {
@@ -1402,6 +1407,32 @@ const updateProfile = asyncErrorHandler(async (req, res, next) => {
       url: resumeUpload.secure_url,
       resumeOriginalName: req.files.resume.name,
     };
+  }
+
+  // Generate recommendations immediately
+  const userSkills = user.profile?.skills || [];
+  const userBio = user.profile?.bio || "";
+  
+  if (userSkills.length > 0 || userBio) {
+    const jobQuery = {
+      $or: [
+        ...(userSkills.length > 0
+          ? userSkills.map((skill) => ({
+              requirements: { $regex: skill.trim(), $options: "i" },
+            }))
+          : []),
+        ...(userBio ? [{ title: { $regex: userBio.trim(), $options: "i" } }] : []),
+      ],
+    };
+    
+    try {
+      const matchedJobs = await Job.find(jobQuery).select("_id").lean().limit(20);
+      user.jobRecommendations = matchedJobs.map((j) => j._id);
+    } catch (recError) {
+      console.error("Failed to generate immediate job recommendations:", recError.message);
+    }
+  } else {
+    user.jobRecommendations = [];
   }
 
   await user.save();
@@ -1638,14 +1669,12 @@ const getRecommendedJobs = asyncErrorHandler(async (req, res, next) => {
       success: true,
       status: 200,
       message: "No recommended jobs found",
-      recommendedJobs: [],
+      jobs: [],
     });
   }
 
-  const jobIds = user.jobRecommendations;
-
   const query = {
-    _id: { $in: jobIds },
+    _id: { $in: user.jobRecommendations },
   };
 
   if (title) {
@@ -1711,7 +1740,7 @@ const getRecommendedJobs = asyncErrorHandler(async (req, res, next) => {
       success: true,
       status: 200,
       message: "No recommended jobs found matching your criteria",
-      recommendedJobs: [],
+      jobs: [],
     });
   }
 

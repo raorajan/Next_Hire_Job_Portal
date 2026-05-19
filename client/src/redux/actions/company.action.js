@@ -28,3 +28,9 @@ export const updateCompanyApi = async (companyId, formData) => {
   const url = `api/v1/company/update/${companyId}`;
   return await fetchFromApiServer("PUT", url, formData);
 };
+
+// Delete company API
+export const deleteCompanyApi = async (companyId) => {
+  const url = `api/v1/company/delete/${companyId}`;
+  return await fetchFromApiServer("DELETE", url);
+};

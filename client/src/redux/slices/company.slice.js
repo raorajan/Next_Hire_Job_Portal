@@ -5,6 +5,7 @@ import {
   getCompanyByIdApi,
   updateCompanyApi,
   getJobsByCompanyApi,
+  deleteCompanyApi,
 } from "../actions/company.action";
 
 /**
@@ -83,6 +84,22 @@ export const updateCompany = createAsyncThunk(
       return response.data; // Return updated company data from API
     } catch (error) {
       return rejectWithValue(error?.response?.data); // Return error response if API call fails
+    }
+  }
+);
+
+/**
+ * Thunk to delete a company's profile.
+ * Dispatches an API call to delete a company.
+ */
+export const deleteCompany = createAsyncThunk(
+  "company/delete",
+  async (companyId, { rejectWithValue }) => {
+    try {
+      const response = await deleteCompanyApi(companyId);
+      return { companyId, data: response.data };
+    } catch (error) {
+      return rejectWithValue(error?.response?.data);
     }
   }
 );
@@ -192,6 +209,24 @@ const companySlice = createSlice({
       .addCase(updateCompany.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload; // Set error message if updating fails
+      })
+
+      // Handle deleting a company
+      .addCase(deleteCompany.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(deleteCompany.fulfilled, (state, action) => {
+        state.loading = false;
+        state.companies = state.companies.filter(
+          (c) => c._id !== action.payload.companyId
+        );
+        state.success = true;
+      })
+      .addCase(deleteCompany.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

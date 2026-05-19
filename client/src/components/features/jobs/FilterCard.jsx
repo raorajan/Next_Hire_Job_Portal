@@ -96,31 +96,31 @@ const FilterCard = ({ setSearchParams, filterOptions }) => {
   }, [selectedFilters, debouncedSearchTerm, setSearchParams]);
 
   return (
-    <div className='bg-card/95 backdrop-blur-sm border border-border rounded-2xl p-6 shadow-custom'>
-      <h2 className='font-extrabold text-xl mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
-        Filters
+    <div className='bg-[#080C1E]/80 backdrop-blur-xl border border-white/5 rounded-2xl p-6 shadow-[0_0_50px_rgba(0,100,220,0.03)] hover:shadow-[0_0_40px_rgba(0,200,255,0.08)] hover:border-[#00C8FF]/20 transition-all duration-300'>
+      <h2 className='font-extrabold text-xl mb-4 bg-gradient-to-r from-[#00C8FF] to-[#8040FF] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(0,229,255,0.2)] tracking-wide text-start'>
+        Filters Workspace
       </h2>
       <div className='space-y-4'>
         <div className='mb-4'>
           <input
             type='text'
-            placeholder='Search by title, skills, company name...'
+            placeholder='Search by title, skills, company...'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className='border border-border rounded-xl w-full p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-300 bg-background text-foreground placeholder:text-muted-foreground'
+            className='border border-white/10 rounded-xl w-full p-3 focus:border-[#00C8FF]/50 focus:ring-2 focus:ring-[#00C8FF]/15 outline-none transition-all duration-300 bg-[#050810]/50 text-foreground placeholder:text-muted-foreground font-semibold text-sm'
           />
         </div>
         {selectedFilters?.length > 0 && (
-          <div className='bg-muted/50 rounded-xl p-4 border border-border'>
+          <div className='bg-[#00C8FF]/5 rounded-xl p-4 border border-[#00C8FF]/15'>
             <div className='flex flex-wrap gap-2 mb-3'>
               {selectedFilters?.map((filter, index) => (
                 <div
                   key={index}
-                  className='flex items-center gap-2 bg-primary/10 text-primary rounded-lg px-3 py-1.5 border border-primary/30'
+                  className='flex items-center gap-2 bg-[#00C8FF]/10 text-[#00C8FF] rounded-lg px-3 py-1.5 border border-[#00C8FF]/20 shadow-[0_0_10px_rgba(0,200,255,0.05)]'
                 >
-                  <span className='text-xs font-semibold'>{filter.value}</span>
+                  <span className='text-xs font-bold'>{filter.value}</span>
                   <FiX
-                    className='text-sm cursor-pointer hover:text-destructive transition-colors duration-200'
+                    className='text-sm cursor-pointer hover:text-red-400 transition-colors duration-200'
                     onClick={() => removeFilter(filter.type, filter.value)}
                   />
                 </div>
@@ -128,31 +128,31 @@ const FilterCard = ({ setSearchParams, filterOptions }) => {
             </div>
             <button
               onClick={clearAllFilters}
-              className='text-sm font-semibold text-destructive hover:text-destructive/80 transition-colors duration-200'
+              className='text-sm font-bold text-red-400 hover:text-red-300 transition-colors duration-200'
             >
               Clear All Filters
             </button>
           </div>
         )}
-        {filterOptions?.map((filter, index) => (
-          <div key={filter.filterType} className='border-b border-border last:border-b-0 pb-3 last:pb-0'>
+        {filterOptions?.map((filter, index) => (      
+          <div key={filter.filterType} className='border-b border-white/5 last:border-b-0 pb-3 last:pb-0'>
             <div
-              className='flex items-center justify-between cursor-pointer py-2 hover:bg-muted/50 rounded-lg px-2 transition-colors duration-200'
+              className='flex items-center justify-between cursor-pointer py-2 hover:bg-white/5 rounded-lg px-2 transition-colors duration-200'
               onClick={() => toggleExpand(index)}
             >
-              <h3 className='font-bold text-foreground'>{filter.filterType}</h3>
+              <h3 className='font-extrabold text-sm text-[#8B949E] hover:text-[#00C8FF] transition-colors duration-200'>{filter.filterType}</h3>
               <div className={`transition-transform duration-200 ${expandedIndex === index ? 'rotate-180' : ''}`}>
                 {expandedIndex === index ? (
-                  <FiMinus className='text-primary' />
+                  <FiMinus className='text-[#00C8FF] anim-pulse-glow' />
                 ) : (
                   <FiPlus className='text-muted-foreground' />
                 )}
               </div>
             </div>
             {expandedIndex === index && (
-              <div className='mt-2 space-y-2 pl-2'>
+              <div className='mt-2 space-y-2 pl-2 text-start'>
                 {filter?.array?.map((item) => (
-                  <div key={item} className='flex items-center gap-2 hover:bg-muted/50 rounded-lg px-2 py-1.5 transition-colors duration-200'>
+                  <div key={item} className='flex items-center gap-2.5 hover:bg-white/5 rounded-lg px-2 py-1.5 transition-colors duration-200 group'>
                     <input
                       type='checkbox'
                       id={item}
@@ -162,9 +162,9 @@ const FilterCard = ({ setSearchParams, filterOptions }) => {
                       onChange={() =>
                         handleFilterSelection(filter.filterType, item)
                       }
-                      className='w-4 h-4 accent-primary border-border rounded focus:ring-primary focus:ring-2 cursor-pointer'
+                      className='w-4 h-4 accent-[#00C8FF] border-white/10 rounded focus:ring-[#00C8FF] focus:ring-2 cursor-pointer bg-[#050810]/50'
                     />
-                    <label htmlFor={item} className='text-sm text-foreground cursor-pointer font-medium'>{item}</label>
+                    <label htmlFor={item} className='text-sm text-[#8B949E] cursor-pointer font-bold group-hover:text-[#00C8FF] transition-colors duration-200'>{item}</label>
                   </div>
                 ))}
               </div>

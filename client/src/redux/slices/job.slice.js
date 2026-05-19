@@ -275,7 +275,11 @@ const jobSlice = createSlice({
       })
       .addCase(postJob.fulfilled, (state, action) => {
         state.loading = false;
-        state.jobs.push(action.payload.job); // Add newly posted job to jobs array
+        if (Array.isArray(state.jobs)) {
+          state.jobs.push(action.payload.job); // Add newly posted job to jobs array
+        } else {
+          state.jobs = [action.payload.job];
+        }
         state.success = true;
       })
       .addCase(postJob.rejected, (state, action) => {
@@ -303,7 +307,7 @@ const jobSlice = createSlice({
       })
       .addCase(getAllJobs.fulfilled, (state, action) => {
         state.loading = false;
-        state.jobs = action.payload; // Set jobs data
+        state.jobs = action.payload.jobs || []; // Set jobs data
       })
       .addCase(getAllJobs.rejected, (state, action) => {
         state.loading = false;
@@ -418,7 +422,7 @@ const jobSlice = createSlice({
         state.loading = false;
         // Update the job in the jobs array if it exists
         const updatedJob = action.payload.job;
-        if (updatedJob) {
+        if (updatedJob && Array.isArray(state.jobs)) {
           const index = state.jobs.findIndex((j) => j._id === updatedJob._id);
           if (index !== -1) {
             state.jobs[index] = updatedJob;

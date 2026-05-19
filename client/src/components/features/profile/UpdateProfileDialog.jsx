@@ -67,10 +67,7 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
     formData.append("email", input.email);
     formData.append("bio", input.bio);
 
-    const skillsArray = input.skills
-      ? input.skills.split(", ").map((skill) => skill.trim())
-      : [];
-    formData.append("skills", skillsArray);
+    formData.append("skills", input.skills || "");
 
     if (input.file) {
       formData.append("resume", input.file);
@@ -96,16 +93,16 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
     <Dialog open={open}>
       {loading && <Loader />}
       <DialogContent
-        className='sm:max-w-[425px] bg-card border-border shadow-custom'
+        className='sm:max-w-[425px] bg-[#080C1E] border border-white/5 shadow-[0_0_50px_rgba(0,100,220,0.05)]'
         onInteractOutside={() => setOpen(false)}
       >
         <DialogHeader className="relative">
-          <DialogTitle className="text-2xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          <DialogTitle className="text-2xl font-extrabold text-white tracking-wide">
             Update Profile
           </DialogTitle>
           <Button
             variant='ghost'
-            className='absolute -top-2 -right-2 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-full transition-all duration-300'
+            className='absolute -top-2 -right-2 text-muted-foreground hover:text-[#00C8FF] hover:bg-[#00C8FF]/10 rounded-full transition-all duration-300'
             onClick={() => setOpen(false)}
           >
             <X className='w-5 h-5' />
@@ -115,7 +112,7 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
           <div className='grid gap-5 py-4'>
             {/* Fullname input */}
             <div className='grid grid-cols-4 items-center gap-4'>
-              <Label htmlFor='fullname' className='text-right text-foreground font-semibold'>
+              <Label htmlFor='fullname' className='text-right text-white font-semibold tracking-wide'>
                 Name
               </Label>
               <Input
@@ -124,14 +121,14 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
                 type='text'
                 value={input.fullname}
                 onChange={changeEventHandler}
-                className='col-span-3 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 rounded-xl'
+                className='col-span-3 bg-[#050810] border-white/5 text-[#E6EDF3] focus:border-[#00C8FF] focus:ring-[#00C8FF]/20 rounded-xl'
                 placeholder="Your full name"
               />
             </div>
 
             {/* Email input */}
             <div className='grid grid-cols-4 items-center gap-4'>
-              <Label htmlFor='email' className='text-right text-foreground font-semibold'>
+              <Label htmlFor='email' className='text-right text-white font-semibold tracking-wide'>
                 Email
               </Label>
               <Input
@@ -140,14 +137,14 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
                 type='email'
                 value={input.email}
                 onChange={changeEventHandler}
-                className='col-span-3 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 rounded-xl'
+                className='col-span-3 bg-[#050810] border-white/5 text-[#E6EDF3] focus:border-[#00C8FF] focus:ring-[#00C8FF]/20 rounded-xl'
                 placeholder="example@gmail.com"
               />
             </div>
 
             {/* Bio input */}
             <div className='grid grid-cols-4 items-center gap-4'>
-              <Label htmlFor='bio' className='text-right text-foreground font-semibold'>
+              <Label htmlFor='bio' className='text-right text-white font-semibold tracking-wide'>
                 Bio
               </Label>
               <Input
@@ -155,7 +152,7 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
                 name='bio'
                 value={input.bio}
                 onChange={changeEventHandler}
-                className='col-span-3 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 rounded-xl'
+                className='col-span-3 bg-[#050810] border-white/5 text-[#E6EDF3] focus:border-[#00C8FF] focus:ring-[#00C8FF]/20 rounded-xl'
                 placeholder="A short bio about yourself"
               />
             </div>
@@ -164,7 +161,7 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
             {user?.role === "student" && (
               <>
                 <div className='grid grid-cols-4 items-center gap-4'>
-                  <Label htmlFor='skills' className='text-right text-foreground font-semibold'>
+                  <Label htmlFor='skills' className='text-right text-white font-semibold tracking-wide'>
                     Skills
                   </Label>
                   <Input
@@ -172,14 +169,14 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
                     name='skills'
                     value={input.skills}
                     onChange={changeEventHandler}
-                    className='col-span-3 bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 rounded-xl'
+                    className='col-span-3 bg-[#050810] border-white/5 text-[#E6EDF3] focus:border-[#00C8FF] focus:ring-[#00C8FF]/20 rounded-xl'
                     placeholder="React, Node.js, Python..."
                   />
                 </div>
 
                 {/* Resume file input */}
                 <div className='grid grid-cols-4 items-center gap-4'>
-                  <Label htmlFor='file' className='text-right text-foreground font-semibold'>
+                  <Label htmlFor='file' className='text-right text-white font-semibold tracking-wide'>
                     Resume
                   </Label>
                   <div className="col-span-3">
@@ -189,7 +186,7 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
                       type='file'
                       accept='image/png, image/jpeg, application/pdf'
                       onChange={fileChangeHandler}
-                      className='bg-background border-border text-foreground focus:border-primary focus:ring-primary/20 rounded-xl file:bg-primary file:text-primary-foreground file:border-none file:rounded-lg file:px-3 file:py-1 file:mr-3 hover:file:bg-primary/80 transition-all cursor-pointer'
+                      className='bg-[#050810] border-white/5 text-[#E6EDF3] focus:border-[#00C8FF] focus:ring-[#00C8FF]/20 rounded-xl file:bg-[#00C8FF] file:text-[#050810] file:border-none file:rounded-lg file:px-3 file:py-1 file:mr-3 hover:file:bg-[#00E5FF] transition-all cursor-pointer'
                     />
                     <p className="text-[10px] text-muted-foreground mt-1 ml-1">Accepts PNG, JPG, or PDF</p>
                   </div>
@@ -201,7 +198,7 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
           <DialogFooter className="mt-6">
             <Button 
               type='submit' 
-              className='w-full bg-primary hover:bg-primary/80 text-primary-foreground font-bold py-5 rounded-xl shadow-neon hover:scale-[1.02] transition-all duration-300 border-none'
+              className='w-full bg-[#00C8FF] hover:bg-[#00E5FF] text-[#050810] font-bold py-5 rounded-xl shadow-[0_0_20px_rgba(0,200,255,0.3)] hover:shadow-[0_0_30px_rgba(0,200,255,0.5)] hover:scale-[1.02] transition-all duration-300 border-none'
               disabled={loading}
             >
               {loading ? "Updating Profile..." : "Update Profile"}

@@ -46,11 +46,17 @@ const CompanyCreate = () => {
   };
 
   return (
-    <div className='min-h-screen bg-background relative overflow-hidden'>
-      {/* Background decorations */}
-      <div className='absolute inset-0 -z-10 overflow-hidden'>
-        <div className='absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] animate-pulse'></div>
-        <div className='absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[120px] animate-pulse'></div>
+    <div className='min-h-screen bg-[#050810] relative overflow-hidden'>
+      {/* Premium Cyber Background */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,200,255,0.03),transparent_40%)] pointer-events-none" />
+      <div className="grid-overlay"></div>
+      
+      {/* Decorative Orbits */}
+      <div className="absolute top-20 left-10 w-[400px] h-[400px] border border-white/5 rounded-full pointer-events-none anim-spin-slow">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-[#00C8FF] rounded-full shadow-[0_0_10px_#00C8FF]" />
+      </div>
+      <div className="absolute bottom-20 right-10 w-[500px] h-[500px] border border-white/5 rounded-full pointer-events-none anim-spin-rev">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#8040FF] rounded-full shadow-[0_0_10px_#8040FF]" />
       </div>
 
       <Navbar />
@@ -62,12 +68,12 @@ const CompanyCreate = () => {
       />
 
       <div className='max-w-4xl mx-auto pt-32 pb-12 px-6 relative z-10'>
-        <div className='bg-card/60 backdrop-blur-xl border border-border rounded-3xl p-10 shadow-custom relative overflow-hidden group'>
-          <div className='absolute top-0 right-0 w-40 h-40 bg-primary/5 -mr-20 -mt-20 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors duration-500'></div>
+        <div className='bg-[#080C1E]/80 backdrop-blur-xl border border-white/5 rounded-3xl p-10 shadow-[0_0_50px_rgba(0,100,220,0.03)] relative overflow-hidden group'>
+          <div className='absolute top-0 right-0 w-40 h-40 bg-[#00C8FF]/5 -mr-20 -mt-20 rounded-full blur-3xl group-hover:bg-[#00C8FF]/10 transition-colors duration-500'></div>
           
           <div className='mb-10 relative z-10'>
-            <h1 className='text-4xl font-black tracking-tight text-foreground mb-4 italic'>
-              Enterprise <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>Initialization</span>
+            <h1 className='text-4xl font-black tracking-tight text-white mb-4 italic'>
+              Enterprise <span className='bg-gradient-to-r from-[#00C8FF] to-[#8040FF] bg-clip-text text-transparent'>Initialization</span>
             </h1>
             <p className='text-muted-foreground font-medium leading-relaxed max-w-2xl'>
               Define the primary nomenclature for your enterprise entity. This identifier serves as the root for all subsequent operational metadata and can be refined at a later stage.
@@ -76,10 +82,10 @@ const CompanyCreate = () => {
 
           <div className='space-y-6 relative z-10'>
             <div className='space-y-3'>
-              <Label className='font-extrabold text-foreground uppercase tracking-widest text-[10px] ml-1'>Enterprise Nomenclature</Label>
+              <Label className='font-extrabold text-white uppercase tracking-widest text-[10px] ml-1'>Enterprise Nomenclature</Label>
               <Input
                 type='text'
-                className='h-16 rounded-2xl bg-muted/20 border-border border-2 focus:ring-primary/20 focus:border-primary/50 text-xl font-bold tracking-tight placeholder:text-muted-foreground/40 transition-all duration-300'
+                className='h-16 rounded-2xl bg-[#080C1E]/80 border-white/5 border-2 focus:ring-[#00C8FF]/20 focus:border-[#00C8FF]/50 text-white text-xl font-bold tracking-tight placeholder:text-muted-foreground/40 transition-all duration-300'
                 placeholder='e.g., TechVault Systems, Global Nexus'
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
@@ -90,13 +96,13 @@ const CompanyCreate = () => {
               <Button 
                 variant='outline' 
                 onClick={() => navigate("/profile/admin/companies")}
-                className='w-full sm:w-auto h-14 px-10 rounded-xl border-border hover:border-primary/50 text-muted-foreground hover:text-primary transition-all duration-300 font-bold'
+                className='w-full sm:w-auto h-14 px-10 rounded-xl bg-white/5 border border-white/10 hover:border-[#00C8FF]/50 text-muted-foreground hover:text-white transition-all duration-300 font-bold'
               >
                 Abort
               </Button>
               <Button 
                 onClick={registerNewCompany}
-                className='w-full sm:flex-1 h-14 rounded-xl bg-primary text-primary-foreground font-black text-lg shadow-neon-sm hover:shadow-neon hover:scale-[1.01] transition-all duration-300 border-none'
+                className='w-full sm:flex-1 h-14 rounded-xl bg-[#00C8FF] hover:bg-[#00E5FF] text-[#050810] font-black text-lg shadow-[0_0_20px_rgba(0,200,255,0.3)] hover:shadow-[0_0_30px_rgba(0,200,255,0.5)] hover:scale-[1.01] transition-all duration-300 border-none'
               >
                 Initialize Profile
               </Button>

@@ -177,11 +177,11 @@ const Navbar = () => {
             {token ? (
               <div className='relative inline-block' ref={dropdownRef}>
                 <div
-                  className='py-2 flex items-center px-3 border border-gray-200 rounded-full cursor-pointer hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 shadow-sm'
+                  className='py-2 flex items-center px-3 border border-white/10 rounded-full cursor-pointer hover:bg-white/5 hover:border-[#00C8FF]/30 transition-all duration-200 shadow-sm'
                   onClick={toggleDropdown}
                 >
-                  <RiMenu2Fill className='text-gray-600' />
-                  <Avatar className='w-7 h-7 ring-2 ring-white shadow-sm ml-3'>
+                  <RiMenu2Fill className='text-white/60' />
+                  <Avatar className='w-7 h-7 ring-2 ring-white/10 shadow-sm ml-3'>
                     <AvatarImage src={profilePic} alt='Profile' />
                     <AvatarFallback className="bg-gradient-to-br from-[#6A38C2]/20 to-[#F83002]/20 text-[#6A38C2] text-xs font-bold">
                       {user?.fullname ? user.fullname.charAt(0).toUpperCase() : "U"}

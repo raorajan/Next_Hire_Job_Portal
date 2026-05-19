@@ -138,11 +138,15 @@ const PostJob = () => {
   };
 
   return (
-    <div className='min-h-screen bg-background relative overflow-hidden'>
-      {/* Background decorations */}
-      <div className='absolute inset-0 -z-10 overflow-hidden'>
-        <div className='absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] animate-pulse'></div>
-        <div className='absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[120px] animate-pulse'></div>
+    <div className='min-h-screen bg-[#050810] relative overflow-hidden'>
+      {/* Premium Cyber Background */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,200,255,0.03),transparent_40%)] pointer-events-none" />
+      <div className="grid-overlay"></div>
+      <div className="absolute top-20 left-10 w-[400px] h-[400px] border border-white/5 rounded-full pointer-events-none anim-spin-slow">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-[#00C8FF] rounded-full shadow-[0_0_10px_#00C8FF]" />
+      </div>
+      <div className="absolute bottom-20 right-10 w-[500px] h-[500px] border border-white/5 rounded-full pointer-events-none anim-spin-rev">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#8040FF] rounded-full shadow-[0_0_10px_#8040FF]" />
       </div>
 
       <Navbar />
@@ -153,128 +157,138 @@ const PostJob = () => {
         canonicalUrl='/admin/jobs/create'
       />
 
-      <div className='flex items-center justify-center w-full my-5 px-6 pt-24 pb-12 relative z-10'>
+      <div className='flex flex-col items-center justify-center w-full my-5 px-6 pt-24 pb-12 relative z-10'>
+        {/* Back Button */}
+        <div className="w-full max-w-4xl mb-6">
+          <Button
+            onClick={() => navigate(-1)}
+            className='rounded-xl bg-white/5 border border-white/10 hover:border-[#00C8FF]/50 text-muted-foreground hover:text-white transition-all duration-300 px-6 py-2'
+          >
+            <span className="mr-2 italic">←</span> Back
+          </Button>
+        </div>
+
         <form
           onSubmit={submitHandler}
-          className='p-10 max-w-4xl bg-card/60 backdrop-blur-xl border border-border shadow-custom rounded-3xl w-full relative overflow-hidden group'
+          className='p-10 max-w-4xl bg-[#080C1E]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_50px_rgba(0,100,220,0.03)] rounded-3xl w-full relative overflow-hidden group'
         >
-          <div className='absolute top-0 right-0 w-32 h-32 bg-primary/5 -mr-16 -mt-16 rounded-full blur-2xl group-hover:bg-primary/10 transition-colors duration-500'></div>
+          <div className='absolute top-0 right-0 w-32 h-32 bg-[#00C8FF]/5 -mr-16 -mt-16 rounded-full blur-2xl group-hover:bg-[#00C8FF]/10 transition-colors duration-500'></div>
           
           <h1 className='text-4xl font-black mb-10 text-center tracking-tight'>
-            <span className='bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent italic'>
+            <span className='bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent italic'>
               Deploy{" "}
             </span>
-            <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
+            <span className='bg-gradient-to-r from-[#00C8FF] to-[#8040FF] bg-clip-text text-transparent'>
               Opportunity
             </span>
           </h1>
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
             <div className='space-y-2'>
-              <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>Role Title</Label>
+              <Label className='font-extrabold text-white uppercase tracking-wider text-[10px] ml-1'>Role Title</Label>
               <Input
                 type='text'
                 name='title'
                 value={input.title}
                 onChange={changeEventHandler}
                 placeholder='e.g., Lead Systems Architect'
-                className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold tracking-tight'
+                className='w-full rounded-2xl bg-[#080C1E]/80 border-white/5 border-2 h-14 focus:ring-[#00C8FF]/20 focus:border-[#00C8FF]/50 text-white font-bold tracking-tight'
                 required
               />
             </div>
             <div className='space-y-2'>
-              <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>Operational Context (Description)</Label>
+              <Label className='font-extrabold text-white uppercase tracking-wider text-[10px] ml-1'>Operational Context (Description)</Label>
               <Input
                 type='text'
                 name='description'
                 value={input.description}
                 onChange={changeEventHandler}
                 placeholder='Core responsibilities and team alignment'
-                className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold tracking-tight'
+                className='w-full rounded-2xl bg-[#080C1E]/80 border-white/5 border-2 h-14 focus:ring-[#00C8FF]/20 focus:border-[#00C8FF]/50 text-white font-bold tracking-tight'
                 required
               />
             </div>
             <div className='space-y-2'>
-              <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>Technical Stack (Requirements)</Label>
+              <Label className='font-extrabold text-white uppercase tracking-wider text-[10px] ml-1'>Technical Stack (Requirements)</Label>
               <Input
                 type='text'
                 name='requirements'
                 value={input.requirements}
                 onChange={changeEventHandler}
-                className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold tracking-tight'
+                className='w-full rounded-2xl bg-[#080C1E]/80 border-white/5 border-2 h-14 focus:ring-[#00C8FF]/20 focus:border-[#00C8FF]/50 text-white font-bold tracking-tight'
                 placeholder='e.g., React, Node.js, GraphQL'
               />
             </div>
             <div className='space-y-2'>
-              <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>Annual Compensation (LPA)</Label>
+              <Label className='font-extrabold text-white uppercase tracking-wider text-[10px] ml-1'>Annual Compensation (LPA)</Label>
               <Input
                 type='text'
                 name='salary'
                 value={input.salary}
                 onChange={changeEventHandler}
-                className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold tracking-tight'
+                className='w-full rounded-2xl bg-[#080C1E]/80 border-white/5 border-2 h-14 focus:ring-[#00C8FF]/20 focus:border-[#00C8FF]/50 text-white font-bold tracking-tight'
                 placeholder='e.g., 1200000'
               />
             </div>
             <div className='space-y-2'>
-              <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>deployment Zone (Location)</Label>
+              <Label className='font-extrabold text-white uppercase tracking-wider text-[10px] ml-1'>deployment Zone (Location)</Label>
               <Input
                 type='text'
                 name='location'
                 value={input.location}
                 onChange={changeEventHandler}
-                className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold tracking-tight'
+                className='w-full rounded-2xl bg-[#080C1E]/80 border-white/5 border-2 h-14 focus:ring-[#00C8FF]/20 focus:border-[#00C8FF]/50 text-white font-bold tracking-tight'
                 placeholder='e.g., Mumbai Hub'
               />
             </div>
             <div className='space-y-2'>
-              <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>Contract Syntax (Job Type)</Label>
+              <Label className='font-extrabold text-white uppercase tracking-wider text-[10px] ml-1'>Contract Syntax (Job Type)</Label>
               <Input
                 type='text'
                 name='jobType'
                 value={input.jobType}
                 onChange={changeEventHandler}
-                className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold tracking-tight'
+                className='w-full rounded-2xl bg-[#080C1E]/80 border-white/5 border-2 h-14 focus:ring-[#00C8FF]/20 focus:border-[#00C8FF]/50 text-white font-bold tracking-tight'
                 placeholder='e.g., Full-cycle, Hybrid'
               />
             </div>
             <div className='space-y-2'>
-              <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>Expertise Threshold (Years)</Label>
+              <Label className='font-extrabold text-white uppercase tracking-wider text-[10px] ml-1'>Expertise Threshold (Years)</Label>
               <Input
                 type='number'
                 name='experienceLevel'
                 value={input.experienceLevel}
                 onChange={changeEventHandler}
-                className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold tracking-tight'
+                className='w-full rounded-2xl bg-[#080C1E]/80 border-white/5 border-2 h-14 focus:ring-[#00C8FF]/20 focus:border-[#00C8FF]/50 text-white font-bold tracking-tight'
                 placeholder='e.g., 5'
                 min='0'
               />
             </div>
             <div className='space-y-2'>
-              <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>Operational Scale (Positions)</Label>
+              <Label className='font-extrabold text-white uppercase tracking-wider text-[10px] ml-1'>Operational Scale (Positions)</Label>
               <Input
                 type='number'
                 name='position'
                 value={input.position}
                 onChange={changeEventHandler}
-                className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold tracking-tight'
+                className='w-full rounded-2xl bg-[#080C1E]/80 border-white/5 border-2 h-14 focus:ring-[#00C8FF]/20 focus:border-[#00C8FF]/50 text-white font-bold tracking-tight'
                 min='1'
               />
             </div>
             {company?.companies?.length > 0 && (
               <div className='md:col-span-2 space-y-2'>
-                <Label className='font-extrabold text-foreground uppercase tracking-wider text-[10px] ml-1'>Target Enterprise Entity</Label>
+                <Label className='font-extrabold text-white uppercase tracking-wider text-[10px] ml-1'>Target Enterprise Entity</Label>
                 <Select onValueChange={selectChangeHandler}>
-                  <SelectTrigger className='w-full rounded-2xl bg-muted/20 border-border border-2 h-14 focus:ring-primary/20 focus:border-primary/50 text-foreground font-bold'>
+                  <SelectTrigger className='w-full rounded-2xl bg-[#080C1E]/80 border-white/5 border-2 h-14 focus:ring-[#00C8FF]/20 focus:border-[#00C8FF]/50 text-white font-bold'>
                     <SelectValue placeholder='Select an enterprise profile' />
                   </SelectTrigger>
-                  <SelectContent className='bg-card border-border'>
+                  <SelectContent className='bg-[#080C1E] border-white/10'>
                     <SelectGroup>
                       {company?.companies?.map((company) => (
                         <SelectItem
                           key={company?._id}
                           value={company?.companyName}
-                          className='focus:bg-primary/10 focus:text-primary transition-colors'
+                          className='focus:bg-[#00C8FF]/10 focus:text-[#00C8FF] text-white transition-colors'
                         >
                           {company?.companyName}
                         </SelectItem>
@@ -288,13 +302,13 @@ const PostJob = () => {
 
           <div className='mt-10'>
             {loading ? (
-              <Button className='w-full h-16 rounded-2xl bg-muted border border-border text-muted-foreground font-black text-xl' disabled>
+              <Button className='w-full h-16 rounded-2xl bg-white/5 border border-white/10 text-white/40 font-black text-xl' disabled>
                 <Loader2 className='mr-3 h-5 w-5 animate-spin' /> Finalizing Deployment...
               </Button>
             ) : (
               <Button
                 type='submit'
-                className='w-full h-16 rounded-2xl bg-gradient-to-r from-primary to-secondary text-primary-foreground font-black text-xl shadow-neon hover:scale-[1.01] transition-all duration-300 border-none'
+                className='w-full h-16 rounded-2xl bg-gradient-to-r from-[#00C8FF] to-[#8040FF] text-[#050810] font-black text-xl shadow-[0_0_30px_rgba(0,200,255,0.3)] hover:shadow-[0_0_50px_rgba(0,200,255,0.5)] hover:scale-[1.01] transition-all duration-300 border-none'
                 disabled={!company?.companies?.length}
               >
                 Sync with Platform Hub

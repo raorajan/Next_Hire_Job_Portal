@@ -84,8 +84,16 @@ app.use(
         process.env.FRONTEND_URL,
         process.env.CLIENT_URL,
         process.env.GITHUB_PAGES_URL,
+        process.env.GITHUB_PAGE_URL,   // support both spellings
+        process.env.BACKEND_URL,        // allow API to call itself (Swagger, etc.)
+        process.env.SERVER_URL,
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://nexthire.raorajan.pro",
+        "https://nexthireapi.raorajan.pro",
+        "https://raorajan.github.io",
       ].filter(Boolean); // Remove undefined/null values
 
       // Allow requests with no origin (like mobile apps or curl)

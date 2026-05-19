@@ -285,39 +285,23 @@ const Jobs = () => {
   }, []);
 
   return (
-    <div className='min-h-screen bg-background relative'>
-      {/* Background decorations */}
+    <div className='min-h-screen bg-[#050810] text-[#E6EDF3] relative overflow-hidden'>
+      {/* Fine-lined cyber laser grid overlay */}
+      <div className="grid-overlay"></div>
+      
+      {/* Enhanced Background decorations with rotating orbits */}
       <div className='absolute inset-0 -z-10 overflow-hidden'>
-        <div className='absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl'></div>
-        <div className='absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl'></div>
+        <div className='absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-[#00C8FF]/5 rounded-full blur-[130px] anim-spin-slow'></div>
+        <div className='absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-[#8040FF]/5 rounded-full blur-[140px] anim-spin-rev'></div>
       </div>
 
       <Navbar />
       <ReactHelmet
-        title='Job Openings - Next_Hire'
-        description='Explore the latest job opportunities tailored to your skills and experience. Find your perfect role and apply today with Next_Hire.'
-        canonicalUrl='/job'
+        title='Job Openings - NextHire'
+        description='Explore the latest job opportunities tailored to your skills and experience. Find your perfect role and apply today with NextHire.'
+        canonicalUrl='/jobs'
       />
       <div className='max-w-7xl mt-24 mx-auto px-4 py-8 relative z-10 space-y-6'>
-        <div className='bg-card/90 backdrop-blur-md border border-border rounded-2xl shadow-custom p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
-          <div className='flex items-start gap-4'>
-            <div className='w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center text-xl'>
-              <FaFilter />
-            </div>
-            <div>
-              <h2 className='text-lg font-semibold text-foreground'>Need advanced filtering?</h2>
-              <p className='text-sm text-muted-foreground'>
-                Use the Browse Jobs workspace to save filters, set alerts, and explore curated job clusters without losing your current view.
-              </p>
-            </div>
-          </div>
-          <Link
-            to='/browse-jobs'
-            className='inline-flex items-center justify-center px-6 py-3 rounded-xl bg-primary text-primary-foreground font-semibold shadow-neon hover:bg-primary/80 transition-all duration-200'
-          >
-            Open Browse Jobs
-          </Link>
-        </div>
 
         <div className='flex flex-col md:flex-row gap-6'>
           {currentCategory !== "searchedBased" ? (
@@ -331,13 +315,13 @@ const Jobs = () => {
           ) : null}
 
           <div className='flex-1 pb-5'>
-            <div className='flex flex-col sm:flex-row items-center justify-between mb-6 gap-4'>
+            <div className='flex items-center justify-start gap-4 mb-6'>
               <button
                 onClick={() => handleCategoryChange("all")}
-                className={`px-6 py-3 text-sm md:text-base font-bold rounded-xl transition-all duration-300 border shadow-md hover:shadow-neon transform hover:scale-105 ${
+                className={`px-6 py-3 text-sm md:text-base font-bold rounded-xl transition-all duration-300 border shadow-md transform hover:scale-105 ${
                   currentCategory === "all"
-                    ? "bg-primary/10 text-primary border-primary shadow-neon"
-                    : "text-foreground border-border hover:border-primary hover:bg-muted"
+                    ? "bg-[#00C8FF]/15 text-[#00C8FF] border-[#00C8FF]/30 shadow-[0_0_20px_rgba(0,200,255,0.2)]"
+                    : "text-muted-foreground border-white/5 hover:border-[#00C8FF]/30 hover:bg-white/5 hover:text-[#00C8FF]"
                 }`}
               >
                 All Jobs ({allJobs?.length || 0})
@@ -346,15 +330,22 @@ const Jobs = () => {
               {user?.role !== "recruiter" && (
                 <button
                   onClick={() => handleCategoryChange("recommended")}
-                  className={`px-6 py-3 text-sm md:text-base font-bold rounded-xl transition-all duration-300 border shadow-md hover:shadow-neon transform hover:scale-105 ${
+                  className={`px-6 py-3 text-sm md:text-base font-bold rounded-xl transition-all duration-300 border shadow-md transform hover:scale-105 ${
                     currentCategory === "recommended"
-                      ? "bg-primary/10 text-primary border-primary shadow-neon"
-                      : "text-foreground border-border hover:border-primary hover:bg-muted"
+                      ? "bg-[#8040FF]/15 text-[#8040FF] border-[#8040FF]/30 shadow-[0_0_20px_rgba(128,64,255,0.2)]"
+                      : "text-muted-foreground border-white/5 hover:border-[#8040FF]/30 hover:bg-white/5 hover:text-[#8040FF]"
                   }`}
                 >
                   Recommended ({recommendedJobs?.length || 0})
                 </button>
               )}
+
+              <Link
+                to='/browse-jobs'
+                className='ml-auto px-6 py-3 text-sm md:text-base font-bold rounded-xl transition-all duration-300 border shadow-md transform hover:scale-105 text-muted-foreground border-white/5 hover:border-[#00C8FF]/30 hover:bg-white/5 hover:text-[#00C8FF] inline-flex items-center gap-2'
+              >
+                <FaFilter className='text-xs' /> Browse Jobs
+              </Link>
             </div>
 
             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
@@ -372,8 +363,8 @@ const Jobs = () => {
                 ))
               ) : (
                 <div className='col-span-full text-center py-12'>
-                  <div className='bg-card backdrop-blur-sm rounded-2xl p-8 border border-border shadow-custom max-w-md mx-auto'>
-                    <p className='text-muted-foreground text-lg'>
+                  <div className='bg-[#080C1E]/80 backdrop-blur-xl rounded-2xl p-8 border border-white/5 shadow-custom max-w-md mx-auto'>
+                    <p className='text-muted-foreground text-lg font-medium leading-relaxed'>
                       No jobs found matching the criteria or update the profile to get recommendation.
                     </p>
                   </div>
@@ -384,7 +375,7 @@ const Jobs = () => {
               <Loader />
             ) : loading ? (
               <div className='flex justify-center items-center py-6 w-full'>
-                <div className='w-8 h-8 border-4 border-primary/20 border-t-primary rounded-full animate-spin shadow-neon'></div>
+                <div className='w-8 h-8 border-4 border-[#00C8FF]/20 border-t-[#00C8FF] rounded-full animate-spin shadow-[0_0_15px_rgba(0,200,255,0.3)]'></div>
               </div>
             ) : null}
           </div>

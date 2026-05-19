@@ -172,7 +172,10 @@ const getAllJobs = asyncErrorHandler(async (req, res) => {
 
   // Handle job type filter with case-insensitive regex
   if (jobType) {
-    query.jobType = { $regex: jobType, $options: "i" };
+    const normalizedRegex = jobType
+      .replace(/[-\s]+/g, "[-\\s]*")
+      .trim();
+    query.jobType = { $regex: normalizedRegex, $options: "i" };
   }
 
   // Pagination settings
@@ -458,24 +461,49 @@ const getJobFilters = asyncErrorHandler(async (req, res, next) => {
   if (salaryStats.length > 0) {
     const { minSalary, maxSalary } = salaryStats[0];
 
-    // Generate salary ranges in steps of 10,000 or based on your preferred logic
-    for (
-      let start = Math.floor(minSalary / 10000) * 10000;
-      start < maxSalary;
-      start += 10000
-    ) {
-      const end = start + 10000;
-      if (end >= maxSalary) {
-        salaryRanges.push("More");
-        break;
-      }
+    const range = maxSalary - minSalary;
+    let step = 10000;
+    if (range > 3000000) {
+      step = 500000; // 5 Lakhs step
+    } else if (range > 1500000) {
+      step = 200000; // 2 Lakhs step
+    } else if (range > 800000) {
+      step = 100000; // 1 Lakh step
+    } else if (range > 400000) {
+      step = 50000;  // 50k step
+    } else if (range > 200000) {
+      step = 25000;  // 25k step
+    } else {
+      step = 10000;
+    }
+
+    const startVal = Math.floor(minSalary / step) * step;
+    for (let start = startVal; start < maxSalary; start += step) {
+      const end = start + step;
       salaryRanges.push(`${start.toLocaleString()}-${end.toLocaleString()}`);
     }
   }
 
+  const uniqueJobTypes = new Set();
+  jobTypes.forEach((type) => {
+    if (!type) return;
+    let normalized = type.trim();
+    if (/^full[- ]*time$/i.test(normalized)) {
+      normalized = "Full-Time";
+    } else if (/^part[- ]*time$/i.test(normalized)) {
+      normalized = "Part-Time";
+    } else {
+      normalized = normalized
+        .toLowerCase()
+        .replace(/\b\w/g, (char) => char.toUpperCase());
+    }
+    uniqueJobTypes.add(normalized);
+  });
+  const formattedJobTypes = Array.from(uniqueJobTypes);
+
   const filterData = [
     { filterType: "Location", array: locations },
-    { filterType: "Job Type", array: jobTypes },
+    { filterType: "Job Type", array: formattedJobTypes },
     { filterType: "Salary", array: salaryRanges },
   ];
 

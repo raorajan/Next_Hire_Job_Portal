@@ -43,12 +43,14 @@ export default function Settings() {
   }, [page]);
 
   return (
-    <div className='min-h-screen bg-background relative overflow-hidden'>
-      {/* Background decorations */}
+    <div className='min-h-screen bg-[#050810] text-[#E6EDF3] relative overflow-hidden'>
+      {/* Fine-lined cyber laser grid overlay */}
+      <div className="grid-overlay"></div>
+      
+      {/* Enhanced Background decorations with rotating orbits */}
       <div className='absolute inset-0 -z-10 overflow-hidden'>
-        <div className='absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl'></div>
-        <div className='absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl'></div>
-        <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/3 rounded-full blur-3xl'></div>
+        <div className='absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-[#00C8FF]/5 rounded-full blur-[130px] anim-spin-slow'></div>
+        <div className='absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-[#8040FF]/5 rounded-full blur-[140px] anim-spin-rev'></div>
       </div>
 
       <Navbar />
@@ -59,8 +61,8 @@ export default function Settings() {
       />
       <div className='flex flex-col min-h-screen'>
         <div className='flex-1 mx-4 pt-24 flex flex-col md:flex-row gap-6 max-w-7xl relative z-10'>
-          <div className='w-full md:w-[300px] bg-card backdrop-blur-sm border border-border shadow-custom rounded-2xl px-4 py-6 md:sticky md:top-24 h-fit'>
-            <h2 className='text-2xl font-extrabold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
+          <div className='w-full md:w-[300px] bg-[#080C1E]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_50px_rgba(0,100,220,0.03)] rounded-2xl px-4 py-6 md:sticky md:top-24 h-fit'>
+            <h2 className='text-2xl font-extrabold mb-6 text-white tracking-wide'>
               Settings
             </h2>
             <div className='flex flex-col gap-2'>
@@ -70,8 +72,8 @@ export default function Settings() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 text-left ${
                     activeTab === tab.id
-                      ? "bg-primary text-primary-foreground shadow-neon transform scale-105"
-                      : "bg-muted/30 text-muted-foreground hover:bg-primary/10 hover:text-primary border border-transparent hover:border-primary/20"
+                      ? "bg-[#00C8FF] text-[#050810] shadow-[0_0_20px_rgba(0,200,255,0.3)] transform scale-105"
+                      : "bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-[#00C8FF] border border-transparent hover:border-[#00C8FF]/20"
                   }`}
                 >
                   {tab.icon}
@@ -82,7 +84,7 @@ export default function Settings() {
           </div>
 
           {/* Main Content Area */}
-          <div className='flex-1 bg-card backdrop-blur-sm border border-border shadow-custom px-6 py-8 rounded-2xl'>
+          <div className='flex-1 bg-[#080C1E]/80 backdrop-blur-xl border border-white/5 shadow-[0_0_50px_rgba(0,100,220,0.03)] px-6 py-8 rounded-2xl'>
             {activeTab === "settings" && <ProfileTab />}
             {activeTab === "password" && <PasswordTab />}
             {activeTab === "notifications" && <NotificationsTab />}
@@ -191,18 +193,18 @@ function ProfileTab() {
     <form onSubmit={submitHandler} className='space-y-6'>
       {loading && <Loader />}
       {profileCompletion && (
-        <div className="mb-6 bg-primary/5 border border-primary/20 rounded-2xl p-4">
+        <div className="mb-6 bg-[#00C8FF]/5 border border-[#00C8FF]/20 rounded-2xl p-4">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-semibold text-foreground">
-              Profile completion: <span className="text-primary">{profileCompletion.score}%</span>
+            <p className="text-sm font-semibold text-white tracking-wide">
+              Profile completion: <span className="text-[#00C8FF]">{profileCompletion.score}%</span>
             </p>
             <p className="text-xs text-muted-foreground">
               {profileCompletion.completedTasks}/{profileCompletion.totalTasks} steps completed
             </p>
           </div>
-          <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
+          <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden border border-white/5">
             <div
-              className="bg-gradient-to-r from-primary to-secondary h-2 rounded-full transition-all duration-500 shadow-neon"
+              className="bg-gradient-to-r from-[#00C8FF] to-[#8040FF] h-2 rounded-full transition-all duration-500 shadow-[0_0_15px_rgba(0,200,255,0.5)]"
               style={{ width: `${profileCompletion.score}%` }}
             />
           </div>
@@ -218,15 +220,15 @@ function ProfileTab() {
       <div className='flex items-start gap-6'>
         <div className='flex flex-col items-center'>
           <div className='relative mb-4'>
-            <Avatar className='h-24 w-24 ring-4 ring-primary/20'>
+            <Avatar className='h-24 w-24 ring-4 ring-[#00C8FF]/20 shadow-[0_0_15px_rgba(0,200,255,0.15)]'>
               <AvatarImage src={user?.profile?.profilePhoto?.url} alt='profile' />
-              <AvatarFallback className="text-3xl font-bold bg-secondary/20 text-secondary">
+              <AvatarFallback className="text-3xl font-bold bg-[#8040FF]/20 text-[#8040FF]">
                 {user?.fullname ? user.fullname.charAt(0).toUpperCase() : "U"}
               </AvatarFallback>
             </Avatar>
-            <div className='absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-r from-primary to-secondary rounded-full border-2 border-background shadow-neon'></div>
+            <div className='absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-r from-[#00C8FF] to-[#8040FF] rounded-full border-2 border-[#050810] shadow-[0_0_10px_rgba(0,200,255,0.5)]'></div>
           </div>
-          <label className='cursor-pointer bg-primary hover:bg-primary/80 text-primary-foreground px-6 py-2 rounded-xl text-sm font-semibold shadow-neon hover:scale-105 transition-all duration-300 inline-block text-center'>
+          <label className='cursor-pointer bg-[#00C8FF] hover:bg-[#00E5FF] text-[#050810] px-6 py-2 rounded-xl text-sm font-bold shadow-[0_0_20px_rgba(0,200,255,0.3)] hover:shadow-[0_0_30px_rgba(0,200,255,0.5)] hover:scale-105 transition-all duration-300 inline-block text-center'>
             Upload Photo
             <input
               id='avatar'
@@ -239,37 +241,37 @@ function ProfileTab() {
           </label>
         </div>
         <div className='flex-1'>
-          <label className='block font-bold mb-2 text-foreground'>Bio</label>
+          <label className='block font-bold mb-2 text-white tracking-wide'>Bio</label>
           <textarea
             name='bio'
             value={input.bio}
             onChange={changeHandler}
             rows='4'
-            className='block w-full rounded-xl border border-border p-3 resize-none focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-300 bg-background text-foreground'
+            className='block w-full rounded-xl border border-white/5 p-3 resize-none focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 outline-none transition-all duration-300 bg-[#050810] text-[#E6EDF3]'
           ></textarea>
         </div>
       </div>
 
       <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
         <div>
-          <label className='block font-bold mb-2 text-foreground'>Full Name</label>
+          <label className='block font-bold mb-2 text-white tracking-wide'>Full Name</label>
           <input
             name='fullname'
             value={input.fullname}
             onChange={changeHandler}
             type='text'
-            className='mt-1 block w-full rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-300 bg-background text-foreground'
+            className='mt-1 block w-full rounded-xl border border-white/5 p-3 focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 outline-none transition-all duration-300 bg-[#050810] text-[#E6EDF3]'
           />
         </div>
         <div>
-          <label className='block font-bold mb-2 text-foreground'>Email</label>
+          <label className='block font-bold mb-2 text-white tracking-wide'>Email</label>
           <input
             name='email'
             value={input.email}
             onChange={changeHandler}
             type='email'
             disabled
-            className='mt-1 block w-full rounded-xl border border-border p-3 bg-muted/50 text-muted-foreground cursor-not-allowed'
+            className='mt-1 block w-full rounded-xl border border-white/5 p-3 bg-white/5 text-muted-foreground cursor-not-allowed'
           />
         </div>
       </div>
@@ -277,24 +279,24 @@ function ProfileTab() {
       {user?.role === "student" && (
         <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
           <div>
-            <label className='block font-bold mb-2 text-foreground'>Skills</label>
+            <label className='block font-bold mb-2 text-white tracking-wide'>Skills</label>
             <input
               name='skills'
               value={input.skills}
               onChange={changeHandler}
               type='text'
-              className='mt-1 block w-full rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-300 bg-background text-foreground'
+              className='mt-1 block w-full rounded-xl border border-white/5 p-3 focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 outline-none transition-all duration-300 bg-[#050810] text-[#E6EDF3]'
               placeholder='e.g., React, Node.js, Python'
             />
           </div>
           <div>
-            <label className='block font-bold mb-2 text-foreground'>Upload Resume</label>
+            <label className='block font-bold mb-2 text-white tracking-wide'>Upload Resume</label>
             <input
               name='file'
               onChange={fileHandler}
               type='file'
               accept='.pdf,.doc,.docx'
-              className='mt-1 block w-full rounded-xl border border-border p-2 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/80 file:cursor-pointer transition-all duration-300 bg-background text-foreground'
+              className='mt-1 block w-full rounded-xl border border-white/5 p-2 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-[#00C8FF] file:text-[#050810] hover:file:bg-[#00E5FF] file:cursor-pointer transition-all duration-300 bg-[#050810] text-[#E6EDF3]'
             />
           </div>
         </div>
@@ -303,7 +305,7 @@ function ProfileTab() {
       <div>
         <button
           type='submit'
-          className='mt-4 bg-primary hover:bg-primary/80 text-primary-foreground px-8 py-3 rounded-xl font-bold shadow-neon hover:scale-105 transition-all duration-300'
+          className='mt-4 bg-[#00C8FF] hover:bg-[#00E5FF] text-[#050810] px-8 py-3 rounded-xl font-bold shadow-[0_0_20px_rgba(0,200,255,0.3)] hover:shadow-[0_0_30px_rgba(0,200,255,0.5)] hover:scale-105 transition-all duration-300'
           disabled={loading}
         >
           {loading ? "Please wait..." : "Save Changes"}
@@ -356,10 +358,10 @@ function PasswordTab() {
   return (
     <div className='space-y-6'>
       <div>
-        <label className='block font-bold mb-2 text-foreground'>Current Password</label>
+        <label className='block font-bold mb-2 text-white tracking-wide'>Current Password</label>
         <input
           type='password'
-          className='mt-1 block w-full rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-300 bg-background text-foreground'
+          className='mt-1 block w-full rounded-xl border border-white/5 p-3 focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 outline-none transition-all duration-300 bg-[#050810] text-[#E6EDF3]'
           value={currentPassword}
           onChange={(e) => {
             setCurrentPassword(e.target.value);
@@ -368,19 +370,19 @@ function PasswordTab() {
         />
       </div>
       <div>
-        <label className='block font-bold mb-2 text-foreground'>New Password</label>
+        <label className='block font-bold mb-2 text-white tracking-wide'>New Password</label>
         <input
           type='password'
-          className='mt-1 block w-full rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-300 bg-background text-foreground'
+          className='mt-1 block w-full rounded-xl border border-white/5 p-3 focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 outline-none transition-all duration-300 bg-[#050810] text-[#E6EDF3]'
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
         />
       </div>
       <div>
-        <label className='block font-bold mb-2 text-foreground'>Confirm New Password</label>
+        <label className='block font-bold mb-2 text-white tracking-wide'>Confirm New Password</label>
         <input
           type='password'
-          className='mt-1 block w-full rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-300 bg-background text-foreground'
+          className='mt-1 block w-full rounded-xl border border-white/5 p-3 focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 outline-none transition-all duration-300 bg-[#050810] text-[#E6EDF3]'
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
@@ -394,7 +396,7 @@ function PasswordTab() {
 
       <button
         onClick={handlePasswordChange}
-        className='mt-4 bg-primary hover:bg-primary/80 text-primary-foreground px-8 py-3 rounded-xl font-bold shadow-neon hover:scale-105 transition-all duration-300'
+        className='mt-4 bg-[#00C8FF] hover:bg-[#00E5FF] text-[#050810] px-8 py-3 rounded-xl font-bold shadow-[0_0_20px_rgba(0,200,255,0.3)] hover:shadow-[0_0_30px_rgba(0,200,255,0.5)] hover:scale-105 transition-all duration-300'
       >
         Update Password
       </button>
@@ -445,10 +447,10 @@ function NotificationsTab() {
 
   return (
     <div className='space-y-6'>
-      <div className='bg-muted/30 rounded-xl p-4 border border-border space-y-4'>
+      <div className='bg-white/5 rounded-xl p-4 border border-white/5 space-y-4 hover:border-white/10 transition-colors'>
         <div className='flex items-center justify-between'>
           <div>
-            <p className='font-semibold text-foreground'>Job Alerts</p>
+            <p className='font-semibold text-white tracking-wide'>Job Alerts</p>
             <p className='text-xs text-muted-foreground'>
               Get periodic emails with new jobs that match your interests.
             </p>
@@ -460,8 +462,8 @@ function NotificationsTab() {
               checked={enabled}
               onChange={(e) => setEnabled(e.target.checked)}
             />
-            <div className='w-11 h-6 bg-muted peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/40 rounded-full peer peer-checked:bg-primary relative transition-colors shadow-inner'>
-              <span className='absolute top-[2px] left-[2px] w-5 h-5 bg-foreground rounded-full shadow-sm transition-transform duration-200 peer-checked:translate-x-5' />
+            <div className='w-11 h-6 bg-white/10 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#00C8FF]/40 rounded-full peer peer-checked:bg-[#00C8FF] relative transition-colors shadow-inner'>
+              <span className='absolute top-[2px] left-[2px] w-5 h-5 bg-[#050810] rounded-full shadow-sm transition-transform duration-200 peer-checked:translate-x-5' />
             </div>
           </label>
         </div>
@@ -474,7 +476,7 @@ function NotificationsTab() {
             value={frequency}
             onChange={(e) => setFrequency(e.target.value)}
             disabled={!enabled}
-            className='mt-1 block w-full rounded-xl border border-border p-2 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none bg-background text-foreground disabled:bg-muted/50 disabled:text-muted-foreground transition-all duration-300'
+            className='mt-1 block w-full rounded-xl border border-white/5 p-2 text-sm focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 outline-none bg-[#050810] text-white disabled:bg-white/5 disabled:text-muted-foreground transition-all duration-300'
           >
             <option value='daily'>Daily</option>
             <option value='weekly'>Weekly</option>
@@ -485,7 +487,7 @@ function NotificationsTab() {
       <button
         onClick={handleSave}
         disabled={saving}
-        className='mt-4 bg-primary hover:bg-primary/80 text-primary-foreground px-8 py-3 rounded-xl font-bold shadow-neon hover:scale-105 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed'
+        className='mt-4 bg-[#00C8FF] hover:bg-[#00E5FF] text-[#050810] px-8 py-3 rounded-xl font-bold shadow-[0_0_20px_rgba(0,200,255,0.3)] hover:shadow-[0_0_30px_rgba(0,200,255,0.5)] hover:scale-105 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed'
       >
         {saving ? "Saving..." : "Save Preferences"}
       </button>
@@ -496,19 +498,19 @@ function NotificationsTab() {
 function PrivacyTab() {
   return (
     <div className='space-y-6'>
-      <div className='bg-muted/30 rounded-xl p-4 border border-border'>
-        <label className='flex items-center gap-3 cursor-pointer hover:bg-primary/5 rounded-lg p-3 transition-all duration-200'>
-          <input type='checkbox' className='w-5 h-5 accent-primary border-border rounded focus:ring-primary focus:ring-2 cursor-pointer bg-background' />
-          <span className='font-semibold text-foreground'>Make my profile public</span>
+      <div className='bg-white/5 rounded-xl p-4 border border-white/5 hover:border-white/10 transition-colors'>
+        <label className='flex items-center gap-3 cursor-pointer hover:bg-white/5 rounded-lg p-3 transition-all duration-200'>
+          <input type='checkbox' className='w-5 h-5 accent-[#00C8FF] border-white/5 rounded focus:ring-[#00C8FF] focus:ring-2 cursor-pointer bg-[#050810]' />
+          <span className='font-semibold text-white tracking-wide'>Make my profile public</span>
         </label>
       </div>
-      <div className='bg-muted/30 rounded-xl p-4 border border-border'>
-        <label className='flex items-center gap-3 cursor-pointer hover:bg-primary/5 rounded-lg p-3 transition-all duration-200'>
-          <input type='checkbox' className='w-5 h-5 accent-primary border-border rounded focus:ring-primary focus:ring-2 cursor-pointer bg-background' />
-          <span className='font-semibold text-foreground'>Allow resume downloads</span>
+      <div className='bg-white/5 rounded-xl p-4 border border-white/5 hover:border-white/10 transition-colors'>
+        <label className='flex items-center gap-3 cursor-pointer hover:bg-white/5 rounded-lg p-3 transition-all duration-200'>
+          <input type='checkbox' className='w-5 h-5 accent-[#00C8FF] border-white/5 rounded focus:ring-[#00C8FF] focus:ring-2 cursor-pointer bg-[#050810]' />
+          <span className='font-semibold text-white tracking-wide'>Allow resume downloads</span>
         </label>
       </div>
-      <div className='mt-8 border-t border-border pt-6 space-y-4'>
+      <div className='mt-8 border-t border-white/10 pt-6 space-y-4'>
         <button className='text-destructive hover:text-white font-bold px-4 py-2 rounded-xl hover:bg-destructive transition-all duration-300 border border-destructive/20 hover:border-destructive'>
           Deactivate Account
         </button>
@@ -582,25 +584,25 @@ function SavedSearchesTab() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        <h2 className="text-2xl font-extrabold text-white tracking-wide">
           Saved Searches
         </h2>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-primary hover:bg-primary/80 text-primary-foreground px-6 py-2 rounded-xl font-bold shadow-neon hover:scale-105 transition-all duration-300"
+          className="bg-[#00C8FF] hover:bg-[#00E5FF] text-[#050810] px-6 py-2 rounded-xl font-bold shadow-[0_0_20px_rgba(0,200,255,0.3)] hover:scale-105 transition-all duration-300"
         >
           {showForm ? "Cancel" : "+ New Search"}
         </button>
       </div>
 
       {showForm && (
-        <div className="bg-muted/30 rounded-xl p-6 border border-border space-y-4 shadow-inner">
+        <div className="bg-[#080C1E]/50 rounded-xl p-6 border border-white/5 space-y-4 shadow-inner">
           <input
             type="text"
             placeholder="Search name (e.g., 'React Developer Jobs')"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            className="w-full rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none bg-background text-foreground"
+            className="w-full rounded-xl border border-white/5 p-3 focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 outline-none bg-[#050810] text-[#E6EDF3]"
           />
           <div className="grid grid-cols-2 gap-4">
             <input
@@ -608,36 +610,36 @@ function SavedSearchesTab() {
               placeholder="Keywords (comma-separated)"
               value={formData.keywords}
               onChange={(e) => setFormData({ ...formData, keywords: e.target.value })}
-              className="rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none bg-background text-foreground"
+              className="rounded-xl border border-white/5 p-3 focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 outline-none bg-[#050810] text-[#E6EDF3]"
             />
             <input
               type="text"
               placeholder="Location"
               value={formData.location}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              className="rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none bg-background text-foreground"
+              className="rounded-xl border border-white/5 p-3 focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 outline-none bg-[#050810] text-[#E6EDF3]"
             />
             <input
               type="text"
               placeholder="Job Type"
               value={formData.jobType}
               onChange={(e) => setFormData({ ...formData, jobType: e.target.value })}
-              className="rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none bg-background text-foreground"
+              className="rounded-xl border border-white/5 p-3 focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 outline-none bg-[#050810] text-[#E6EDF3]"
             />
             <div className="flex items-center gap-3">
               <input
                 type="checkbox"
                 checked={formData.alertEnabled}
                 onChange={(e) => setFormData({ ...formData, alertEnabled: e.target.checked })}
-                className="w-5 h-5 accent-primary bg-background border-border"
+                className="w-5 h-5 accent-[#00C8FF] bg-[#050810] border-white/5"
               />
-              <label className="font-semibold text-foreground">Enable alerts for this search</label>
+              <label className="font-semibold text-white tracking-wide">Enable alerts for this search</label>
             </div>
           </div>
           <button
             onClick={handleSave}
             disabled={loading}
-            className="bg-primary hover:bg-primary/80 text-primary-foreground px-6 py-2 rounded-xl font-bold shadow-neon hover:scale-105 transition-all duration-300"
+            className="bg-[#00C8FF] hover:bg-[#00E5FF] text-[#050810] px-6 py-2 rounded-xl font-bold shadow-[0_0_20px_rgba(0,200,255,0.3)] hover:scale-105 transition-all duration-300"
           >
             {loading ? "Saving..." : "Save Search"}
           </button>
@@ -653,7 +655,7 @@ function SavedSearchesTab() {
             >
               <div className="flex justify-between items-start">
                 <div className="flex-1">
-                  <h3 className="font-bold text-lg text-foreground mb-2 group-hover:text-primary transition-colors">{search.name}</h3>
+                  <h3 className="font-bold text-lg text-white mb-2 group-hover:text-[#00C8FF] transition-colors">{search.name}</h3>
                   <div className="text-sm text-muted-foreground space-y-1">
                     {search.keywords?.length > 0 && (
                       <p><strong>Keywords:</strong> {search.keywords.join(", ")}</p>
@@ -661,7 +663,7 @@ function SavedSearchesTab() {
                     {search.location && <p><strong>Location:</strong> {search.location}</p>}
                     {search.jobType && <p><strong>Job Type:</strong> {search.jobType}</p>}
                     {search.alertEnabled && (
-                      <span className="inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold mt-2 shadow-neon-sm">
+                      <span className="inline-block bg-[#00C8FF]/10 text-[#00C8FF] border border-[#00C8FF]/20 px-3 py-1 rounded-full text-xs font-bold mt-2 shadow-[0_0_10px_rgba(0,200,255,0.2)]">
                         Alerts Enabled
                       </span>
                     )}
@@ -745,7 +747,7 @@ function QuickTemplatesTab() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        <h2 className="text-2xl font-extrabold text-white tracking-wide">
           Quick Apply Templates
         </h2>
         <button
@@ -756,32 +758,32 @@ function QuickTemplatesTab() {
               setFormData({ title: "", coverLetter: "" });
             }
           }}
-          className="bg-primary hover:bg-primary/80 text-primary-foreground px-6 py-2 rounded-xl font-bold shadow-neon hover:scale-105 transition-all duration-300"
+          className="bg-[#00C8FF] hover:bg-[#00E5FF] text-[#050810] px-6 py-2 rounded-xl font-bold shadow-[0_0_20px_rgba(0,200,255,0.3)] hover:scale-105 transition-all duration-300"
         >
           {showForm ? "Cancel" : "+ New Template"}
         </button>
       </div>
 
       {showForm && (
-        <div className="bg-muted/30 rounded-xl p-6 border border-border space-y-4 shadow-inner">
+        <div className="bg-[#080C1E]/50 rounded-xl p-6 border border-white/5 space-y-4 shadow-inner">
           <input
             type="text"
             placeholder="Template title (e.g., 'Software Engineer Application')"
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            className="w-full rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none bg-background text-foreground"
+            className="w-full rounded-xl border border-white/5 p-3 focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 outline-none bg-[#050810] text-[#E6EDF3]"
           />
           <textarea
             placeholder="Cover letter text..."
             value={formData.coverLetter}
             onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })}
             rows={8}
-            className="w-full rounded-xl border border-border p-3 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none resize-none bg-background text-foreground"
+            className="w-full rounded-xl border border-white/5 p-3 focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 outline-none resize-none bg-[#050810] text-[#E6EDF3]"
           />
           <button
             onClick={handleSave}
             disabled={loading}
-            className="bg-primary hover:bg-primary/80 text-primary-foreground px-6 py-2 rounded-xl font-bold shadow-neon hover:scale-105 transition-all duration-300"
+            className="bg-[#00C8FF] hover:bg-[#00E5FF] text-[#050810] px-6 py-2 rounded-xl font-bold shadow-[0_0_20px_rgba(0,200,255,0.3)] hover:scale-105 transition-all duration-300"
           >
             {loading ? "Saving..." : editingId ? "Update Template" : "Create Template"}
           </button>
@@ -793,23 +795,23 @@ function QuickTemplatesTab() {
           quickTemplates.map((template) => (
             <div
               key={template._id}
-              className="bg-muted/20 backdrop-blur-sm rounded-xl p-4 border border-border hover:border-primary/30 transition-all duration-300"
+              className="bg-[#080C1E]/50 backdrop-blur-xl rounded-xl p-4 border border-white/5 hover:border-[#00C8FF]/30 transition-all duration-300"
             >
               <div className="flex justify-between items-start">
                 <div className="flex-1">
-                  <h3 className="font-bold text-lg text-foreground mb-2">{template.title}</h3>
+                  <h3 className="font-bold text-lg text-white mb-2">{template.title}</h3>
                   <p className="text-sm text-muted-foreground line-clamp-3">{template.coverLetter}</p>
                 </div>
                 <div className="flex gap-2 ml-4">
                   <button
                     onClick={() => handleEdit(template)}
-                    className="text-[#6A38C2] hover:text-[#5b30a6] p-2 hover:bg-purple-50 rounded-lg transition-colors"
+                    className="text-[#00C8FF] hover:text-[#00E5FF] p-2 hover:bg-[#00C8FF]/10 rounded-lg transition-colors"
                   >
                     <FaEdit />
                   </button>
                   <button
                     onClick={() => handleDelete(template._id)}
-                    className="text-red-600 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition-colors"
+                    className="text-red-500 hover:text-red-400 p-2 hover:bg-red-500/10 rounded-lg transition-colors"
                   >
                     <FaTrash />
                   </button>

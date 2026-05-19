@@ -110,60 +110,60 @@ const HeroSection = () => {
     }
   };
 
-  return (
-    <div className='text-center mt-[80px] relative z-30 pb-12'>
-      {/* Enhanced Background decoration with animations */}
+  return ( 
+    <div className='text-center mt-[80px] relative z-30 pb-12 bg-transparent'>
+      {/* Enhanced Background decoration with massive radial glows & rotating orbits */}
       <div className='absolute inset-0 -z-10 overflow-hidden'>
-        <div className='absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse'></div>
-        <div className='absolute top-40 right-10 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse delay-1000'></div>
-        <div className='absolute bottom-20 left-1/2 transform -translate-x-1/2 w-80 h-80 bg-primary/8 rounded-full blur-3xl animate-pulse delay-2000'></div>
-        <div className='absolute top-1/2 right-1/4 w-64 h-64 bg-secondary/5 rounded-full blur-3xl animate-pulse delay-3000'></div>
+        <div className='absolute top-20 left-10 w-[400px] h-[400px] bg-[#00C8FF]/5 rounded-full blur-[130px] anim-spin-slow'></div>
+        <div className='absolute top-40 right-10 w-[500px] h-[500px] bg-[#8040FF]/5 rounded-full blur-[150px] anim-spin-rev'></div>
+        <div className='absolute bottom-20 left-1/2 transform -translate-x-1/2 w-80 h-80 bg-[#00C8FF]/4 rounded-full blur-[100px] anim-pulse-glow'></div>
       </div>
       
       <div className='flex flex-col gap-8 mt-12 mb-0 relative z-10 px-4'>
-        <span className='mx-auto px-6 py-3 rounded-full bg-primary/10 text-primary font-semibold text-sm border border-primary/30 shadow-neon backdrop-blur-sm hover:scale-105 transition-transform duration-300'>
-          ✨ Your Gateway to Opportunities
+        <span className='mx-auto px-5 py-2 rounded-full bg-[#00C8FF]/10 text-[#00C8FF] font-semibold text-xs border border-[#00C8FF]/20 shadow-[0_0_15px_rgba(0,229,255,0.15)] backdrop-blur-md hover:scale-105 hover:bg-[#00C8FF]/20 hover:border-[#00C8FF]/40 transition-all duration-300 relative overflow-hidden group'>
+          <span className='absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000'></span>
+          ✨ Your Intelligent Opportunities Portal
         </span>
-        <h1 className='text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight animate-fade-in'>
-          <span className='text-foreground block mb-2'>
-            Discover, Apply & 
+        <h1 className='text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-[-0.02em] animate-fade-in'>
+          <span className='text-foreground block mb-2 font-black'>
+            Discover, Apply &
           </span>
-          <span className='bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-gradient drop-shadow-[0_0_15px_rgba(0,229,255,0.3)]'>
+          <span className='bg-gradient-to-r from-[#00C8FF] via-[#4f46e5] to-[#8040FF] bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(0,229,255,0.3)]'>
             Land Your Perfect Job
           </span>
         </h1>
         <p className='text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-medium'>
-          Explore thousands of job listings across various industries. Take the
-          next step towards your career success with our intelligent job matching platform!
+          Explore thousands of real-time verified job listings. Take the
+          next step towards your career goals with our predictive matching engine.
         </p>
-        <div ref={searchContainerRef} className='relative w-full max-w-3xl mx-auto mt-4'>
-          <div className='relative flex w-full shadow-2xl border border-border bg-card/95 backdrop-blur-md pl-6 pr-2 rounded-full items-center gap-4 hover:shadow-neon hover:border-primary/50 transition-all duration-300 transform hover:scale-[1.02]'>
-            <Search className='h-6 w-6 text-muted-foreground flex-shrink-0' />
+        <div ref={searchContainerRef} className='relative w-full max-w-3xl mx-auto mt-4 px-4 sm:px-0'>
+          <div className='relative flex w-full shadow-2xl border border-white/5 bg-[#080C1E]/60 backdrop-blur-xl pl-6 pr-2 rounded-full items-center gap-4 hover:shadow-[0_0_50px_rgba(0,200,255,0.15)] hover:border-[#00C8FF]/30 transition-all duration-300 transform hover:scale-[1.01]'>
+            <Search className='h-6 w-6 text-[#00C8FF] flex-shrink-0 anim-pulse-glow' />
             <input
               type='text'
-              placeholder='Search for jobs, companies, or skills...'
+              placeholder='Search by job title, core skills, or company name...'
               value={query}
               onChange={handleInputChange}
               onClick={handleDropdownClick}
-              className='outline-none border-none w-full bg-transparent text-foreground placeholder-muted-foreground text-base md:text-lg py-5'
+              className='outline-none border-none w-full bg-transparent text-foreground placeholder:text-muted-foreground text-base md:text-lg py-5 font-medium'
               aria-label='Job search input'
             />
             <Button
               onClick={handleSearchButtonClick}
-              className='rounded-full bg-primary text-primary-foreground hover:bg-primary/80 px-8 md:px-10 py-3 md:py-4 shadow-neon transform hover:scale-105 transition-all duration-300 font-semibold text-base'
+              className='rounded-full bg-[#00C8FF] text-[#050810] hover:bg-[#00E5FF] px-8 md:px-10 py-3 md:py-4 shadow-[0_0_20px_rgba(0,200,255,0.3)] hover:shadow-[0_0_35px_rgba(0,200,255,0.6)] transform hover:scale-105 transition-all duration-300 font-bold text-base flex items-center gap-2'
               aria-label='Search button'
             >
-              <Search className='h-5 w-5 mr-2' />
+              <Search className='h-5 w-5' />
               Search
             </Button>
             {loading && <SearchSkeleton />}
           </div>
           
-          {/* Enhanced Search Dropdown */}
-          {dropdownVisible && searchResults.length > 0 && !loading && (
+          {/* Enhanced Search Dropdown with High-Tech styling */}
+          {dropdownVisible && searchResults.length > 0 && !loading && ( 
             <div
               ref={dropdownRef}
-              className={`absolute left-0 w-full max-h-72 overflow-y-auto overflow-x-hidden bg-card/98 backdrop-blur-xl shadow-2xl rounded-2xl z-[9999] border border-border duration-300 ${
+              className={`absolute left-0 w-full max-h-72 overflow-y-auto overflow-x-hidden bg-[#080C1E]/95 backdrop-blur-2xl shadow-[0_0_80px_rgba(0,100,220,0.2)] rounded-2xl z-[9999] border border-white/5 duration-300 ${
                 dropdownPosition === "top"
                   ? "bottom-full mb-4 animate-in slide-in-from-bottom-2"
                   : "top-full mt-4 animate-in slide-in-from-top-2"
@@ -173,13 +173,15 @@ const HeroSection = () => {
                 <div
                   key={job._id}
                   onClick={() => searchJobHandler(job._id)}
-                  className='cursor-pointer hover:bg-muted/80 transition-all duration-200 p-4 border-b border-border last:border-b-0 group transform hover:translate-x-1'
+                  className='cursor-pointer hover:bg-white/5 transition-all duration-200 p-4 border-b border-white/5 last:border-b-0 group transform hover:translate-x-2 text-start'
                 >
                   <div className='flex items-center gap-3'>
-                    <div className='w-2.5 h-2.5 bg-primary rounded-full group-hover:scale-125 group-hover:shadow-neon transition-all duration-200 flex-shrink-0'></div>
-                    <span className='font-semibold text-foreground group-hover:text-primary'>{job.title}</span>
-                    {job.company?.name && (
-                      <span className='text-sm text-muted-foreground ml-auto'>{job.company.name}</span>
+                    <div className='w-2 h-2 bg-[#00C8FF] rounded-full group-hover:scale-125 group-hover:shadow-[0_0_10px_rgba(0,200,255,1)] transition-all duration-200 flex-shrink-0 anim-pulse-glow'></div>
+                    <span className='font-bold text-foreground group-hover:text-[#00C8FF] transition-colors duration-200'>{job.title}</span>
+                    {job.company?.companyName && (
+                      <span className='text-xs font-semibold px-2 py-0.5 bg-[#8040FF]/15 border border-[#8040FF]/30 text-[#8040FF] rounded-lg ml-auto'>
+                        {job.company.companyName}
+                      </span>
                     )}
                   </div>
                 </div>

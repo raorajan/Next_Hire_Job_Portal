@@ -95,3 +95,84 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* High-Tech Cybernetic Design System (PayAI Guardian Style) */
+.grid-overlay {
+  background-image: linear-gradient(rgba(0, 229, 255, 0.02) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0, 229, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+.glassmorphic-card {
+  background: rgba(8, 12, 30, 0.45);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 0 80px rgba(0, 100, 220, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+.anim-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin-rev {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+.anim-spin-slow {
+  animation: spin-slow 25s linear infinite;
+}
+.anim-spin-rev {
+  animation: spin-rev 18s linear infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.45;
+    filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.2));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 12px rgba(0, 229, 255, 0.5));
+  }
+}
+.anim-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Custom high-tech thin scrollbar track */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #050810;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 229, 255, 0.15);
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 229, 255, 0.45);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+}

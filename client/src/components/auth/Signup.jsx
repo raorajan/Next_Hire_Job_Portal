@@ -118,12 +118,14 @@ const Signup = () => {
   };
 
   return (
-    <div className='min-h-screen bg-background relative overflow-hidden'>
-      {/* Background decorations */}
+    <div className='min-h-screen bg-[#050810] text-[#E6EDF3] relative overflow-hidden'>
+      {/* Fine-lined cyber laser grid overlay */}
+      <div className="grid-overlay"></div>
+      
+      {/* Enhanced Background decorations with rotating orbits */}
       <div className='absolute inset-0 -z-10 overflow-hidden'>
-        <div className='absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl'></div>
-        <div className='absolute bottom-0 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl'></div>
-        <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/3 rounded-full blur-3xl'></div>
+        <div className='absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-[#00C8FF]/5 rounded-full blur-[130px] anim-spin-slow'></div>
+        <div className='absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-[#8040FF]/5 rounded-full blur-[140px] anim-spin-rev'></div>
       </div>
 
       <RegisterNavbar />
@@ -136,20 +138,20 @@ const Signup = () => {
       <div className='container mx-auto px-4 py-12 md:py-20 relative z-10'>
         <div className='max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8'>
           {/* Left Side - Benefits Card */}
-          <div className='bg-card backdrop-blur-sm rounded-2xl border border-border shadow-custom p-8 lg:sticky lg:top-24 h-fit'>
+          <div className='bg-[#080C1E]/80 backdrop-blur-xl rounded-2xl border border-white/5 shadow-[0_0_50px_rgba(0,100,220,0.03)] hover:shadow-[0_0_35px_rgba(0,200,255,0.08)] transition-all duration-500 p-8 lg:sticky lg:top-24 h-fit'>
             <div className='text-center mb-6'>
-              <div className='w-32 h-32 mx-auto mb-4 rounded-2xl overflow-hidden border-2 border-primary/20 shadow-lg'>
+              <div className='w-32 h-32 mx-auto mb-4 rounded-2xl overflow-hidden border-2 border-[#00C8FF]/20 shadow-lg'>
                 <img
                   src={JobSearch}
                   alt='Job Search'
                   className='w-full h-full object-cover'
                 />
               </div>
-              <h4 className='text-2xl md:text-3xl font-extrabold mb-2'>
-                <span className='text-foreground'>
+              <h4 className='text-2xl md:text-3xl font-extrabold mb-2 tracking-wide'>
+                <span className='text-white'>
                   Start Your{" "}
                 </span>
-                <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
+                <span className='text-[#00C8FF] drop-shadow-[0_0_15px_rgba(0,200,255,0.4)]'>
                   Journey
                 </span>
               </h4>
@@ -157,29 +159,29 @@ const Signup = () => {
             </div>
 
             <ul className='space-y-4 mb-6'>
-              <li className='flex items-start gap-3 p-3 rounded-xl bg-primary/5 border border-primary/10'>
-                <span className='text-primary text-xl font-bold mt-0.5'>✓</span>
-                <span className='text-foreground font-medium'>Build your profile and let recruiters find you</span>
+              <li className='flex items-start gap-3 p-3 rounded-xl bg-[#00C8FF]/5 border border-white/5'>
+                <span className='text-[#00C8FF] text-xl font-bold mt-0.5'>✓</span>
+                <span className='text-white font-medium'>Build your profile and let recruiters find you</span>
               </li>
-              <li className='flex items-start gap-3 p-3 rounded-xl bg-primary/5 border border-primary/10'>
-                <span className='text-primary text-xl font-bold mt-0.5'>✓</span>
-                <span className='text-foreground font-medium'>Get job postings delivered right to your email</span>
+              <li className='flex items-start gap-3 p-3 rounded-xl bg-[#00C8FF]/5 border border-white/5'>
+                <span className='text-[#00C8FF] text-xl font-bold mt-0.5'>✓</span>
+                <span className='text-white font-medium'>Get job postings delivered right to your email</span>
               </li>
-              <li className='flex items-start gap-3 p-3 rounded-xl bg-primary/5 border border-primary/10'>
-                <span className='text-primary text-xl font-bold mt-0.5'>✓</span>
-                <span className='text-foreground font-medium'>Find a job and grow your career</span>
+              <li className='flex items-start gap-3 p-3 rounded-xl bg-[#00C8FF]/5 border border-white/5'>
+                <span className='text-[#00C8FF] text-xl font-bold mt-0.5'>✓</span>
+                <span className='text-white font-medium'>Find a job and grow your career</span>
               </li>
             </ul>
           </div>
 
           {/* Right Side - Signup Form */}
-          <div className='bg-card backdrop-blur-sm rounded-2xl border border-border shadow-custom p-8 md:p-10'>
+          <div className='bg-[#080C1E]/80 backdrop-blur-xl rounded-2xl border border-white/5 shadow-[0_0_50px_rgba(0,100,220,0.03)] hover:shadow-[0_0_35px_rgba(0,200,255,0.08)] transition-all duration-500 p-8 md:p-10'>
             <div className='text-center mb-8'>
-              <h1 className='text-4xl md:text-5xl font-extrabold mb-3'>
-                <span className='text-foreground'>
+              <h1 className='text-4xl md:text-5xl font-extrabold mb-3 tracking-wide'>
+                <span className='text-white'>
                   Create{" "}
                 </span>
-                <span className='bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent'>
+                <span className='text-[#00C8FF] drop-shadow-[0_0_15px_rgba(0,200,255,0.4)]'>
                   Account
                 </span>
               </h1>
@@ -188,43 +190,43 @@ const Signup = () => {
 
             <form onSubmit={submitHandler} className='space-y-5'>
               <div>
-                <Label className='text-base font-bold text-foreground mb-2 block'>Full Name</Label>
+                <Label className='text-base font-bold text-white mb-2 block tracking-wide'>Full Name</Label>
                 <Input
                   type='text'
                   value={fullname}
                   onChange={(e) => setFullname(e.target.value)}
                   placeholder='John Doe'
-                  className='w-full rounded-xl border border-border p-4 focus:border-primary focus:ring-2 focus:ring-primary/20 bg-background text-foreground placeholder:text-muted-foreground text-base'
+                  className='w-full rounded-xl border border-white/5 p-4 focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 bg-[#050810] text-[#E6EDF3] placeholder:text-muted-foreground text-base'
                   required
                 />
               </div>
 
               <div>
-                <Label className='text-base font-bold text-foreground mb-2 block'>Email</Label>
+                <Label className='text-base font-bold text-white mb-2 block tracking-wide'>Email</Label>
                 <Input
                   type='email'
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder='example@gmail.com'
-                  className='w-full rounded-xl border border-border p-4 focus:border-primary focus:ring-2 focus:ring-primary/20 bg-background text-foreground placeholder:text-muted-foreground text-base'
+                  className='w-full rounded-xl border border-white/5 p-4 focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 bg-[#050810] text-[#E6EDF3] placeholder:text-muted-foreground text-base'
                   required
                 />
               </div>
 
               <div>
-                <Label className='text-base font-bold text-foreground mb-2 block'>Password</Label>
+                <Label className='text-base font-bold text-white mb-2 block tracking-wide'>Password</Label>
                 <Input
                   type='password'
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder='Enter your password'
-                  className='w-full rounded-xl border border-border p-4 focus:border-primary focus:ring-2 focus:ring-primary/20 bg-background text-foreground placeholder:text-muted-foreground text-base'
+                  className='w-full rounded-xl border border-white/5 p-4 focus:border-[#00C8FF] focus:ring-2 focus:ring-[#00C8FF]/20 bg-[#050810] text-[#E6EDF3] placeholder:text-muted-foreground text-base'
                   required
                 />
               </div>
 
-              <div className='bg-muted/30 rounded-xl p-4 border border-border'>
-                <Label className='text-base font-bold text-foreground mb-3 block'>I am a</Label>
+              <div className='bg-white/5 rounded-xl p-4 border border-white/5'>
+                <Label className='text-base font-bold text-white mb-3 block tracking-wide'>I am a</Label>
                 <div className='flex gap-6'>
                   <label className='flex items-center gap-3 cursor-pointer group'>
                     <input
@@ -232,10 +234,10 @@ const Signup = () => {
                       name='role'
                       value='student'
                       onChange={(e) => setRole(e.target.value)}
-                      className='w-5 h-5 accent-primary border-border focus:ring-primary focus:ring-2 cursor-pointer'
+                      className='w-5 h-5 accent-[#00C8FF] border-white/5 focus:ring-[#00C8FF] focus:ring-2 cursor-pointer bg-[#050810]'
                       required
                     />
-                    <span className='text-foreground font-semibold group-hover:text-primary transition-colors'>Student</span>
+                    <span className='text-white font-semibold group-hover:text-[#00C8FF] transition-colors'>Student</span>
                   </label>
                   <label className='flex items-center gap-3 cursor-pointer group'>
                     <input
@@ -243,16 +245,16 @@ const Signup = () => {
                       name='role'
                       value='recruiter'
                       onChange={(e) => setRole(e.target.value)}
-                      className='w-5 h-5 accent-primary border-border focus:ring-primary focus:ring-2 cursor-pointer'
+                      className='w-5 h-5 accent-[#00C8FF] border-white/5 focus:ring-[#00C8FF] focus:ring-2 cursor-pointer bg-[#050810]'
                       required
                     />
-                    <span className='text-foreground font-semibold group-hover:text-primary transition-colors'>Recruiter</span>
+                    <span className='text-white font-semibold group-hover:text-[#00C8FF] transition-colors'>Recruiter</span>
                   </label>
                 </div>
               </div>
 
               <div>
-                <Label className='text-base font-bold text-foreground mb-2 block'>Profile Picture</Label>
+                <Label className='text-base font-bold text-white mb-2 block tracking-wide'>Profile Picture</Label>
                 <div className='flex items-center gap-4'>
                   <label className='cursor-pointer'>
                     <Input
@@ -261,11 +263,11 @@ const Signup = () => {
                       onChange={changeFileHandler}
                       className='hidden'
                     />
-                    <span className='px-6 py-3 bg-primary hover:bg-primary/80 text-primary-foreground font-semibold rounded-xl cursor-pointer shadow-neon hover:scale-105 transition-all duration-300 inline-block'>
+                    <span className='px-6 py-3 bg-[#00C8FF] hover:bg-[#00E5FF] text-[#050810] font-semibold rounded-xl cursor-pointer shadow-[0_0_15px_rgba(0,200,255,0.3)] hover:scale-105 transition-all duration-300 inline-block'>
                       Choose File
                     </span>
                   </label>
-                  <div className='w-16 h-16 border-2 border-dashed border-border rounded-full flex items-center justify-center overflow-hidden bg-muted/30 hover:border-primary transition-colors'>
+                  <div className='w-16 h-16 border-2 border-dashed border-white/20 rounded-full flex items-center justify-center overflow-hidden bg-white/5 hover:border-[#00C8FF]/50 transition-colors'>
                     {avatar ? (
                       <img
                         src={URL.createObjectURL(avatar)}
@@ -283,7 +285,7 @@ const Signup = () => {
 
               <Button 
                 type='submit' 
-                className='w-full bg-primary hover:bg-primary/80 text-primary-foreground font-bold py-6 rounded-xl shadow-neon hover:scale-105 transition-all duration-300 text-lg'
+                className='w-full bg-[#00C8FF] hover:bg-[#00E5FF] text-[#050810] font-bold py-6 rounded-xl shadow-[0_0_20px_rgba(0,200,255,0.3)] hover:shadow-[0_0_30px_rgba(0,200,255,0.5)] hover:scale-[1.02] transition-all duration-300 text-lg border-none'
                 disabled={loading}
               >
                 {loading ? "Creating Account..." : "Sign Up"}
@@ -292,7 +294,7 @@ const Signup = () => {
               <div className='text-center'>
                 <p className='text-muted-foreground'>
                   Already have an account?{" "}
-                  <Link to='/login' className='text-primary hover:text-secondary font-bold transition-colors'>
+                  <Link to='/login' className='text-[#00C8FF] hover:text-[#00E5FF] font-bold transition-colors'>
                     Login
                   </Link>
                 </p>

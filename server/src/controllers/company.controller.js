@@ -184,10 +184,61 @@ const updateCompany = asyncErrorHandler(async (req, res, next) => {
 
 
 
+// Delete Company
+const deleteCompany = asyncErrorHandler(async (req, res, next) => {
+  const companyId = req.params.id;
+
+  // Check if the user is a Recruiter
+  if (req.user.role !== "recruiter") {
+    const error = new ErrorHandler(
+      "Only Recruiters are allowed to delete a company.",
+      403
+    ); // 403: Forbidden
+    return error.sendError(res);
+  }
+
+  const company = await Company.findById(companyId);
+  if (!company) {
+    const error = new ErrorHandler("Company not found", 404);
+    return error.sendError(res);
+  }
+
+  // Check if the company belongs to the logged-in recruiter
+  if (company.userId.toString() !== req.user.id.toString()) {
+    const error = new ErrorHandler(
+      "You are not authorized to delete this company.",
+      403
+    );
+    return error.sendError(res);
+  }
+
+  // Delete the company's logo from Cloudinary if it exists
+  if (company.logo && company.logo.public_id) {
+    try {
+      await cloudinary.uploader.destroy(company.logo.public_id);
+    } catch (err) {
+      console.error("Failed to delete company logo from Cloudinary:", err);
+    }
+  }
+
+  // Delete all jobs associated with this company
+  await Job.deleteMany({ company: companyId });
+
+  // Delete the company itself
+  await Company.findByIdAndDelete(companyId);
+
+  return res.status(200).json({
+    message: "Company and its associated postings deleted successfully.",
+    success: true,
+    status: 200,
+  });
+});
+
 module.exports = {
   registerCompany,
   getCompany,
   getCompanyById,
   getJobsByCompanyId,
   updateCompany,
+  deleteCompany,
 };
