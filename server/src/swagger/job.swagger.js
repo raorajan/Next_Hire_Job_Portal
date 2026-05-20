@@ -387,3 +387,55 @@
  *         description: Internal server error
  */
 
+
+/**
+ * @swagger
+ * /api/v1/job/generate-description:
+ *   post:
+ *     summary: Generate job description using AI
+ *     tags: [Job]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Generates a professional job description using Google Gemini AI based on job title, requirements, and other parameters.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 description: Job title
+ *               skills:
+ *                 type: string
+ *                 description: Comma-separated list of required skills
+ *               experience:
+ *                 type: string
+ *                 description: Required experience level
+ *               companyName:
+ *                 type: string
+ *                 description: Name of the company
+ *             required:
+ *               - title
+ *     responses:
+ *       200:
+ *         description: Job description generated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 description:
+ *                   type: string
+ *                   description: AI generated job description in HTML or Markdown format
+ *       400:
+ *         description: Job title is required
+ *       403:
+ *         description: AI quota exceeded
+ *       500:
+ *         description: Internal server error (AI service failure)
+ */

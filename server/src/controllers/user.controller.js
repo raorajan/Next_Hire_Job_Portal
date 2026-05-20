@@ -745,7 +745,7 @@ const deleteSavedSearch = asyncErrorHandler(async (req, res, next) => {
     return error.sendError(res);
   }
 
-  savedSearch.remove();
+  savedSearch.deleteOne();
   await user.save();
 
   res.status(200).json({
@@ -873,7 +873,7 @@ const deleteQuickTemplate = asyncErrorHandler(async (req, res, next) => {
     return error.sendError(res);
   }
 
-  template.remove();
+  template.deleteOne();
   await user.save();
 
   res.status(200).json({

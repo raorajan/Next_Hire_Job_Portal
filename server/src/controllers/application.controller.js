@@ -193,6 +193,12 @@ const updateStatus = asyncErrorHandler(async (req, res) => {
 
     const previousStatus = application.status;
     const nextStatus = status.toLowerCase();
+    
+    const validStatuses = ["pending", "accepted", "rejected"];
+    if (!validStatuses.includes(nextStatus)) {
+      return new ErrorHandler("Invalid status value", 400).sendError(res);
+    }
+
     if (previousStatus === nextStatus) {
       return new ErrorHandler("Application is already in this status", 400).sendError(res);
     }

@@ -1159,3 +1159,118 @@
  *         description: User or template not found
  */
 
+
+/**
+ * @swagger
+ * /api/v1/user/profile/upgrade:
+ *   post:
+ *     summary: Upgrade user profile to Pro
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Upgrades the authenticated user's account to a Pro subscription.
+ *     responses:
+ *       200:
+ *         description: Profile upgraded successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Profile upgraded to Pro successfully.
+ *       500:
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/v1/user/profile/recruiter-stats:
+ *   get:
+ *     summary: Get dashboard statistics for recruiters
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Returns key metrics for a recruiter's dashboard, such as total jobs posted, active jobs, and total applications received.
+ *     responses:
+ *       200:
+ *         description: Recruiter statistics retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 stats:
+ *                   type: object
+ *                   properties:
+ *                     totalJobs:
+ *                       type: integer
+ *                     activeJobs:
+ *                       type: integer
+ *                     totalApplications:
+ *                       type: integer
+ *       403:
+ *         description: User is not a recruiter
+ *       500:
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/v1/user/profile/search-candidates:
+ *   get:
+ *     summary: Search for candidates
+ *     tags: [User]
+ *     security:
+ *       - bearerAuth: []
+ *     description: Allows recruiters to search the user database for potential candidates based on skills, experience, or keywords.
+ *     parameters:
+ *       - name: keyword
+ *         in: query
+ *         description: Search keyword (skills, name, bio)
+ *         required: false
+ *         schema:
+ *           type: string
+ *       - name: page
+ *         in: query
+ *         description: Page number for pagination
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - name: limit
+ *         in: query
+ *         description: Number of candidates per page
+ *         required: false
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *     responses:
+ *       200:
+ *         description: Candidates retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 candidates:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/User'
+ *                 total:
+ *                   type: integer
+ *       403:
+ *         description: User is not a recruiter
+ *       500:
+ *         description: Internal server error
+ */
