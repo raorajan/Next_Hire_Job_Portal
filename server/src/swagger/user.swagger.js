@@ -58,7 +58,9 @@
  *                   type: string
  *                   example: User registered successfully
  *       400:
- *         description: All fields are required or user already exists
+ *         description: Validation error (e.g. invalid email format, missing required fields) or user already exists
+ *       429:
+ *         description: Too many registration attempts from this IP, please try again after 15 minutes
  *       500:
  *         description: Internal server error
  */
@@ -109,13 +111,15 @@
  *                 user:
  *                   $ref: '#/components/schemas/User'
  *       400:
- *         description: Please enter email and password
+ *         description: Validation error (e.g. missing credentials or invalid email)
  *       401:
  *         description: Incorrect password or account role mismatch
  *       403:
  *         description: Email not verified. A verification email has been sent to the user's email address.
  *       404:
  *         description: User not found
+ *       429:
+ *         description: Too many login attempts from this IP, please try again after 15 minutes
  *       500:
  *         description: Internal server error
  */

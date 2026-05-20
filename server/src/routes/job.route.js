@@ -14,10 +14,12 @@ const {
 } = require("../controllers/job.controller.js");
 
 const checkAiQuota = require("../middlewares/checkAiQuota.js");
+const validate = require("../middlewares/validate.js");
+const { postJobSchema } = require("../validations/job.validation.js");
 
 const jobRouter = express.Router();
 
-jobRouter.route("/post").post(isAuthenticated, postJob);
+jobRouter.route("/post").post(isAuthenticated, validate(postJobSchema), postJob);
 jobRouter.route("/generate-description").post(isAuthenticated, checkAiQuota, generateJobDescription);
 jobRouter.route("/get").get(getAllJobs);
 jobRouter.route("/getadminjobs").get(isAuthenticated, getAdminJobs);

@@ -399,6 +399,8 @@ const getApplicationInterviewQuestions = asyncErrorHandler(async (req, res) => {
   }
 });
 
+const { sendMail } = require("../utils/sendEmail.js");
+
 const getApplicationEmailDraft = asyncErrorHandler(async (req, res) => {
   try {
     const applicationId = req.params.applicationId;
@@ -419,7 +421,7 @@ const getApplicationEmailDraft = asyncErrorHandler(async (req, res) => {
       return new ErrorHandler("Application not found", 404).sendError(res);
     }
 
-    const draft = await generateEmailDraftAi(application.job, application.applicant, application, type);
+    const draft = await generateEmailDraftAi(application.job, application.applicant, application, type, req.user.fullname);
 
     return res.status(200).json({
       success: true,
@@ -438,4 +440,51 @@ const getApplicationEmailDraft = asyncErrorHandler(async (req, res) => {
   }
 });
 
-module.exports = { applyJob, getAppliedJobs, getApplicants, updateStatus, getApplicationTimeline, getApplicationAiScore, getApplicationInterviewQuestions, getApplicationEmailDraft };
+const sendApplicationEmail = asyncErrorHandler(async (req, res) => {
+  try {
+    const applicationId = req.params.applicationId;
+    const { subject, body } = req.body;
+
+    if (!applicationId || !subject || !body) {
+      return new ErrorHandler("Application ID, Subject, and Body are required", 400).sendError(res);
+    }
+
+    const application = await Application.findById(applicationId)
+      .populate("job")
+      .populate("applicant");
+
+    if (!application) {
+      return new ErrorHandler("Application not found", 404).sendError(res);
+    }
+
+    // Convert plain text body to HTML by replacing newlines with <br/>
+    const htmlBody = `<div style="font-family: Arial, sans-serif; white-space: pre-wrap;">${body}</div>`;
+
+    const emailBody = {
+      from: `NextHire <notifications@raorajan.pro>`,
+      to: application.applicant.email,
+      subject: subject,
+      text: body,
+      html: htmlBody,
+    };
+
+    await sendMail(emailBody);
+
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      message: "Email sent successfully to the candidate.",
+    });
+  } catch (error) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("Send application email error:", error.message);
+    }
+    return res.status(500).json({
+      message: "Failed to send email. Internal server error",
+      success: false,
+      status: 500,
+    });
+  }
+});
+
+module.exports = { applyJob, getAppliedJobs, getApplicants, updateStatus, getApplicationTimeline, getApplicationAiScore, getApplicationInterviewQuestions, getApplicationEmailDraft, sendApplicationEmail };

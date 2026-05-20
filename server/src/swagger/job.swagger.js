@@ -33,7 +33,7 @@
  *                 job:
  *                   $ref: '#/components/schemas/Job'
  *       400:
- *         description: All fields are required
+ *         description: Validation error (e.g. missing required fields, invalid format)
  *       404:
  *         description: Company not found
  *       403:

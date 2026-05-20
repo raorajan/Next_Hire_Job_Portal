@@ -3,6 +3,9 @@ require("dotenv").config();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const logger = require("./utils/logger");
 const Connection = require("./config/db");
 
 const userRouter = require("./routes/user.route");
@@ -16,6 +19,16 @@ const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const externalJobsRouter = require("./routes/externalJobs.route");
 const app = express();
+
+// Security middleware
+app.use(helmet());
+
+// Logging middleware
+app.use(
+  morgan("combined", {
+    stream: { write: (message) => logger.info(message.trim()) },
+  })
+);
 
 // Configure file upload FIRST to handle multipart/form-data before other parsers
 app.use(

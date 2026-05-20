@@ -9,6 +9,7 @@ const {
   getApplicationAiScore,
   getApplicationInterviewQuestions,
   getApplicationEmailDraft,
+  sendApplicationEmail,
 } = require("../controllers/application.controller.js");
 
 const applicationRouter = express.Router();
@@ -33,5 +34,8 @@ applicationRouter
 applicationRouter
   .route("/:applicationId/email-draft")
   .post(isAuthenticated, checkAiQuota, getApplicationEmailDraft);
+applicationRouter
+  .route("/:applicationId/send-email")
+  .post(isAuthenticated, sendApplicationEmail);
 
 module.exports = applicationRouter;

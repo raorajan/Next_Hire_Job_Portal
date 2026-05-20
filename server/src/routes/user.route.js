@@ -29,11 +29,14 @@ const {
   searchCandidates,
 } = require("../controllers/user.controller.js");
 const isAuthenticated = require("../middlewares/auth.js");
+const validate = require("../middlewares/validate.js");
+const { registerSchema, loginSchema } = require("../validations/user.validation.js");
+const { authRateLimiter } = require("../middlewares/rateLimiter.js");
 
 const userRouter = express.Router();
 
-userRouter.route("/register").post(registerUser);
-userRouter.route("/login").post(loginUser);
+userRouter.route("/register").post(authRateLimiter, validate(registerSchema), registerUser);
+userRouter.route("/login").post(authRateLimiter, validate(loginSchema), loginUser);
 userRouter.route("/logout").get(logoutUser);
 userRouter.route("/change-password").post(isAuthenticated, changePassword);
 userRouter.route("/forget-password").post(forgetPassword);

@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import { toast } from "react-toastify";
 import Loader from "../common/Loader";
 import fetchFromApiServer from "@/services";
-import { Sparkles, Brain, Award, CheckCircle, HelpCircle, X, ShieldAlert, Cpu } from "lucide-react";
+import { Sparkles, Brain, Award, CheckCircle, HelpCircle, X, ShieldAlert, Cpu, Send } from "lucide-react";
 import SaaSUpgradeModal from "../common/SaaSUpgradeModal";
 
 const ApplicantsTable = ({ applicants: initialApplicants }) => {
@@ -42,6 +42,7 @@ const ApplicantsTable = ({ applicants: initialApplicants }) => {
   const [draftBody, setDraftBody] = useState("");
   const [draftLoading, setDraftLoading] = useState(false);
   const [draftText, setDraftText] = useState("Drafting email context...");
+  const [sendingEmail, setSendingEmail] = useState(false);
 
   useEffect(() => {
     if (initialApplicants) {
@@ -215,6 +216,31 @@ const ApplicantsTable = ({ applicants: initialApplicants }) => {
     } finally {
       clearInterval(interval);
       setDraftLoading(false);
+    }
+  };
+
+  const handleSendEmail = async () => {
+    if (!draftSubject.trim() || !draftBody.trim()) {
+      toast.error("Subject and Body are required to send an email.");
+      return;
+    }
+    setSendingEmail(true);
+    try {
+      const response = await fetchFromApiServer("POST", `api/v1/application/${selectedApplicant._id}/send-email`, {
+        subject: draftSubject,
+        body: draftBody,
+      });
+      if (response?.data?.success) {
+        toast.success("🚀 Outreach Email Dispatched Successfully!");
+        setModalOpen(false); // Close the modal upon success
+      } else {
+        toast.error(response?.data?.message || "Failed to dispatch email.");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Communication channel failed. Check server status.");
+    } finally {
+      setSendingEmail(false);
     }
   };
 
@@ -772,7 +798,17 @@ const ApplicantsTable = ({ applicants: initialApplicants }) => {
             )}
 
             {/* Footer */}
-            <div className="flex justify-end p-4 border-t border-white/5 bg-[#050810]/50">
+            <div className="flex justify-end gap-3 p-4 border-t border-white/5 bg-[#050810]/50">
+              {activeTab === "outreach" && draftSubject && (
+                <Button
+                  onClick={handleSendEmail}
+                  disabled={sendingEmail}
+                  className="rounded-xl bg-[#00C8FF]/10 border border-[#00C8FF]/30 hover:border-[#00C8FF] text-[#00C8FF] font-black uppercase tracking-wider px-6 py-2 text-xs flex items-center gap-2 transition-all duration-300"
+                >
+                  {sendingEmail ? <span className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full" /> : <Send className="w-4 h-4" />}
+                  {sendingEmail ? "Dispatching..." : "Send Email Directly"}
+                </Button>
+              )}
               <Button
                 onClick={() => setModalOpen(false)}
                 className="rounded-xl bg-white/5 border border-white/10 hover:border-[#00C8FF]/50 text-muted-foreground hover:text-white transition-all duration-300 font-extrabold px-5 py-2 text-xs"
