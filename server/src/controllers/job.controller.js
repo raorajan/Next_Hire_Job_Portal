@@ -9,7 +9,7 @@ const {
   processJobAndNotifyUsers,
   notifyJobDeletion,
   generateJobDescriptionAi,
-} = require("../services/openai.service");
+} = require("../services/ai.service");
 
 const postJob = asyncErrorHandler(async (req, res) => {
   const {

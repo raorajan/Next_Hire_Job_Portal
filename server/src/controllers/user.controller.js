@@ -12,9 +12,7 @@ const cron = require("node-cron");
 const crypto = require("crypto");
 const fs = require("fs");
 const mongoose = require("mongoose");
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_API_KEY);
+const { genAI } = require("../utils/gemini");
 
 const JOB_ALERT_FREQUENCIES = ["daily", "weekly"];
 const MAX_ALERT_FILTERS = 5;

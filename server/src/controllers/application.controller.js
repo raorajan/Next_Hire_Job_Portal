@@ -8,7 +8,7 @@ const {
   calculateCandidateMatchScore,
   generateInterviewQuestionsAi,
   generateEmailDraftAi,
-} = require("../services/openai.service");
+} = require("../services/ai.service");
 
 const ErrorHandler = require("../utils/errorHandler");
 
