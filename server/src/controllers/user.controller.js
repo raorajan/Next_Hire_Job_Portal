@@ -1725,8 +1725,8 @@ const getRecommendedJobs = asyncErrorHandler(async (req, res, next) => {
       })
       .populate({
         path: "applications",
-        select: "status createdAt", // Only needed fields
-        options: { limit: 3 }, // Limit applications
+        match: { applicant: userId || null },
+        select: "status createdAt applicant", // Only needed fields
       })
       .select("-__v") // Exclude version key
       .lean() // Use lean() for better performance

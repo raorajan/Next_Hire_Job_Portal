@@ -202,8 +202,8 @@ const getAllJobs = asyncErrorHandler(async (req, res) => {
       })
       .populate({
         path: "applications",
-        select: "status createdAt", // Only select needed fields
-        options: { limit: 5 }, // Limit applications to reduce payload
+        match: { applicant: userId || null },
+        select: "status createdAt applicant", // Only select needed fields
       })
       .select("-__v") // Exclude version key
       .lean() // Use lean() for read-only query (faster)
