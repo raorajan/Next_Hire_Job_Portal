@@ -176,3 +176,22 @@
   background: rgba(0, 229, 255, 0.45);
   box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
 }
+
+/* Radar Chart Styles */
+.radar-data-polygon {
+  transition: all 0.5s ease-out;
+  transform-origin: center;
+  filter: drop-shadow(0 0 10px rgba(0, 200, 255, 0.4));
+}
+.radar-data-polygon:hover {
+  filter: drop-shadow(0 0 20px rgba(0, 200, 255, 0.7));
+}
+.radar-point {
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+.radar-point:hover {
+  r: 6;
+  fill: #00C8FF;
+  filter: drop-shadow(0 0 8px rgba(0, 200, 255, 0.8));
+}

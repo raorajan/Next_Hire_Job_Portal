@@ -10,6 +10,11 @@ const {
   getApplicationInterviewQuestions,
   getApplicationEmailDraft,
   sendApplicationEmail,
+  evaluateMockInterview,
+  getMockInterviewResult,
+  optimizeResumeForJob,
+  getCandidateInsights,
+  getCandidateRadar,
 } = require("../controllers/application.controller.js");
 
 const applicationRouter = express.Router();
@@ -37,5 +42,20 @@ applicationRouter
 applicationRouter
   .route("/:applicationId/send-email")
   .post(isAuthenticated, sendApplicationEmail);
+applicationRouter
+  .route("/:applicationId/mock-interview/evaluate")
+  .post(isAuthenticated, checkAiQuota, evaluateMockInterview);
+applicationRouter
+  .route("/:applicationId/mock-interview")
+  .get(isAuthenticated, getMockInterviewResult);
+applicationRouter
+  .route("/:jobId/optimize-resume")
+  .post(isAuthenticated, checkAiQuota, optimizeResumeForJob);
+applicationRouter
+  .route("/:applicationId/insights")
+  .get(isAuthenticated, checkAiQuota, getCandidateInsights);
+applicationRouter
+  .route("/:applicationId/radar")
+  .get(isAuthenticated, checkAiQuota, getCandidateRadar);
 
 module.exports = applicationRouter;

@@ -6,8 +6,9 @@ import { Button } from "../ui/button";
 import { toast } from "react-toastify";
 import Loader from "../common/Loader";
 import fetchFromApiServer from "@/services";
-import { Sparkles, Brain, Award, CheckCircle, HelpCircle, X, ShieldAlert, Cpu, Send } from "lucide-react";
+import { Sparkles, Brain, Award, CheckCircle, HelpCircle, X, ShieldAlert, Cpu, Send, CheckSquare, Square } from "lucide-react";
 import SaaSUpgradeModal from "../common/SaaSUpgradeModal";
+import CandidateGrid from "./CandidateGrid";
 
 const ApplicantsTable = ({ applicants: initialApplicants }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +17,10 @@ const ApplicantsTable = ({ applicants: initialApplicants }) => {
   const [paywallOpen, setPaywallOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Compare candidates state
+  const [selectedCandidates, setSelectedCandidates] = useState([]);
+  const [compareModalOpen, setCompareModalOpen] = useState(false);
 
   // Filtering & Sorting State
   const [filterType, setFilterType] = useState("all");
@@ -58,6 +63,19 @@ const ApplicantsTable = ({ applicants: initialApplicants }) => {
     });
     setApplicantActions(initialActions);
   }, [applicants]);
+
+  const handleToggleCandidate = (candidate) => {
+    setSelectedCandidates(prev => {
+      if (prev.find(c => c._id === candidate._id)) {
+        return prev.filter(c => c._id !== candidate._id);
+      }
+      if (prev.length >= 5) {
+        toast.warning("You can compare up to 5 candidates at a time.");
+        return prev;
+      }
+      return [...prev, candidate];
+    });
+  };
 
   const statusHandler = async (action, id) => {
     const status = action === "accept" ? "Accepted" : "Rejected";
@@ -304,6 +322,14 @@ const ApplicantsTable = ({ applicants: initialApplicants }) => {
         </div>
 
         <div className="flex items-center gap-3 justify-between md:justify-end">
+          {selectedCandidates.length > 0 && (
+            <Button 
+              onClick={() => setCompareModalOpen(true)}
+              className="bg-[#8040FF] hover:bg-[#6030cc] text-white px-4 py-2 rounded-xl text-xs font-bold"
+            >
+              Compare ({selectedCandidates.length})
+            </Button>
+          )}
           <span className="text-[9px] text-muted-foreground uppercase font-black tracking-widest">Sort:</span>
           <select
             value={sortBy}
@@ -335,6 +361,18 @@ const ApplicantsTable = ({ applicants: initialApplicants }) => {
               >
                 <div className='absolute inset-0 bg-gradient-to-br from-[#00C8FF]/5 to-[#8040FF]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none'></div>
                 
+                {/* Candidate Selection Checkbox */}
+                <div 
+                  className="absolute top-4 left-4 z-20 cursor-pointer text-gray-400 hover:text-[#8040FF] transition-colors"
+                  onClick={() => handleToggleCandidate(item)}
+                >
+                  {selectedCandidates.find(c => c._id === item._id) ? (
+                    <CheckSquare className="w-5 h-5 text-[#8040FF]" />
+                  ) : (
+                    <Square className="w-5 h-5" />
+                  )}
+                </div>
+
                 {/* Glowing Match Score Badge (Top Right) */}
                 {item?.aiScore !== undefined && item?.aiScore !== null ? (
                   <div className={`absolute top-4 right-4 px-2.5 py-1 rounded-full text-[8px] font-black uppercase tracking-widest border shadow-sm ${
@@ -817,6 +855,32 @@ const ApplicantsTable = ({ applicants: initialApplicants }) => {
               </Button>
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* Compare Candidates Modal */}
+      {compareModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="bg-[#050810] border border-white/10 rounded-3xl w-full max-w-7xl max-h-[90vh] overflow-hidden shadow-[0_0_100px_rgba(128,64,255,0.15)] flex flex-col">
+            <div className="flex justify-between items-center p-6 border-b border-white/5 bg-[#080C1E]">
+              <div className="flex items-center gap-3">
+                <Brain className="w-6 h-6 text-[#8040FF]" />
+                <div>
+                  <h3 className="text-xl font-black tracking-tight text-white">Recruiter Copilot</h3>
+                  <p className="text-[10px] text-muted-foreground font-bold tracking-widest uppercase mt-1">Comparative Insights Dashboard</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setCompareModalOpen(false)}
+                className="p-2 hover:bg-white/5 text-muted-foreground hover:text-white rounded-xl transition-all"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-6 overflow-y-auto flex-1">
+              <CandidateGrid selectedApplications={selectedCandidates} />
+            </div>
           </div>
         </div>
       )}

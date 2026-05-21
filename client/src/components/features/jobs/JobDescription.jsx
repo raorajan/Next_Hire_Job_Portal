@@ -27,8 +27,12 @@ import {
   CheckCircle2, 
   ChevronRight, 
   ExternalLink,
-  Info
+  Info,
+  Brain,
+  Target
 } from "lucide-react";
+import MockInterviewSandbox from "./MockInterviewSandbox";
+import ResumeOptimizer from "./ResumeOptimizer";
 
 const JobDescription = () => {
   const dispatch = useDispatch();
@@ -41,7 +45,15 @@ const JobDescription = () => {
   const [applying, setApplying] = useState(false);
   const [skillGap, setSkillGap] = useState(null);
   const [showSkillGap, setShowSkillGap] = useState(false);
+  const [showMockSandbox, setShowMockSandbox] = useState(false);
+  const [showResumeOptimizer, setShowResumeOptimizer] = useState(false);
   const user = useSelector((state) => state.user.user);
+
+  const userApplication = useMemo(() => {
+    return singleJob?.applications?.find(
+      (application) => (application?.applicant?._id || application?.applicant) === user?._id
+    );
+  }, [singleJob?.applications, user?._id]);
 
   // Fetch job details
   useEffect(() => {
@@ -433,6 +445,26 @@ const JobDescription = () => {
                       Check Skill Gap
                     </Button>
                   )}
+
+                  {user?.role === "student" && isApplied && (
+                    <Button
+                      onClick={() => setShowMockSandbox(true)}
+                      className='w-full rounded-2xl bg-gradient-to-r from-[#00C8FF]/10 to-[#8040FF]/10 border border-[#00C8FF]/30 hover:border-[#8040FF]/50 text-[#00C8FF] hover:text-white font-extrabold shadow-sm hover:shadow-[0_0_25px_rgba(0,200,255,0.25)] transition-all duration-300 py-6 flex items-center justify-center gap-2'
+                    >
+                      <Brain className='w-5 h-5 animate-pulse' />
+                      AI Mock Interview Sandbox
+                    </Button>
+                  )}
+
+                  {user?.role === "student" && (
+                    <Button
+                      onClick={() => setShowResumeOptimizer(true)}
+                      className='w-full rounded-2xl bg-gradient-to-r from-[#8040FF]/10 to-emerald-500/10 border border-[#8040FF]/30 hover:border-emerald-500/50 text-[#8040FF] hover:text-white font-extrabold shadow-sm hover:shadow-[0_0_25px_rgba(128,64,255,0.25)] transition-all duration-300 py-6 flex items-center justify-center gap-2'
+                    >
+                      <Target className='w-5 h-5' />
+                      ATS Resume Optimizer
+                    </Button>
+                  )}
                 </div>
 
                 {/* Sidebar Job Specifications */}
@@ -524,6 +556,22 @@ const JobDescription = () => {
 
         </div>
       </div>
+
+      {showMockSandbox && userApplication && (
+        <MockInterviewSandbox
+          applicationId={userApplication._id}
+          job={singleJob}
+          onClose={() => setShowMockSandbox(false)}
+        />
+      )}
+
+      {showResumeOptimizer && (
+        <ResumeOptimizer
+          jobId={jobId}
+          job={singleJob}
+          onClose={() => setShowResumeOptimizer(false)}
+        />
+      )}
     </div>
   );
 };

@@ -70,6 +70,22 @@ const applicationSchema = new mongoose.Schema(
         guidelines: { type: String, trim: true },
       }
     ],
+    mockInterviewResult: {
+      overallScore: { type: Number, min: 0, max: 100 },
+      keyStrengths: [{ type: String, trim: true }],
+      areasOfImprovement: [{ type: String, trim: true }],
+      verdict: { type: String, trim: true },
+      answers: [
+        {
+          question: { type: String, trim: true },
+          userAnswer: { type: String, trim: true },
+          score: { type: Number, min: 0, max: 100 },
+          feedback: { type: String, trim: true },
+          modelAnswer: { type: String, trim: true },
+        }
+      ],
+      completedAt: { type: Date }
+    },
   },
   { timestamps: true }
 );

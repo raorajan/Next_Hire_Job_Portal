@@ -8,6 +8,10 @@ const {
   calculateCandidateMatchScore,
   generateInterviewQuestionsAi,
   generateEmailDraftAi,
+  evaluateMockInterviewAnswersAi,
+  optimizeResumeForJobAi,
+  generateCandidateInsightsAi,
+  calculateRadarDataAi,
 } = require("../services/ai.service");
 
 const ErrorHandler = require("../utils/errorHandler");
@@ -493,4 +497,183 @@ const sendApplicationEmail = asyncErrorHandler(async (req, res) => {
   }
 });
 
-module.exports = { applyJob, getAppliedJobs, getApplicants, updateStatus, getApplicationTimeline, getApplicationAiScore, getApplicationInterviewQuestions, getApplicationEmailDraft, sendApplicationEmail };
+const evaluateMockInterview = asyncErrorHandler(async (req, res) => {
+  try {
+    const applicationId = req.params.applicationId;
+    const { answers } = req.body; // Array of { question, userAnswer }
+
+    if (!applicationId || !Array.isArray(answers) || answers.length === 0) {
+      return new ErrorHandler("Application ID and answers are required", 400).sendError(res);
+    }
+
+    const application = await Application.findById(applicationId)
+      .populate("job")
+      .populate("applicant");
+
+    if (!application) {
+      return new ErrorHandler("Application not found", 404).sendError(res);
+    }
+
+    // Call AI service to evaluate answers
+    const evaluation = await evaluateMockInterviewAnswersAi(
+      application.job,
+      application.applicant,
+      answers
+    );
+
+    // Save mock interview result in database
+    application.mockInterviewResult = {
+      overallScore: evaluation.overallScore,
+      keyStrengths: evaluation.keyStrengths,
+      areasOfImprovement: evaluation.areasOfImprovement,
+      verdict: evaluation.verdict,
+      answers: evaluation.answers,
+      completedAt: new Date(),
+    };
+
+    await application.save();
+
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      message: "Mock interview evaluated successfully",
+      mockInterviewResult: application.mockInterviewResult,
+    });
+  } catch (error) {
+    console.error("Evaluate mock interview error:", error);
+    return res.status(500).json({
+      message: "Failed to evaluate mock interview. Internal server error",
+      success: false,
+      status: 500,
+    });
+  }
+});
+
+const getMockInterviewResult = asyncErrorHandler(async (req, res) => {
+  try {
+    const applicationId = req.params.applicationId;
+
+    if (!applicationId) {
+      return new ErrorHandler("Application ID is required", 400).sendError(res);
+    }
+
+    const application = await Application.findById(applicationId).select("mockInterviewResult");
+
+    if (!application) {
+      return new ErrorHandler("Application not found", 404).sendError(res);
+    }
+
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      mockInterviewResult: application.mockInterviewResult,
+    });
+  } catch (error) {
+    console.error("Get mock interview result error:", error);
+    return res.status(500).json({
+      message: "Failed to retrieve mock interview result. Internal server error",
+      success: false,
+      status: 500,
+    });
+  }
+});
+
+const optimizeResumeForJob = asyncErrorHandler(async (req, res) => {
+  try {
+    const { jobId } = req.params;
+    const { customResumeText } = req.body;
+    const userId = req.user.id;
+
+    const job = await Job.findById(jobId);
+    if (!job) {
+      return new ErrorHandler("Job not found", 404).sendError(res);
+    }
+
+    const user = req.user;
+
+    const result = await optimizeResumeForJobAi(job, user, customResumeText || null);
+
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      message: "Resume optimized successfully",
+      optimization: result,
+    });
+  } catch (error) {
+    console.error("Optimize resume error:", error);
+    return res.status(500).json({
+      message: "Failed to optimize resume. Internal server error",
+      success: false,
+      status: 500,
+    });
+  }
+});
+
+const getCandidateInsights = asyncErrorHandler(async (req, res) => {
+  try {
+    const applicationId = req.params.applicationId;
+    if (!applicationId) {
+      return new ErrorHandler("Application ID is required", 400).sendError(res);
+    }
+    const application = await Application.findById(applicationId);
+    if (!application) {
+      return new ErrorHandler("Application not found", 404).sendError(res);
+    }
+    const insights = await generateCandidateInsightsAi(applicationId, application.job);
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      insights,
+    });
+  } catch (error) {
+    console.error("Get insights error:", error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+      status: 500,
+    });
+  }
+});
+
+const getCandidateRadar = asyncErrorHandler(async (req, res) => {
+  try {
+    const applicationId = req.params.applicationId;
+    if (!applicationId) {
+      return new ErrorHandler("Application ID is required", 400).sendError(res);
+    }
+    const application = await Application.findById(applicationId);
+    if (!application) {
+      return new ErrorHandler("Application not found", 404).sendError(res);
+    }
+    const radar = await calculateRadarDataAi(applicationId, application.job);
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      radar,
+    });
+  } catch (error) {
+    console.error("Get radar error:", error);
+    return res.status(500).json({
+      message: "Internal server error",
+      success: false,
+      status: 500,
+    });
+  }
+});
+
+module.exports = {
+  applyJob,
+  getAppliedJobs,
+  getApplicants,
+  updateStatus,
+  getApplicationTimeline,
+  getApplicationAiScore,
+  getApplicationInterviewQuestions,
+  getApplicationEmailDraft,
+  sendApplicationEmail,
+  evaluateMockInterview,
+  getMockInterviewResult,
+  optimizeResumeForJob,
+  getCandidateInsights,
+  getCandidateRadar,
+};

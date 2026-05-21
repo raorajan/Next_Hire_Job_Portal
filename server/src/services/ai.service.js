@@ -427,6 +427,180 @@ async function generateEmailDraftAi(job, user, application, type, recruiterName)
   }
 }
 
+async function evaluateMockInterviewAnswersAi(job, user, QAs) {
+  const fallback = {
+    overallScore: 60,
+    keyStrengths: ["Demonstrated basic familiarity with key concepts."],
+    areasOfImprovement: ["Add more specific details and projects in answers."],
+    verdict: "Needs Practice",
+    answers: QAs.map((qa) => ({
+      question: qa.question,
+      userAnswer: qa.userAnswer,
+      score: 50,
+      feedback: "Answer lacks specific technical details or depth.",
+      modelAnswer: "Provide a detailed explanation highlighting design decisions and implementation details.",
+    })),
+  };
+
+  try {
+    const prompt = `You are a world-class technical interviewer, staff engineer, and recruitment lead. Evaluate the candidate's answers to the technical mock interview questions for this specific role.
+
+    Job Details:
+    - Title: ${job.title}
+    - Requirements: ${job.requirements ? job.requirements.join(", ") : ""}
+
+    Candidate Profile:
+    - Name: ${user.fullname}
+    - Skills: ${user.profile?.skills ? user.profile.skills.join(", ") : "None listed"}
+
+    Interview Questions & Candidate's Answers:
+    ${JSON.stringify(QAs, null, 2)}
+
+    Evaluate each answer rigorously based on technical accuracy, clarity, and depth. Provide structured feedback.
+    
+    Return a JSON object with EXACTLY these keys:
+    - overallScore: Number (0-100 overall performance score)
+    - keyStrengths: Array of 2-3 specific technical strengths demonstrated in the answers
+    - areasOfImprovement: Array of 2-3 specific technical or communication areas of improvement
+    - verdict: String (One of: 'Excellent Fit', 'Ready for Real Interview', 'Needs Practice', or 'Basic Knowledge')
+    - answers: Array of objects, where each object has:
+      - question: String (the original question)
+      - userAnswer: String (the candidate's answer)
+      - score: Number (0-100 score for this specific answer)
+      - feedback: String (constructive feedback on how to improve this answer, highlighting what was good and what was missing)
+      - modelAnswer: String (a comprehensive, model-standard answer for this question that demonstrates outstanding expertise)`;
+
+    const parsed = await generateJson(prompt, fallback);
+    return parsed;
+  } catch (error) {
+    console.error("AI Interview Evaluation failed:", error);
+    return fallback;
+  }
+}
+
+async function optimizeResumeForJobAi(job, user, customResumeText) {
+  const fallback = {
+    score: 70,
+    matchedKeywords: ["JavaScript", "React"],
+    missingKeywords: ["TypeScript", "State Management", "Performance Tuning"],
+    tailoredBullets: [
+      {
+        original: "Developed web applications.",
+        optimized: "Developed robust React web applications incorporating TypeScript and performance tuning methodologies to optimize client-side loading times."
+      }
+    ]
+  };
+
+  try {
+    const resumeSource = customResumeText || `
+      Skills: ${user.profile?.skills ? user.profile.skills.join(", ") : "None listed"}
+      Experience: ${user.profile?.experience || "None listed"}
+      Education: ${user.profile?.education || "None listed"}
+      Bio: ${user.profile?.bio || "None listed"}
+    `;
+
+    const prompt = `You are an elite ATS (Applicant Tracking System) optimization algorithm and executive recruiter. Analyze the candidate's resume/profile details against the target job description to match keywords, calculate a score, and write beautifully optimized resume bullet points.
+
+    Job Details:
+    - Title: ${job.title}
+    - Requirements: ${job.requirements ? job.requirements.join(", ") : ""}
+    - Description: ${job.description}
+
+    Candidate Resume/Profile details:
+    ${resumeSource}
+
+    Perform a rigorous match assessment:
+    1. Calculate a compatibility score (0 to 100) based on how well the candidate's profile matches the job requirements.
+    2. Extract a list of critical technical/behavioral keywords that are present in BOTH the resume and job description (matchedKeywords).
+    3. Extract a list of critical technical/behavioral keywords from the job description that are MISSING from the resume (missingKeywords).
+    4. Provide 3 high-impact, custom-crafted resume bullet points that the candidate should use. For each, give the "original" generic phrasing (or standard template lines like "Developed React components") and the "optimized" version which showcases strong action verbs, quantifiable achievements, and seamlessly incorporates some of the missing keywords.
+
+    Return a JSON object with EXACTLY these keys:
+    - score: Number (0-100 compatibility score)
+    - matchedKeywords: Array of Strings
+    - missingKeywords: Array of Strings
+    - tailoredBullets: Array of objects, where each object has:
+      - original: String (generic or original bullet point)
+      - optimized: String (optimized bullet point incorporating missing keywords)`;
+
+    const parsed = await generateJson(prompt, fallback);
+    return parsed;
+  } catch (error) {
+    console.error("AI Resume Optimization failed:", error);
+    return fallback;
+  }
+}
+
+// New function: generateCandidateInsightsAi
+async function generateCandidateInsightsAi(applicationId, job) {
+  const fallback = {
+    strengths: ["Strong problem-solving skills", "Good communication"],
+    concerns: ["Limited experience with cloud services"],
+    interviewStarters: [
+      "Can you describe a recent project where you tackled a performance bottleneck?",
+      "What motivates you to work in this domain?"
+    ]
+  };
+  try {
+    const Application = require("../models/application.model");
+    const application = await Application.findById(applicationId).populate("applicant");
+    if (!application || !job) return fallback;
+    const prompt = `You are a senior recruiter AI assistant. Provide concise AI-generated insights for a candidate.
+    - Candidate: ${application.applicant.fullname}
+    - Skills: ${application.applicant.profile?.skills?.join(", ") || "None"}
+    - Job Title: ${job.title}
+    - Job Requirements: ${job.requirements?.join(", ")}
+    Return a JSON with keys: strengths (array), concerns (array), interviewStarters (array).`;
+    
+    // Use the existing generateJson function which was imported at the top
+    const { generateJson } = require("../utils/gemini");
+    const result = await generateJson(prompt, fallback);
+    
+    return {
+      strengths: result.strengths || fallback.strengths,
+      concerns: result.concerns || fallback.concerns,
+      interviewStarters: result.interviewStarters || fallback.interviewStarters,
+    };
+  } catch (error) {
+    console.error("generateCandidateInsightsAi error:", error);
+    return fallback;
+  }
+}
+
+// New function: calculateRadarDataAi
+async function calculateRadarDataAi(applicationId, job) {
+  const fallback = {
+    communication: 70,
+    technical: 75,
+    leadership: 60,
+    problemSolving: 80,
+    creativity: 65
+  };
+  try {
+    const Application = require("../models/application.model");
+    const application = await Application.findById(applicationId).populate("applicant");
+    if (!application || !job) return fallback;
+    const prompt = `You are an AI analyst for recruitment. Produce a skill-gap radar data (0-100) for a candidate vs. job.
+    - Candidate skills: ${application.applicant.profile?.skills?.join(", ") || "None"}
+    - Job requirements: ${job.requirements?.join(", ")}
+    Provide JSON with categories: communication, technical, leadership, problemSolving, creativity.`;
+    
+    const { generateJson } = require("../utils/gemini");
+    const result = await generateJson(prompt, fallback);
+    
+    return {
+      communication: result.communication ?? fallback.communication,
+      technical: result.technical ?? fallback.technical,
+      leadership: result.leadership ?? fallback.leadership,
+      problemSolving: result.problemSolving ?? fallback.problemSolving,
+      creativity: result.creativity ?? fallback.creativity,
+    };
+  } catch (error) {
+    console.error("calculateRadarDataAi error:", error);
+    return fallback;
+  }
+}
+
 module.exports = {
   processJobAndNotifyUsers,
   notifyUsersToCompleteProfile,
@@ -437,4 +611,8 @@ module.exports = {
   generateJobDescriptionAi,
   generateInterviewQuestionsAi,
   generateEmailDraftAi,
+  evaluateMockInterviewAnswersAi,
+  optimizeResumeForJobAi,
+  generateCandidateInsightsAi,
+  calculateRadarDataAi,
 };

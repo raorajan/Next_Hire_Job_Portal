@@ -29,3 +29,33 @@ export const getApplicationTimelineApi = async (applicationId) => {
   const url = `api/v1/application/${applicationId}/timeline`;
   return await fetchFromApiServer("GET", url);
 };
+
+// Evaluate Mock Interview API
+export const evaluateMockInterviewApi = async (applicationId, answers) => {
+  const url = `api/v1/application/${applicationId}/mock-interview/evaluate`;
+  return await fetchFromApiServer("POST", url, { answers });
+};
+
+// Get Mock Interview Result API
+export const getMockInterviewResultApi = async (applicationId) => {
+  const url = `api/v1/application/${applicationId}/mock-interview`;
+  return await fetchFromApiServer("GET", url);
+};
+
+// Optimize Resume for Job API
+export const optimizeResumeApi = async (jobId, customResumeText) => {
+  const url = `api/v1/application/${jobId}/optimize-resume`;
+  return await fetchFromApiServer("POST", url, { customResumeText });
+};
+
+// Get Candidate Insights API
+export const getCandidateInsightsApi = async (applicationId) => {
+  const url = `api/v1/application/${applicationId}/insights`;
+  return await fetchFromApiServer("GET", url);
+};
+
+// Get Candidate Radar Data API
+export const getCandidateRadarApi = async (applicationId) => {
+  const url = `api/v1/application/${applicationId}/radar`;
+  return await fetchFromApiServer("GET", url);
+};
