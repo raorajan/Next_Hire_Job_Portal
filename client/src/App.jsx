@@ -33,6 +33,10 @@ const appRouter = createBrowserRouter([
     element: <Home />,
   },
   {
+    path: "/schedule/:applicationId",
+    element: <ScheduleInterview />,
+  },
+  {
     path: "/settings",
     element: <Settings />,
   },
