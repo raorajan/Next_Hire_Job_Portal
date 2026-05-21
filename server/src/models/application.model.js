@@ -86,6 +86,12 @@ const applicationSchema = new mongoose.Schema(
       ],
       completedAt: { type: Date }
     },
+    interviewSchedule: {
+      date: { type: String, trim: true },
+      time: { type: String, trim: true },
+      meetLink: { type: String, trim: true },
+      scheduledAt: { type: Date },
+    },
   },
   { timestamps: true }
 );

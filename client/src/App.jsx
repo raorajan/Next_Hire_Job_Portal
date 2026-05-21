@@ -24,6 +24,7 @@ import Settings from "./components/features/profile/Settings";
 import NotFound from "./components/common/NotFound";
 import CareerResources from "./components/features/resources/CareerResources";
 import CandidateSearch from "./components/admin/CandidateSearch";
+import ScheduleInterview from "./components/features/applications/ScheduleInterview";
 
 // Router setup
 const appRouter = createBrowserRouter([

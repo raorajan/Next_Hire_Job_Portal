@@ -59,3 +59,9 @@ export const getCandidateRadarApi = async (applicationId) => {
   const url = `api/v1/application/${applicationId}/radar`;
   return await fetchFromApiServer("GET", url);
 };
+
+// Schedule Interview API (public — no auth needed)
+export const scheduleInterviewApi = async (applicationId, date, time) => {
+  const url = `api/v1/application/${applicationId}/schedule`;
+  return await fetchFromApiServer("POST", url, { date, time });
+};

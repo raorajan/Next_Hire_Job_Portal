@@ -15,6 +15,7 @@ const {
   optimizeResumeForJob,
   getCandidateInsights,
   getCandidateRadar,
+  scheduleInterview,
 } = require("../controllers/application.controller.js");
 
 const applicationRouter = express.Router();
@@ -57,5 +58,9 @@ applicationRouter
 applicationRouter
   .route("/:applicationId/radar")
   .get(isAuthenticated, checkAiQuota, getCandidateRadar);
+// Public route — candidate clicks scheduling link from email (no auth needed)
+applicationRouter
+  .route("/:applicationId/schedule")
+  .post(scheduleInterview);
 
 module.exports = applicationRouter;

@@ -399,6 +399,9 @@ async function generateEmailDraftAi(job, user, application, type, recruiterName)
   };
 
   try {
+    const frontendUrl = process.env.FRONTEND_URL || process.env.CLIENT_URL || "http://localhost:5173";
+    const schedulingLink = `${frontendUrl}/schedule/${application._id}`;
+
     const prompt = `You are an elite, highly empathetic, and professional technical recruiter. Draft a personalized email outreach to the candidate.
     - Candidate Name: ${user.fullname}
     - Role: ${job.title}
@@ -409,7 +412,7 @@ async function generateEmailDraftAi(job, user, application, type, recruiterName)
 
     Use the exact Recruiter Name provided in the email signature instead of placeholders.
 
-    If Outreach Type is 'Interview Invitation': Draft a warm, highly enthusiastic, and professional interview invitation email.
+    If Outreach Type is 'Interview Invitation': Draft a warm, highly enthusiastic, and professional interview invitation email. IMPORTANT: You MUST include this exact scheduling link in the email body so the candidate can pick their preferred interview slot: ${schedulingLink} — present it naturally in the email, e.g. "Please schedule your interview at your convenience using this link: ${schedulingLink}".
     If Outreach Type is 'Polite Rejection': Draft a highly constructive, encouraging, and empathetic rejection email, thanking them for their application and encouraging them for future roles.
 
     Return a JSON object with the keys:

@@ -661,6 +661,132 @@ const getCandidateRadar = asyncErrorHandler(async (req, res) => {
   }
 });
 
+const crypto = require("crypto");
+
+const scheduleInterview = asyncErrorHandler(async (req, res) => {
+  try {
+    const applicationId = req.params.applicationId;
+    const { date, time } = req.body;
+
+    if (!applicationId || !date || !time) {
+      return new ErrorHandler("Application ID, date, and time are required", 400).sendError(res);
+    }
+
+    const application = await Application.findById(applicationId)
+      .populate("job")
+      .populate("applicant");
+
+    if (!application) {
+      return new ErrorHandler("Application not found", 404).sendError(res);
+    }
+
+    // Check if already scheduled
+    if (application.interviewSchedule && application.interviewSchedule.meetLink) {
+      return res.status(200).json({
+        success: true,
+        status: 200,
+        message: "Interview was already scheduled.",
+        schedule: application.interviewSchedule,
+      });
+    }
+
+    // Generate a unique Jitsi Meet link (completely free, no API key needed)
+    const uniqueId = crypto.randomBytes(8).toString("hex");
+    const meetLink = `https://meet.jit.si/NextHire-${uniqueId}`;
+
+    // Save schedule to application
+    application.interviewSchedule = {
+      date,
+      time,
+      meetLink,
+      scheduledAt: new Date(),
+    };
+    await application.save();
+
+    // Find the recruiter (job creator)
+    const User = require("../models/user.model");
+    const job = application.job;
+    const recruiter = await User.findById(job.created_by);
+
+    const candidateName = application.applicant.fullname;
+    const candidateEmail = application.applicant.email;
+    const recruiterEmail = recruiter ? recruiter.email : null;
+    const jobTitle = job.title;
+
+    const formattedDate = new Date(date).toLocaleDateString("en-US", {
+      weekday: "long", year: "numeric", month: "long", day: "numeric",
+    });
+
+    // Build HTML email
+    const emailHtml = `
+      <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #0A0C10; color: #E6EDF3; border-radius: 16px; overflow: hidden; border: 1px solid #1e2433;">
+        <div style="background: linear-gradient(135deg, #00C8FF22, #8040FF22); padding: 32px; text-align: center;">
+          <h1 style="margin: 0; font-size: 24px; color: #00C8FF;">🎯 Interview Scheduled!</h1>
+          <p style="color: #8B949E; margin-top: 8px;">Your interview for <strong style="color: #fff;">${jobTitle}</strong> has been confirmed.</p>
+        </div>
+        <div style="padding: 32px;">
+          <div style="background: #161B22; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid #30363D;">
+            <p style="margin: 0 0 12px; color: #8B949E; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">📅 Date</p>
+            <p style="margin: 0; font-size: 18px; font-weight: bold; color: #fff;">${formattedDate}</p>
+          </div>
+          <div style="background: #161B22; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid #30363D;">
+            <p style="margin: 0 0 12px; color: #8B949E; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">🕐 Time</p>
+            <p style="margin: 0; font-size: 18px; font-weight: bold; color: #fff;">${time}</p>
+          </div>
+          <div style="text-align: center; margin: 28px 0;">
+            <a href="${meetLink}" style="display: inline-block; background: linear-gradient(135deg, #00C8FF, #8040FF); color: #fff; text-decoration: none; padding: 16px 40px; border-radius: 12px; font-weight: bold; font-size: 16px; letter-spacing: 0.5px;">
+              🚀 Join Meeting
+            </a>
+          </div>
+          <p style="color: #8B949E; font-size: 13px; text-align: center;">Meeting Link: <a href="${meetLink}" style="color: #00C8FF;">${meetLink}</a></p>
+        </div>
+        <div style="padding: 20px 32px; background: #161B22; text-align: center; border-top: 1px solid #30363D;">
+          <p style="color: #8B949E; font-size: 12px; margin: 0;">Powered by NextHire — AI-Driven Hiring Platform</p>
+        </div>
+      </div>
+    `;
+
+    // Send to candidate
+    await sendMail({
+      from: `NextHire <notifications@raorajan.pro>`,
+      to: candidateEmail,
+      subject: `✅ Interview Confirmed: ${jobTitle} — ${formattedDate} at ${time}`,
+      text: `Your interview for ${jobTitle} is scheduled on ${formattedDate} at ${time}. Join here: ${meetLink}`,
+      html: emailHtml,
+    });
+
+    // Send to recruiter
+    if (recruiterEmail) {
+      const recruiterHtml = emailHtml.replace("Your interview for", `${candidateName}'s interview for`);
+      await sendMail({
+        from: `NextHire <notifications@raorajan.pro>`,
+        to: recruiterEmail,
+        subject: `✅ Interview Scheduled: ${candidateName} for ${jobTitle} — ${formattedDate} at ${time}`,
+        text: `${candidateName}'s interview for ${jobTitle} is scheduled on ${formattedDate} at ${time}. Join here: ${meetLink}`,
+        html: recruiterHtml,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      message: "Interview scheduled successfully! Confirmation emails sent.",
+      schedule: {
+        date,
+        time,
+        meetLink,
+      },
+    });
+  } catch (error) {
+    console.error("Schedule interview error:", error);
+    return res.status(500).json({
+      message: "Failed to schedule interview. Internal server error.",
+      success: false,
+      status: 500,
+    });
+  }
+});
+
 module.exports = {
   applyJob,
   getAppliedJobs,
@@ -676,4 +802,5 @@ module.exports = {
   optimizeResumeForJob,
   getCandidateInsights,
   getCandidateRadar,
+  scheduleInterview,
 };
