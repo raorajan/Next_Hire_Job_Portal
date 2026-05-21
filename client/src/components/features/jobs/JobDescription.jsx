@@ -52,7 +52,7 @@ const JobDescription = () => {
           setSingleJob(response);
           const findApplications = res?.payload?.job?.applications;
           const alreadyApplied = findApplications?.some(
-            (application) => application?.applicant === user?._id
+            (application) => (application?.applicant?._id || application?.applicant) === user?._id
           );
           setIsApplied(alreadyApplied);
 

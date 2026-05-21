@@ -15,7 +15,7 @@ const Job = ({ job }) => {
   const user = useSelector((state) => state?.user?.user);
   const [hasApplied, setHasApplied] = useState(
     job?.applications?.some(
-      (application) => application?.applicant === user?._id
+      (application) => (application?.applicant?._id || application?.applicant) === user?._id
     )
   );
 
