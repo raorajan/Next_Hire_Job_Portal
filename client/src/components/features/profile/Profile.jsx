@@ -26,6 +26,8 @@ import { getRecruiterStats } from "@/redux/slices/user.slice";
 import { getCompanies } from "@/redux/slices/company.slice";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../common/Loader";
+import { getResumeSignedUrlApi } from "@/redux/actions/user.action";
+import { toast } from "react-toastify";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -59,6 +61,23 @@ const Profile = () => {
   const filteredCompanies = companies?.filter((company) =>
     company?.companyName?.toLowerCase()?.includes(companySearch.toLowerCase())
   );
+
+  const handleViewMyResume = async () => {
+    try {
+      const toastId = toast.loading("Decrypting secure resume link...");
+      const response = await getResumeSignedUrlApi(user._id);
+      if (response?.data?.success) {
+        toast.update(toastId, { render: "Resume unlocked!", type: "success", isLoading: false, autoClose: 2000 });
+        window.open(response.data.url, "_blank");
+      } else {
+        toast.update(toastId, { render: response?.data?.message || "Failed to access resume", type: "error", isLoading: false, autoClose: 3000 });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.dismiss();
+      toast.error("Error accessing secure resume");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#050810] text-[#E6EDF3] relative overflow-hidden">
@@ -170,12 +189,10 @@ const Profile = () => {
               
               <div className="space-y-2">
                 <Label className="text-md font-bold text-white tracking-wide">Registered Resume</Label>
-                {user?.profile?.resume ? (
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={user?.profile?.resume?.url}
-                    className="group flex items-center gap-3 bg-[#050810]/40 hover:bg-[#050810]/80 border border-white/5 hover:border-[#00C8FF]/30 rounded-2xl p-4 max-w-md transition-all duration-300"
+                {user?.profile?.resume?.public_id || user?.profile?.resume?.url ? (
+                  <button
+                    onClick={handleViewMyResume}
+                    className="group flex items-center gap-3 bg-[#050810]/40 hover:bg-[#050810]/80 border border-white/5 hover:border-[#00C8FF]/30 rounded-2xl p-4 max-w-md transition-all duration-300 w-full text-left cursor-pointer"
                   >
                     <div className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 group-hover:scale-105 transition-transform duration-300">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -186,9 +203,9 @@ const Profile = () => {
                       <span className="text-[#00C8FF] hover:text-[#00E5FF] font-bold block truncate text-sm">
                         {user?.profile?.resume?.resumeOriginalName || "resume.pdf"}
                       </span>
-                      <p className="text-[10px] text-muted-foreground mt-0.5">Click to view in new tab</p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">Click to unlock secure document link</p>
                     </div>
-                  </a>
+                  </button>
                 ) : (
                   <span className="text-muted-foreground italic text-sm block">No resume cataloged yet.</span>
                 )}

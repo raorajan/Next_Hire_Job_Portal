@@ -1390,23 +1390,27 @@ const updateProfile = asyncErrorHandler(async (req, res, next) => {
     // Continue profile update even if avatar upload fails
   }
 
+const { uploadFileToS3, deleteFileFromS3 } = require("../services/s3.service");
+const fs = require("fs");
+
   if (req.files && req.files.resume && req.files.resume.tempFilePath) {
     if (user.profile.resume && user.profile.resume.public_id) {
-      await cloudinary.uploader.destroy(user.profile.resume.public_id, {
-        resource_type: "raw",
-      });
+      await deleteFileFromS3(user.profile.resume.public_id);
     }
-    const resumeUpload = await cloudinary.uploader.upload(
-      req.files.resume.tempFilePath,
-      {
-        folder: "resumes",
-        resource_type: "raw",
-      }
+    
+    const resumeFile = req.files.resume;
+    const fileBuffer = fs.readFileSync(resumeFile.tempFilePath);
+    
+    const objectKey = await uploadFileToS3(
+      fileBuffer,
+      resumeFile.mimetype || "application/pdf",
+      resumeFile.name
     );
+    
     user.profile.resume = {
-      public_id: resumeUpload.public_id,
-      url: resumeUpload.secure_url,
-      resumeOriginalName: req.files.resume.name,
+      public_id: objectKey,
+      url: "", // Intentionally empty to prevent public access. Use signed URLs.
+      resumeOriginalName: resumeFile.name,
     };
   }
 
@@ -1857,6 +1861,56 @@ const searchCandidates = asyncErrorHandler(async (req, res, next) => {
   });
 });
 
+const { getSignedResumeUrl } = require("../services/s3.service");
+
+const getResumeUrl = asyncErrorHandler(async (req, res) => {
+  try {
+    const targetUserId = req.params.userId;
+    const requesterId = req.user.id;
+    const requesterRole = req.user.role;
+
+    // Check authorization: Must be the user themselves, OR a recruiter
+    if (targetUserId !== requesterId && requesterRole !== "recruiter") {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to view this resume.",
+        status: 403,
+      });
+    }
+
+    const targetUser = await User.findById(targetUserId);
+    if (!targetUser) {
+      return new ErrorHandler("User not found", 404).sendError(res);
+    }
+
+    const s3ObjectKey = targetUser.profile?.resume?.public_id;
+    if (!s3ObjectKey) {
+      return res.status(404).json({
+        success: false,
+        message: "No resume found for this user.",
+        status: 404,
+      });
+    }
+
+    // Generate 60-second signed URL
+    const signedUrl = await getSignedResumeUrl(s3ObjectKey);
+
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      url: signedUrl,
+      resumeOriginalName: targetUser.profile.resume.resumeOriginalName,
+    });
+  } catch (error) {
+    console.error("Get Signed Resume URL error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error while generating resume link",
+      status: 500,
+    });
+  }
+});
+
 module.exports = {
   registerUser,
   loginUser,
@@ -1885,5 +1939,6 @@ module.exports = {
   getRecruiterStats,
   upgradeToPro,
   searchCandidates,
+  getResumeUrl,
 };
 

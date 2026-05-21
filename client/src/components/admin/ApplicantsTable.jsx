@@ -9,6 +9,7 @@ import fetchFromApiServer from "@/services";
 import { Sparkles, Brain, Award, CheckCircle, HelpCircle, X, ShieldAlert, Cpu, Send, CheckSquare, Square } from "lucide-react";
 import SaaSUpgradeModal from "../common/SaaSUpgradeModal";
 import CandidateGrid from "./CandidateGrid";
+import { getResumeSignedUrlApi } from "@/redux/actions/user.action";
 
 const ApplicantsTable = ({ applicants: initialApplicants }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -95,6 +96,23 @@ const ApplicantsTable = ({ applicants: initialApplicants }) => {
       toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleViewResume = async (userId) => {
+    try {
+      const toastId = toast.loading("Decrypting secure resume link...");
+      const response = await getResumeSignedUrlApi(userId);
+      if (response?.data?.success) {
+        toast.update(toastId, { render: "Resume unlocked!", type: "success", isLoading: false, autoClose: 2000 });
+        window.open(response.data.url, "_blank");
+      } else {
+        toast.update(toastId, { render: response?.data?.message || "Failed to access resume", type: "error", isLoading: false, autoClose: 3000 });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.dismiss();
+      toast.error("Error accessing secure resume");
     }
   };
 
@@ -432,17 +450,15 @@ const ApplicantsTable = ({ applicants: initialApplicants }) => {
                           <span className='text-muted-foreground uppercase tracking-widest text-[9px]'>Applied On</span>
                           <span className="text-white">{new Date(item?.createdAt).toLocaleDateString()}</span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between items-center border-b border-white/5 pb-2">
                           <span className='text-muted-foreground uppercase tracking-widest text-[9px]'>Resume</span>
-                          {item?.applicant?.profile?.resume?.url ? (
-                            <a
-                              className='text-[#00C8FF] hover:text-[#00E5FF] italic transition-colors drop-shadow-[0_0_10px_rgba(0,200,255,0.2)]'
-                              href={item?.applicant?.profile?.resume?.url}
-                              target='_blank'
-                              rel='noopener noreferrer'
+                          {item?.applicant?.profile?.resume?.public_id || item?.applicant?.profile?.resume?.url ? (
+                            <button
+                              onClick={() => handleViewResume(item.applicant._id)}
+                              className='text-[#00C8FF] hover:text-[#00E5FF] italic transition-colors drop-shadow-[0_0_10px_rgba(0,200,255,0.2)] text-[11px] font-bold bg-transparent border-none p-0 cursor-pointer'
                             >
-                              View Document →
-                            </a>
+                              Unlock Document 🔒
+                            </button>
                           ) : (
                             <span className="text-destructive/60 uppercase tracking-widest text-[9px]">Missing</span>
                           )}

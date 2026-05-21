@@ -27,6 +27,7 @@ const {
   getRecruiterStats,
   upgradeToPro,
   searchCandidates,
+  getResumeUrl,
 } = require("../controllers/user.controller.js");
 const isAuthenticated = require("../middlewares/auth.js");
 const validate = require("../middlewares/validate.js");
@@ -77,5 +78,8 @@ userRouter.route("/recommended-jobs").get(isAuthenticated, getRecommendedJobs);
 userRouter.route("/search").get(isAuthenticated, getSearchResult);
 userRouter.route("/verify-email").post(verifyEmail);
 userRouter.route("/read-content").post(isAuthenticated, checkAiQuota, readDocumentContent);
+
+// Secure Resume Access Route
+userRouter.route("/resume-url/:userId").get(isAuthenticated, getResumeUrl);
 
 module.exports = userRouter;

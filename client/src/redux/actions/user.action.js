@@ -141,4 +141,10 @@ export const readDocumentContentApi = async (data) => {
 export const getRecruiterStatsApi = async () => {
   const url = `api/v1/user/profile/recruiter-stats`;
   return await fetchFromApiServer("GET", url);
+};
+
+// Get signed URL for secure resume access
+export const getResumeSignedUrlApi = async (userId) => {
+  const url = `api/v1/user/resume-url/${userId}`;
+  return await fetchFromApiServer("GET", url);
 };
